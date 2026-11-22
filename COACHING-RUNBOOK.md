@@ -1,6 +1,6 @@
 # Daily coaching run (for Claude)
 
-Runs once a day in Chrome on Simon's PC. Simon is logged in to the site as the coach.
+Runs once a day in the Claude app's built-in browser on Simon's PC (simsbox11). Simon is logged in to the site there as the coach.
 **Nothing reaches a client without Simon's yes**: everything Claude makes is a draft in the coach area's Approvals page.
 
 ## 0. Read first
@@ -9,7 +9,7 @@ From Simon's Brain (`Documents\Brain`): Start, Rules for AI, Next Time, then
 Simon's lessons win over anything below.
 
 ## 1. Open the coach area
-Open `https://simon-hanus-coaching.netlify.app/#coach-approvals` in Chrome.
+Open `https://simon-hanus-coaching.netlify.app/#coach-approvals` in the built-in browser.
 If it shows the log-in page, stop and message Simon: "Please log in to the coach area so I can do today's check-ins."
 
 ## 2. Get today's list
@@ -17,7 +17,7 @@ In the page run `await SHC.todo()`. It returns:
 `checkPayments`, `plansToMake`, `plansToRedo`, `checkinsDue`, `checkinsToRedo`, `waitingForSimon`.
 
 ## 3. Payments
-For each `checkPayments` client, find the Stripe Checkout session (`stripe_session_id`, or the client's email) with the Stripe connector.
+For each `checkPayments` client, find the Stripe Checkout session (`stripe_session_id`, or the client's email) with the Stripe connector, account **Simon Hanus Coaching** (sandbox = test mode until the account goes live). The session's `client_reference_id` is the client's id.
 Paid → `await SHC.confirmPayment(id, sessionId)`. Not found → leave it and put it in the report.
 
 ## 4. New plans (`plansToMake`)

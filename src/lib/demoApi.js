@@ -66,6 +66,9 @@ export const demoApi = {
   async myClient() {
     return wait(client(myId()) || null);
   },
+  async myAnswers() {
+    return wait(db.answers[myId()] || null);
+  },
   async startClient({ plan, full_name, answers }) {
     const u = me();
     const flags = answers?._flags || [];

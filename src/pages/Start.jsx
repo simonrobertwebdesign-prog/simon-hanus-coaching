@@ -25,8 +25,9 @@ const blank = {
   experience: "", days: "", session: "", where: "", equipment: [], routine: "", lifts: "", likes_ex: "", dislikes_ex: "", injuries: "",
   work: "", steps: "", sleep: "", stress: "", train_time: "",
   diet: "", allergies: "", likes: "", dislikes: "", meals: "", cooking: "", budget: "", alcohol: "", tracking: "", supplements: "",
-  health: {}, health_details: "",
-  agree_age: false, agree_terms: false, agree_data: false, agree_results: false,
+  health: {}, health_details: "", peds: "", peds_details: "",
+  guardian_name: "", guardian_email: "", guardian_agree: false,
+  agree_terms: false, agree_data: false, agree_results: false,
 };
 
 export function Start({ route, session }) {
@@ -46,6 +47,7 @@ export function Start({ route, session }) {
 
   const set = (k) => (v) => setA((x) => ({ ...x, [k]: v?.target ? (v.target.type === "checkbox" ? v.target.checked : v.target.value) : v }));
   const p = planById(plan);
+  const minor = a.age !== "" && +a.age < 18;
   const flags = useMemo(() => {
     const f = HEALTH.filter(([k]) => a.health[k] === "Yes").map(([, q]) => q);
     if (a.injuries?.trim()) f.push("Injury: " + a.injuries.trim());
@@ -63,7 +65,7 @@ export function Start({ route, session }) {
     };
     if (s === 1) {
       need("first_name"); need("last_name"); need("age"); need("sex");
-      if (a.age && +a.age < 18) e.age = "Coaching is for people aged 18 and over.";
+      if (a.age && !(Number.isInteger(+a.age) && +a.age >= 5 && +a.age <= 100)) e.age = "Please enter your age in years.";
       if (a.height_unit === "cm") need("height_cm"); else need("height_ft");
       if (a.weight_unit === "kg") need("weight_kg"); else need("weight_st");
     }
@@ -73,7 +75,16 @@ export function Start({ route, session }) {
     if (s === 5) { need("diet"); need("cooking"); need("meals"); }
     if (s === 6) HEALTH.forEach(([k]) => { if (!a.health[k]) e["h_" + k] = "Please answer yes or no"; });
     if (s === 6 && flags.length && !a.health_details.trim()) e.health_details = "Tell us a little more so Simon can plan around it";
-    if (s === 7) { if (!a.agree_age) e.agree_age = "Required"; if (!a.agree_terms) e.agree_terms = "Required"; if (!a.agree_data) e.agree_data = "Required"; }
+    if (s === 6) need("peds", "Please pick one");
+    if (s === 7) {
+      if (minor) {
+        need("guardian_name");
+        if (!/^\S+@\S+\.\S+$/.test(a.guardian_email)) e.guardian_email = "Enter a valid email address";
+        if (!a.guardian_agree) e.guardian_agree = "Required";
+      }
+      if (!a.agree_terms) e.agree_terms = "Required";
+      if (!a.agree_data) e.agree_data = "Required";
+    }
     setErrors(e);
     if (Object.keys(e).length) {
       setTimeout(() => document.querySelector(".err-text")?.scrollIntoView({ behavior: "smooth", block: "center" }), 30);
@@ -89,7 +100,11 @@ export function Start({ route, session }) {
 
   async function saveAnswers() {
     const { height_cm, weight_kg } = metric();
-    const answers = { ...a, height_cm, weight_kg, _flags: flags, submitted_at: new Date().toISOString() };
+    const extra = [];
+    if (minor) extra.push(`Under 18 (age ${a.age}). Parent/guardian ${a.guardian_name.trim()} (${a.guardian_email.trim()}) agreed.`);
+    if (a.peds === "Yes, now") extra.push("Using steroids or other PEDs now" + (a.peds_details.trim() ? ": " + a.peds_details.trim() : ""));
+    const clean = minor ? { ...a, agree_results: false } : { ...a, guardian_name: "", guardian_email: "", guardian_agree: false };
+    const answers = { ...clean, height_cm, weight_kg, _flags: [...flags, ...extra], submitted_at: new Date().toISOString() };
     await api.startClient({ plan, full_name: `${a.first_name} ${a.last_name}`.trim(), answers });
   }
 
@@ -404,6 +419,20 @@ export function Start({ route, session }) {
                     <Choices options={["No", "Yes"]} value={a.health[k]} onChange={(v) => setA((x) => ({ ...x, health: { ...x.health, [k]: v } }))} label={q} />
                   </div>
                 ))}
+                <div className="yn">
+                  <div>
+                    Have you ever used steroids or other performance-enhancing drugs (PEDs)?
+                    {E("peds") && <div className="err-text">{E("peds")}</div>}
+                  </div>
+                  <Choices options={["Never", "In the past", "Yes, now"]} value={a.peds} onChange={set("peds")} label="Steroids or other PEDs" />
+                </div>
+                {(a.peds === "In the past" || a.peds === "Yes, now") && (
+                  <div style={{ marginTop: 14 }}>
+                    <Field label="What, and when?" hint="Optional. Kept private between you and Simon.">
+                      <input className="input" value={a.peds_details} onChange={set("peds_details")} />
+                    </Field>
+                  </div>
+                )}
                 {flags.length > 0 && (
                   <div style={{ marginTop: 22 }} className="stack">
                     <Field label="Tell us more" error={E("health_details")} hint="What it is, and anything your doctor has said.">
@@ -421,9 +450,23 @@ export function Start({ route, session }) {
           {step === 7 && (
             <>
               <h2 id="step-title" style={{ marginTop: 8 }}>Before you pay</h2>
-              <p className="intro">Three quick ticks so we can coach you properly.</p>
+              <p className="intro">{minor ? "Because you're under 18, a parent or guardian needs to agree too." : "A couple of quick ticks so we can coach you properly."}</p>
               <div className="wizard-body" style={{ gap: 4 }}>
-                <label className="check"><input type="checkbox" checked={a.agree_age} onChange={set("agree_age")} /><span>I'm 18 or over.{E("agree_age") && <span className="err-text"> Required</span>}</span></label>
+                {minor && (
+                  <div className="panel stack" style={{ marginBottom: 12 }}>
+                    <b>Parent or guardian</b>
+                    <Field label="Their full name" error={E("guardian_name")}>
+                      <input className={cx("input", E("guardian_name") && "err")} autoComplete="off" value={a.guardian_name} onChange={set("guardian_name")} />
+                    </Field>
+                    <Field label="Their email" hint="Simon may contact them about your coaching." error={E("guardian_email")}>
+                      <input className={cx("input", E("guardian_email") && "err")} type="email" autoComplete="off" value={a.guardian_email} onChange={set("guardian_email")} />
+                    </Field>
+                    <label className="check">
+                      <input type="checkbox" checked={a.guardian_agree} onChange={set("guardian_agree")} />
+                      <span>I'm their parent or guardian. I've read the answers, the terms and the health disclaimer, and I agree to them being coached.{E("guardian_agree") && <span className="err-text"> Required</span>}</span>
+                    </label>
+                  </div>
+                )}
                 <label className="check">
                   <input type="checkbox" checked={a.agree_terms} onChange={set("agree_terms")} />
                   <span>
@@ -434,14 +477,16 @@ export function Start({ route, session }) {
                 <label className="check">
                   <input type="checkbox" checked={a.agree_data} onChange={set("agree_data")} />
                   <span>
-                    I'm happy for Simon Hanus Coaching to keep my answers, health information, logs and progress photos to coach me. I can ask for them to be deleted at any time (<a href="#privacy">privacy policy</a>).
+                    I'm happy for Simon Hanus Coaching to keep my answers, health information, logs{minor ? "" : " and progress photos"} to coach me. I can ask for them to be deleted at any time (<a href="#privacy">privacy policy</a>).
                     {E("agree_data") && <span className="err-text"> Required</span>}
                   </span>
                 </label>
-                <label className="check">
-                  <input type="checkbox" checked={a.agree_results} onChange={set("agree_results")} />
-                  <span>Optional: Simon can share my progress (without my name or face) as a result on the website.</span>
-                </label>
+                {!minor && (
+                  <label className="check">
+                    <input type="checkbox" checked={a.agree_results} onChange={set("agree_results")} />
+                    <span>Optional: Simon can share my progress (without my name or face) as a result on the website.</span>
+                  </label>
+                )}
               </div>
             </>
           )}

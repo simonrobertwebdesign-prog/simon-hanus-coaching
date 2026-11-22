@@ -84,6 +84,11 @@ export const supabaseApi = {
   async startClient({ plan, full_name, answers }) {
     must(await sb.rpc("start_client", { p_plan: plan, p_full_name: full_name, p_answers: answers }));
   },
+  async myAnswers() {
+    if (!me) return null;
+    const rows = must(await sb.from("questionnaires").select("answers").eq("client_id", me.id).order("created_at", { ascending: false }).limit(1));
+    return rows?.[0]?.answers || null;
+  },
   async reportPayment(sessionId) {
     must(await sb.rpc("report_payment", { p_session: sessionId || null }));
   },

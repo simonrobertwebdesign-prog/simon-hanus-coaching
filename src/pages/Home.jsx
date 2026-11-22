@@ -194,7 +194,7 @@ function Showcase() {
 }
 
 const FAQ = [
-  ["Who are the plans for?", "Anyone 18 or over who wants to build muscle, lose fat or get stronger, from complete beginners to people who've trained for years. Gym or home: the questionnaire asks what you have."],
+  ["Who are the plans for?", "Anyone who wants to build muscle, lose fat, get stronger or just get fitter, whatever your age, from complete beginners to people who've trained for years. Under 18? A parent or guardian signs off in the questionnaire. Gym or home: the questionnaire asks what you have."],
   ["How fast do I get my plans?", "Within 48 hours of paying. Simon checks every plan himself before it reaches you."],
   ["What happens at a check-in?", "You send your weight, how training went and how you feel. Simon looks at everything you've logged and sends back what's working, what changes, and why."],
   ["Can I cancel?", "Yes. Monthly and Premium have no minimum term. Cancel any time and you won't be charged again."],

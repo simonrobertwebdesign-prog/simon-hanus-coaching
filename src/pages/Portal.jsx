@@ -20,10 +20,13 @@ const NAV = [
 function useData() {
   const [d, setD] = useState(null);
   const load = useCallback(async () => {
-    const [client, plans, workouts, body, photos, checkins, messages] = await Promise.all([
+    const [client, plans, workouts, body, photos, checkins, messages, answers] = await Promise.all([
       api.myClient(), api.myPlans(), api.workouts(), api.bodyLogs(), api.photos(), api.checkins(), api.messages(),
+      api.myAnswers().catch(() => null),
     ]);
-    setD({ client, plans, workouts, body, photos, checkins, messages });
+    // Under-18s don't use progress photos.
+    const minor = answers?.age !== undefined && answers?.age !== "" && +answers.age < 18;
+    setD({ client, plans, workouts, body, photos, checkins, messages, minor });
   }, []);
   useEffect(() => { load(); }, [load]);
   return [d, load];
@@ -33,13 +36,14 @@ export function Portal({ route, session }) {
   const [d, reload] = useData();
   const [logDay, setLogDay] = useState(null);
   const name = (d?.client?.full_name || session.user.name || "").split(" ")[0];
+  const nav = d?.minor ? NAV.filter(([r]) => r !== "app-photos") : NAV;
 
   const shell = (title, sub, body, actions) => (
     <div className="app">
       <aside className="side">
         <Brand light onClick={() => go("home")} />
         <nav aria-label="Client area">
-          {NAV.map(([r, label, icon]) => (
+          {nav.map(([r, label, icon]) => (
             <button key={r} aria-current={route === r ? "page" : undefined} onClick={() => go(r)}>
               <Icon name={icon} /> {label}
             </button>
@@ -65,7 +69,7 @@ export function Portal({ route, session }) {
         {body}
       </main>
       <nav className="tabbar" aria-label="Client area">
-        {NAV.map(([r, label, icon]) => (
+        {nav.map(([r, label, icon]) => (
           <button key={r} aria-current={route === r ? "page" : undefined} onClick={() => go(r)}>
             <Icon name={icon} />
             {label}
@@ -102,7 +106,10 @@ export function Portal({ route, session }) {
   if (route === "app-training") return shell("Training", training?.content?.title, waiting ? <Waiting d={d} /> : <TrainingView plan={training} workouts={d.workouts} onLog={setLogDay} reload={reload} />);
   if (route === "app-food") return shell("Food", food?.content?.title, waiting ? <Waiting d={d} /> : <FoodView plan={food} />);
   if (route === "app-progress") return shell("Progress", "Everything you log, as charts.", <ProgressView d={d} reload={reload} />);
-  if (route === "app-photos") return shell("Photos", "Private: only you and Simon can see these.", <PhotosView d={d} reload={reload} />);
+  if (route === "app-photos")
+    return d.minor
+      ? shell("Photos", null, <div className="panel"><Empty title="No photos needed">We track your progress with your lifts, weigh-ins and check-ins instead.</Empty></div>)
+      : shell("Photos", "Private: only you and Simon can see these.", <PhotosView d={d} reload={reload} />);
   if (route === "app-checkins") return shell("Check-ins", null, <CheckinsView d={d} reload={reload} />);
   return shell(`Hi ${name}`, fmtDate(today(), { weekday: "long", day: "numeric", month: "long" }), <TodayView d={d} onLog={setLogDay} reload={reload} waiting={waiting} />);
 }
@@ -136,7 +143,7 @@ function Waiting({ d }) {
           </li>
         ))}
       </ol>
-      <p className="small muted" style={{ marginTop: 18 }}>While you wait: add a weigh-in on the Progress page and your first photos.</p>
+      <p className="small muted" style={{ marginTop: 18 }}>While you wait: add a weigh-in on the Progress page{d.minor ? "." : " and your first photos."}</p>
     </div>
   );
 }

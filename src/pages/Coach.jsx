@@ -501,7 +501,8 @@ const LABELS = {
   routine: "Current training", lifts: "Best lifts", likes_ex: "Loves", dislikes_ex: "Hates / can't do", injuries: "Injuries", work: "Job / day",
   steps: "Steps", sleep: "Sleep", stress: "Stress", train_time: "Trains at (time)", diet: "Diet", allergies: "Allergies", likes: "Foods loved",
   dislikes: "Won't eat", meals: "Meals a day", cooking: "Cooking", budget: "Budget", alcohol: "Alcohol", tracking: "Tracked before", supplements: "Supplements",
-  health_details: "Health details",
+  health_details: "Health details", peds: "Steroids / PEDs", peds_details: "PED details",
+  guardian_name: "Parent / guardian", guardian_email: "Guardian email",
 };
 
 function Answers({ a }) {

@@ -234,6 +234,14 @@ begin
   if gap is not null then update clients set next_checkin = current_date + gap where id = k.client_id; end if;
 end $$;
 
+-- ============ Access for logged-in users (row rules above still apply) ============
+grant usage on schema public to anon, authenticated;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+revoke execute on function public.start_client(text, text, jsonb), public.report_payment(text), public.submit_checkin(jsonb),
+  public.approve_plan(uuid), public.approve_checkin(uuid) from public, anon;
+grant execute on function public.start_client(text, text, jsonb), public.report_payment(text), public.submit_checkin(jsonb),
+  public.approve_plan(uuid), public.approve_checkin(uuid), public.is_coach() to authenticated;
+
 -- ============ Progress photos (private) ============
 insert into storage.buckets (id, name, public) values ('progress', 'progress', false);
 

@@ -36,8 +36,8 @@ export const PLANS = [
       "Progress charts and photos",
     ],
     missing: ["Check-ins with Simon", "Plan changes as you progress"],
-    // Stripe payment link (test mode until Stripe is switched to live).
-    paymentLink: "",
+    // Stripe payment links. TEST MODE ("buy.stripe.com/test_...") until the coaching Stripe account is live.
+    paymentLink: "https://buy.stripe.com/test_eVq4gybnn04kaLnbw60RG00",
   },
   {
     id: "monthly",
@@ -58,7 +58,7 @@ export const PLANS = [
       "Plan changes as you progress",
     ],
     missing: [],
-    paymentLink: "",
+    paymentLink: "https://buy.stripe.com/test_9B68wOajj7wM6v7bw60RG01",
   },
   {
     id: "premium",
@@ -79,11 +79,11 @@ export const PLANS = [
       "Replies to your messages first",
     ],
     missing: [],
-    paymentLink: "",
+    paymentLink: "https://buy.stripe.com/test_aFa00i6333gw8DffMm0RG02",
   },
 ];
 
 export const planById = (id) => PLANS.find((p) => p.id === id) || PLANS[1];
 
 // Stripe's page where clients manage or cancel a subscription.
-export const STRIPE_CUSTOMER_PORTAL = "";
+export const STRIPE_CUSTOMER_PORTAL = "https://billing.stripe.com/p/login/test_eVq4gybnn04kaLnbw60RG00";

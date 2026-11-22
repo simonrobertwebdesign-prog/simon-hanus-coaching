@@ -44,9 +44,12 @@ export const supabaseApi = {
     return user ? { user } : null;
   },
   onChange(cb) {
-    const { data } = sb.auth.onAuthStateChange(async (_e, s) => {
-      const user = await loadMe(s);
-      cb(user ? { user } : null);
+    const { data } = sb.auth.onAuthStateChange((event, s) => {
+      // Run outside the auth callback (Supabase advises against awaiting inside it).
+      setTimeout(async () => {
+        const user = await loadMe(s);
+        cb(user ? { user } : null, event);
+      }, 0);
     });
     return () => data.subscription.unsubscribe();
   },
@@ -55,7 +58,7 @@ export const supabaseApi = {
       await sb.auth.signUp({
         email,
         password,
-        options: { data: { full_name: name }, emailRedirectTo: location.origin + "/#start" },
+        options: { data: { full_name: name }, emailRedirectTo: location.origin + "/" },
       })
     );
     return { needsConfirm: !data.session };
@@ -67,7 +70,7 @@ export const supabaseApi = {
     await sb.auth.signOut();
   },
   async resetPassword(email) {
-    must(await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/#reset" }));
+    must(await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/" }));
   },
   async updatePassword(password) {
     must(await sb.auth.updateUser({ password }));

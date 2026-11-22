@@ -4,18 +4,27 @@ import { go } from "../lib/router";
 import { Brand, Field } from "../components/ui";
 import { cx } from "../lib/util";
 
-export function Login() {
-  const [f, setF] = useState({ email: "", password: "" });
+export function Login({ initialMode = "login" }) {
+  const [f, setF] = useState({ email: "", password: "", name: "" });
   const [note, setNote] = useState(null);
   const [busy, setBusy] = useState(false);
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState(initialMode);
 
   async function submit(e) {
     e.preventDefault();
     setBusy(true);
     setNote(null);
     try {
-      if (mode === "reset") {
+      if (mode === "signup") {
+        if (f.password.length < 8) throw new Error("Use at least 8 characters for your password.");
+        const r = await api.signUp({ email: f.email.trim().toLowerCase(), password: f.password, name: f.name.trim() });
+        if (r.needsConfirm) {
+          setNote({ kind: "green", text: "Account made. Check your email and press the link to confirm it." });
+          return;
+        }
+        const s = await api.session();
+        go(s?.user?.role === "coach" ? "coach" : "app");
+      } else if (mode === "reset") {
         await api.resetPassword(f.email.trim());
         setNote({ kind: "green", text: "If that email has an account, a reset link is on its way." });
       } else {
@@ -34,18 +43,23 @@ export function Login() {
     <div className="wrap auth">
       <Brand onClick={() => go("home")} />
       <div className="wizard-main" style={{ marginTop: 28 }}>
-        <h2>{mode === "reset" ? "Reset your password" : "Log in"}</h2>
+        <h2>{mode === "reset" ? "Reset your password" : mode === "signup" ? "Create an account" : "Log in"}</h2>
         <form className="wizard-body" onSubmit={submit}>
+          {mode === "signup" && (
+            <Field label="Your name">
+              <input className="input" autoComplete="name" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} required />
+            </Field>
+          )}
           <Field label="Email">
             <input className="input" type="email" autoComplete="email" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} required />
           </Field>
-          {mode === "login" && (
-            <Field label="Password">
-              <input className="input" type="password" autoComplete="current-password" value={f.password} onChange={(e) => setF({ ...f, password: e.target.value })} required />
+          {mode !== "reset" && (
+            <Field label="Password" hint={mode === "signup" ? "At least 8 characters." : undefined}>
+              <input className="input" type="password" autoComplete={mode === "signup" ? "new-password" : "current-password"} value={f.password} onChange={(e) => setF({ ...f, password: e.target.value })} required />
             </Field>
           )}
           {note && <div className={cx("notice", note.kind)}>{note.text}</div>}
-          <button className="btn block" disabled={busy}>{mode === "reset" ? "Send reset link" : busy ? "Logging in…" : "Log in"}</button>
+          <button className="btn block" disabled={busy}>{mode === "reset" ? "Send reset link" : mode === "signup" ? (busy ? "Creating…" : "Create account") : busy ? "Logging in…" : "Log in"}</button>
           <div className="row between small">
             <button type="button" className="link" onClick={() => setMode(mode === "reset" ? "login" : "reset")}>
               {mode === "reset" ? "Back to log in" : "Forgot password?"}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "./lib/api";
 import { go, useRoute } from "./lib/router";
+import { store } from "./lib/util";
 import { ToastHost, Loading } from "./components/ui";
 import { Home } from "./pages/Home";
 import { Start, Paid } from "./pages/Start";
@@ -15,16 +16,24 @@ export default function App() {
 
   useEffect(() => {
     api.session().then(setSession);
-    return api.onChange(setSession);
+    return api.onChange((s, event) => {
+      setSession(s);
+      if (event === "PASSWORD_RECOVERY") go("reset");
+    });
   }, []);
 
-  // Supabase email links land with tokens in the hash; send them on.
+  // Back from the confirmation email with a half-finished questionnaire? Carry on.
   useEffect(() => {
-    if (route.includes("access_token") || route.includes("type=recovery")) {
-      const recovery = route.includes("type=recovery");
-      setTimeout(() => go(recovery ? "reset" : "start"), 400);
+    const draft = store("shc-q");
+    if (session && session.user.role !== "coach" && draft?.step >= 8 && (route === "home" || route.includes("access_token"))) go("start");
+  }, [session]);
+
+  // Supabase email links land with tokens in the hash; tidy the address once they're read.
+  useEffect(() => {
+    if (route.includes("access_token") && session !== undefined) {
+      setTimeout(() => go(route.includes("type=recovery") ? "reset" : session ? (session.user.role === "coach" ? "coach" : "app") : "home"), 300);
     }
-  }, [route]);
+  }, [route, session]);
 
   if (session === undefined) return <Loading />;
 
@@ -36,6 +45,7 @@ export default function App() {
   else if (route.startsWith("start")) page = <Start route={route} session={session} />;
   else if (route === "paid") page = <Paid session={session} />;
   else if (route === "login") page = <Login />;
+  else if (route === "signup") page = <Login initialMode="signup" />;
   else if (route === "reset") page = <ResetPassword />;
   else if (["terms", "privacy", "health"].includes(route)) page = <Legal which={route} session={session} />;
   else page = <Home session={session} />;

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { PLANS, planById } from "../config";
 import { api } from "../lib/api";
 import { go } from "../lib/router";
-import { sessionStore, cx } from "../lib/util";
+import { store, cx } from "../lib/util";
 import { Brand, Choices, Field, Plate, Seg } from "../components/ui";
 
 const HEALTH = [
@@ -30,7 +30,7 @@ const blank = {
 };
 
 export function Start({ route, session }) {
-  const saved = sessionStore("shc-q");
+  const saved = store("shc-q");
   const fromRoute = route.startsWith("start-") ? route.slice(6) : null;
   const [plan, setPlan] = useState(fromRoute || saved?.plan || "monthly");
   const [a, setA] = useState({ ...blank, ...(saved?.answers || {}) });
@@ -41,7 +41,7 @@ export function Start({ route, session }) {
   const [account, setAccount] = useState({ email: "", password: "" });
 
   useEffect(() => {
-    sessionStore("shc-q", { plan, answers: a, step });
+    store("shc-q", { plan, answers: a, step });
   }, [plan, a, step]);
 
   const set = (k) => (v) => setA((x) => ({ ...x, [k]: v?.target ? (v.target.type === "checkbox" ? v.target.checked : v.target.value) : v }));
@@ -162,7 +162,7 @@ export function Start({ route, session }) {
     }
     setBusy(true);
     await api.reportPayment("demo-" + Date.now());
-    sessionStore("shc-q", null);
+    store("shc-q", null);
     setBusy(false);
     go("paid");
   }
@@ -517,7 +517,7 @@ export function Paid({ session }) {
   useEffect(() => {
     const sid = new URLSearchParams(location.search).get("session_id");
     if (sid && session) api.reportPayment(sid).catch(() => {});
-    sessionStore("shc-q", null);
+    store("shc-q", null);
   }, [session]);
   return (
     <div className="wrap auth" style={{ maxWidth: 620 }}>

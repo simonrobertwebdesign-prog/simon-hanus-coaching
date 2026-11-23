@@ -36,7 +36,7 @@ export const PLANS = [
       "Client area to log every set",
       "Progress charts and photos",
     ],
-    missing: ["Check-ins with Simon", "Plan changes as you progress"],
+    missing: ["Check-ins with your coach", "Plan changes as you progress"],
     // Stripe payment links. TEST MODE ("buy.stripe.com/test_...") until the coaching Stripe account is live.
     paymentLink: "https://buy.stripe.com/test_eVq4gybnn04kaLnbw60RG00",
   },

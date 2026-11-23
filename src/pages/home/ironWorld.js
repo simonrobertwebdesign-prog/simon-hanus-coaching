@@ -10,37 +10,39 @@ import {
   AdditiveBlending, DoubleSide, MathUtils,
 } from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { T, weekAt, kgAt, CLIMB } from "./storyTiming.js";
 
 // Urethane plates in the style of commercial gym plates (12 sides, two handles, steel hub, white numbers).
 // The coloured ring shows the coaching level. Loaded heaviest first, nearest the collar.
 // R = corner radius of the 12-sided plate, t = thickness, in metres.
 export const PLATES = [
-  { plan: "premium", kg: 25, accent: "#8b3fd1", R: 0.226, t: 0.046, from: 0.24, to: 0.35 },
-  { plan: "monthly", kg: 20, accent: "#c8102e", R: 0.206, t: 0.041, from: 0.36, to: 0.47 },
-  { plan: "oneoff", kg: 15, accent: "#d8dadd", R: 0.186, t: 0.037, from: 0.48, to: 0.58 },
+  { plan: "premium", kg: 25, accent: "#8b3fd1", R: 0.226, t: 0.046, from: T.plates.premium[0], to: T.plates.premium[1] },
+  { plan: "monthly", kg: 20, accent: "#b0122d", R: 0.206, t: 0.041, from: T.plates.monthly[0], to: T.plates.monthly[1] },
+  { plan: "oneoff", kg: 15, accent: "#d8dadd", R: 0.186, t: 0.037, from: T.plates.oneoff[0], to: T.plates.oneoff[1] },
 ];
-const CLIP = { from: 0.585, to: 0.63 };
-const LIFT = { from: 0.66, to: 0.88, height: 0.62 };
+const CLIP = { from: T.clip[0], to: T.clip[1] };
+const LIFT_HEIGHT = 0.62;
+const KG0 = CLIMB[0].kg, KG1 = CLIMB[CLIMB.length - 1].kg;
 const BAR_Y = 1.0;
 const COLLAR_X = 0.685;
 const SLEEVE_END = 1.1;
 
 const SHOTS = [
   { p: 0.0, pos: [2.05, 1.62, 1.55], tgt: [-0.95, 1.42, -0.5] },
-  { p: 0.12, pos: [1.95, 1.4, 1.35], tgt: [0.25, 1.08, -0.1] },
-  { p: 0.23, pos: [1.78, 1.13, 1.12], tgt: [0.6, 1.0, 0] },
-  { p: 0.6, pos: [1.62, 1.24, 0.98], tgt: [0.62, 1.0, 0] },
-  { p: 0.7, pos: [-0.2, 1.05, 4.25], tgt: [-0.68, 1.2, 0] },
-  { p: 0.88, pos: [-0.2, 0.95, 4.2], tgt: [-0.68, 1.22, 0] },
+  { p: 0.08, pos: [1.95, 1.4, 1.35], tgt: [0.25, 1.08, -0.1] },
+  { p: 0.14, pos: [1.78, 1.13, 1.12], tgt: [0.6, 1.0, 0] },
+  { p: 0.47, pos: [1.62, 1.24, 0.98], tgt: [0.62, 1.0, 0] },
+  { p: 0.545, pos: [-0.3, 1.05, 4.3], tgt: [-0.84, 1.2, 0] },
+  { p: 0.86, pos: [-0.38, 0.92, 4.1], tgt: [-0.86, 1.25, 0] },
   { p: 1.0, pos: [-0.15, 0.9, 3.95], tgt: [-0.64, 1.3, 0] },
 ];
 const SHOTS_TALL = [
   { p: 0.0, pos: [1.6, 1.75, 1.7], tgt: [0.15, 1.32, -0.1] },
-  { p: 0.12, pos: [1.9, 1.55, 2.1], tgt: [0.42, 1.48, 0] },
-  { p: 0.23, pos: [1.95, 1.55, 1.6], tgt: [0.72, 1.45, 0] },
-  { p: 0.6, pos: [1.85, 1.6, 1.5], tgt: [0.74, 1.47, 0] },
-  { p: 0.7, pos: [0.0, 1.8, 6.5], tgt: [0.0, 2.45, 0] },
-  { p: 0.88, pos: [0.0, 1.75, 6.4], tgt: [0.0, 2.45, 0] },
+  { p: 0.08, pos: [1.9, 1.55, 2.1], tgt: [0.42, 1.48, 0] },
+  { p: 0.14, pos: [1.95, 1.55, 1.6], tgt: [0.72, 1.45, 0] },
+  { p: 0.47, pos: [1.85, 1.6, 1.5], tgt: [0.74, 1.47, 0] },
+  { p: 0.545, pos: [0.0, 1.85, 6.6], tgt: [0.0, 2.55, 0] },
+  { p: 0.86, pos: [0.0, 1.75, 6.4], tgt: [0.0, 2.5, 0] },
   { p: 1.0, pos: [0.0, 1.7, 6.2], tgt: [0.0, 2.4, 0] },
 ];
 
@@ -120,7 +122,7 @@ function plateLabel(kg, R) {
     ctx.textBaseline = "middle";
     try { ctx.fontStretch = "expanded"; } catch {}
     // numbers sit between the handles, top and bottom, like the real thing
-    ctx.font = `900 ${Math.round(70 * (0.226 / R) ** 0.2)}px Archivo, "Helvetica Neue", Arial, sans-serif`;
+    ctx.font = `900 ${Math.round(72 * (0.226 / R) ** 0.2)}px Anybody, "Arial Black", Arial, sans-serif`;
     ctx.fillText(`${kg} KG`, s / 2, s * 0.82);
     ctx.fillText(`${kg} KG`, s / 2, s * 0.18);
   });
@@ -215,7 +217,7 @@ export function createIronWorld(host, { phone = false, still = false } = {}) {
   scene.add(spot, spot.target);
   const purple = new DirectionalLight("#8b3fd1", 3.2);
   purple.position.set(-2.4, 1.8, -3);
-  const crimson = new DirectionalLight("#c8102e", 1.4);
+  const crimson = new DirectionalLight("#a50f25", 1.4);
   crimson.position.set(2.6, 0.2, 2.2);
   scene.add(purple, crimson, new HemisphereLight("#26262c", "#000000", 0.35));
 
@@ -226,7 +228,7 @@ export function createIronWorld(host, { phone = false, still = false } = {}) {
     g.addColorStop(0, "rgba(98,30,150,0.75)"); g.addColorStop(0.45, "rgba(52,14,84,0.45)"); g.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
     g = ctx.createRadialGradient(w * 0.58, h * 0.86, 0, w * 0.58, h * 0.86, w * 0.3);
-    g.addColorStop(0, "rgba(200,16,46,0.32)"); g.addColorStop(1, "rgba(0,0,0,0)");
+    g.addColorStop(0, "rgba(158,16,40,0.32)"); g.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
   }));
   const haze = new Mesh(keep(new PlaneGeometry(26, 13)), keep(new MeshBasicMaterial({ map: hazeTex, fog: false, depthWrite: false, toneMapped: false })));
@@ -381,7 +383,7 @@ export function createIronWorld(host, { phone = false, still = false } = {}) {
   }
 
   // ---------- state ----------
-  let progress = still ? 0.64 : 0;
+  let progress = still ? T.platesOut[0] : 0;
   let shown = progress;
   const pointer = new Vector2(), pointerSmooth = new Vector2(), dustPointer = new Vector2(9, 9);
   const ZERO = new Vector2(0, 0), FAR = new Vector2(9, 9);
@@ -420,12 +422,12 @@ export function createIronWorld(host, { phone = false, still = false } = {}) {
       c.position.x = MathUtils.lerp(SLEEVE_END + 0.25, clipX, ck);
       c.visible = ck > 0.001;
     }
-    const lift = smooth(span(p, LIFT.from, LIFT.to)) * LIFT.height;
+    const lift = ((kgAt(weekAt(p)) - KG0) / (KG1 - KG0)) * LIFT_HEIGHT;
     bar.position.y = BAR_Y + lift + Math.sin(t * 0.9) * 0.008;
     bar.rotation.z = Math.sin(t * 0.5) * 0.004;
     for (const s of sides) s.rotation.x = t * 0.1;
-    const loaded = span(p, 0.24, 0.5);
-    shadow.material.opacity = (0.5 + loaded * 0.5) * (1 - (lift / LIFT.height) * 0.5);
+    const loaded = span(p, T.plates.premium[0], T.plates.oneoff[1]);
+    shadow.material.opacity = (0.5 + loaded * 0.5) * (1 - (lift / LIFT_HEIGHT) * 0.5);
     const sc = 1 + lift * 0.6;
     shadow.scale.set(2.8 * sc, (0.55 + loaded * 0.35) * sc, 1);
   }
@@ -445,7 +447,7 @@ export function createIronWorld(host, { phone = false, still = false } = {}) {
     time += dt;
     shown += (progress - shown) * (still ? 1 : Math.min(1, dt * 7));
     pointerSmooth.lerp(pointerActive ? pointer : ZERO, Math.min(1, dt * 3));
-    shotAt(still ? 0.7 : shown, camPos, camTgt);
+    shotAt(still ? 0.6 : shown, camPos, camTgt);
     camPos.x += pointerSmooth.x * 0.14;
     camPos.y += pointerSmooth.y * 0.07;
     camera.position.copy(camPos);

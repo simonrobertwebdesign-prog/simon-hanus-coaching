@@ -75,7 +75,7 @@ export function Start({ route, session }) {
     if (s === 4) { need("work"); need("sleep"); }
     if (s === 5) { need("diet"); need("cooking"); need("meals"); }
     if (s === 6) HEALTH.forEach(([k]) => { if (!a.health[k]) e["h_" + k] = "Please answer yes or no"; });
-    if (s === 6 && flags.length && !a.health_details.trim()) e.health_details = "Tell us a little more so Simon can plan around it";
+    if (s === 6 && flags.length && !a.health_details.trim()) e.health_details = "Tell us a little more so your coach can plan around it";
     if (s === 6) need("peds", "Please pick one");
     if (s === 7) {
       if (minor) {
@@ -228,16 +228,15 @@ export function Start({ route, session }) {
                     key={x.id}
                     type="button"
                     onClick={() => setPlan(x.id)}
-                    className="choice"
+                    className="choice plan-pick"
                     aria-pressed={plan === x.id}
-                    style={{ borderRadius: 16, display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 16, alignItems: "center", padding: 16, textAlign: "left" }}
                   >
                     <Plate plan={x.id} size={48} />
-                    <span>
-                      <b style={{ display: "block", fontSize: "1.1rem" }}>{x.name}</b>
-                      <span style={{ fontWeight: 400, opacity: 0.8 }}>{x.blurb}</span>
+                    <span className="pp-text">
+                      <b className="pp-name">{x.name}</b>
+                      <span className="pp-blurb">{x.blurb}</span>
                     </span>
-                    <b style={{ fontSize: "1.3rem", whiteSpace: "nowrap" }}>£{x.price}{x.period === "month" ? "/mo" : ""}</b>
+                    <b className="pp-price">£{x.price}{x.period === "month" ? "/mo" : ""}</b>
                   </button>
                 ))}
               </div>
@@ -290,7 +289,7 @@ export function Start({ route, session }) {
           {step === 2 && (
             <>
               <h2 id="step-title" style={{ marginTop: 8 }}>Your goal</h2>
-              <p className="intro">Be honest. The more Simon knows, the better the plan.</p>
+              <p className="intro">Be honest. The more your coach knows, the better the plan.</p>
               <div className="wizard-body">
                 <Field label="Main goal" error={E("goal")}>
                   <Choices options={["Build muscle", "Lose fat", "Build muscle and lose fat", "Get stronger", "Get fitter and healthier"]} value={a.goal} onChange={set("goal")} label="Main goal" />
@@ -409,7 +408,7 @@ export function Start({ route, session }) {
           {step === 6 && (
             <>
               <h2 id="step-title" style={{ marginTop: 8 }}>Health check</h2>
-              <p className="intro">Standard questions before starting any training plan. A yes doesn't stop you joining: Simon reads it personally, and may ask you to check with your GP first.</p>
+              <p className="intro">Standard questions before starting any training plan. A yes doesn't stop you joining: your coach reads it personally, and may ask you to check with your GP first.</p>
               <div className="wizard-body" style={{ gap: 0 }}>
                 {HEALTH.map(([k, q]) => (
                   <div className="yn" key={k}>
@@ -429,7 +428,7 @@ export function Start({ route, session }) {
                 </div>
                 {(a.peds === "In the past" || a.peds === "Yes, now") && (
                   <div style={{ marginTop: 14 }}>
-                    <Field label="What, and when?" hint="Optional. Kept private between you and Simon.">
+                    <Field label="What, and when?" hint="Optional. Kept private between you and your coach.">
                       <input className="input" value={a.peds_details} onChange={set("peds_details")} />
                     </Field>
                   </div>
@@ -440,7 +439,7 @@ export function Start({ route, session }) {
                       <textarea className={cx("textarea", E("health_details") && "err")} value={a.health_details} onChange={set("health_details")} />
                     </Field>
                     <div className="notice amber">
-                      <b>Simon will look at this before your plan is made.</b> If you answered yes to the eating disorder question, your food plan won't be built around calorie targets, and Simon will talk to you first.
+                      <b>Your coach will look at this before your plan is made.</b> If you answered yes to the eating disorder question, your food plan won't be built around calorie targets, and your coach will talk to you first.
                     </div>
                   </div>
                 )}
@@ -459,7 +458,7 @@ export function Start({ route, session }) {
                     <Field label="Their full name" error={E("guardian_name")}>
                       <input className={cx("input", E("guardian_name") && "err")} autoComplete="off" value={a.guardian_name} onChange={set("guardian_name")} />
                     </Field>
-                    <Field label="Their email" hint="Simon may contact them about your coaching." error={E("guardian_email")}>
+                    <Field label="Their email" hint="Your coach may contact them about your coaching." error={E("guardian_email")}>
                       <input className={cx("input", E("guardian_email") && "err")} type="email" autoComplete="off" value={a.guardian_email} onChange={set("guardian_email")} />
                     </Field>
                     <label className="check">
@@ -485,7 +484,7 @@ export function Start({ route, session }) {
                 {!minor && (
                   <label className="check">
                     <input type="checkbox" checked={a.agree_results} onChange={set("agree_results")} />
-                    <span>Optional: Simon can share my progress (without my name or face) as a result on the website.</span>
+                    <span>Optional: my coach can share my progress (without my name or face) as a result on the website.</span>
                   </label>
                 )}
               </div>
@@ -525,7 +524,7 @@ export function Start({ route, session }) {
                   </div>
                   <b style={{ fontSize: "1.5rem" }}>£{p.price}{p.period === "month" ? "/mo" : ""}</b>
                 </div>
-                {flags.length > 0 && <div className="notice amber">You told us about something in the health check. Simon will read it before building your plan.</div>}
+                {flags.length > 0 && <div className="notice amber">You told us about something in the health check. Your coach will read it before building your plan.</div>}
                 {(api.demo || !p.paymentLink) && (
                   <div className="notice">
                     <b>Test mode.</b> Real payments aren't switched on yet, so this button pretends you've paid.
@@ -570,7 +569,7 @@ export function Paid({ session }) {
       <Brand onClick={() => go("home")} />
       <div className="stack" style={{ marginTop: 40, "--gap": "18px" }}>
         <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.4rem)" }}>You're in.</h1>
-        <p className="lead">Thanks for paying. Simon is now reading your answers and building your training and food plans.</p>
+        <p className="lead">Thanks for paying. Your coach is now reading your answers and building your training and food plans.</p>
         <div className="notice green">
           <b>What happens next:</b> your plans appear in your client area within 48 hours. Until then, have a look around and add your first weigh-in.
         </div>

@@ -3,8 +3,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
-import { IronStory, prefersReduced } from "./home/IronStory";
-import { Marquee, Pillars, StackSteps, PlanCards, ProteinCalc, FinalCta, useTilt, useSpotlight } from "./home/sections";
+import { Story } from "./home/Story";
+import { prefersReduced } from "./home/motion";
+import { Marquee, Pillars, StackSteps, PlanCards, FinalCta, useTilt, useSpotlight } from "./home/sections";
+import { Method, WeekPlanner, StartingNumbers } from "./home/method";
 import { PLANS, BRAND } from "../config";
 import { go, scrollToId } from "../lib/router";
 import { Plate, Brand } from "../components/ui";
@@ -28,6 +30,7 @@ export function Nav({ session }) {
         <Brand onClick={() => go("home")} />
         <nav className="nav-links" aria-label="Main">
           <button onClick={() => scrollToId("how")}>How it works</button>
+          <button onClick={() => scrollToId("method")}>The method</button>
           <button onClick={() => scrollToId("inside")}>Your client area</button>
           <button onClick={() => scrollToId("plans")}>Plans</button>
         </nav>
@@ -161,7 +164,7 @@ function InsideSection() {
 
 const FAQ = [
   ["Who are the plans for?", "Anyone aged 14 or over who wants to build muscle, lose fat, get stronger or just get fitter, from complete beginners to people who've trained for years. Under 18? A parent or guardian signs off in the questionnaire. Gym or home: the questionnaire asks what you have."],
-  ["How fast do I get my plans?", "Within 48 hours of paying. Simon checks every plan himself before it reaches you."],
+  ["How fast do I get my plans?", "Within 48 hours of paying. Your coach checks every plan before it reaches you."],
   ["What happens at a check-in?", "You send your weight, how training went and how you feel. Your coach looks at everything you've logged and sends back what's working, what changes, and why."],
   ["Can I cancel?", "Yes. Monthly and Premium have no minimum term. Cancel any time and you won't be charged again."],
   ["Do I need to count calories?", "Your food plan gives you meals and amounts, so you don't have to track every bite. If you like tracking, the targets are there too."],
@@ -192,8 +195,8 @@ function useKineticHeadings() {
     if (prefersReduced()) return;
     const ctx = gsap.context(() => {
       gsap.utils.toArray("main > .section h2").forEach((h) => {
-        gsap.fromTo(h, { fontVariationSettings: '"wdth" 72' }, {
-          fontVariationSettings: '"wdth" 125',
+        gsap.fromTo(h, { fontVariationSettings: '"wdth" 60' }, {
+          fontVariationSettings: '"wdth" 108',
           ease: "none",
           scrollTrigger: { trigger: h, start: "top 95%", end: "top 62%", scrub: true },
         });
@@ -210,15 +213,17 @@ export function Home({ session }) {
     <>
       <Nav session={session} />
       <main>
-        <IronStory />
+        <Story />
         <Marquee />
         <Pillars />
         <StackSteps />
+        <Method />
+        <WeekPlanner />
 
         <InsideSection />
 
         <PlanCards />
-        <ProteinCalc />
+        <StartingNumbers />
 
         <section className="section" id="faq">
           <div className="wrap">

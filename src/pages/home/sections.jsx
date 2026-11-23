@@ -3,14 +3,13 @@ import { useEffect, useId, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { useGSAP } from "@gsap/react";
 import { PLANS } from "../../config";
 import { go } from "../../lib/router";
-import { prefersReduced } from "./IronStory";
+import { prefersReduced, finePointer } from "./motion";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
-
-const finePointer = () => typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText, ScrambleTextPlugin);
 
 // ---------- small effects ----------
 
@@ -80,7 +79,7 @@ export function useMagnetic(strength = 0.35) {
 
 // ---------- the plate, drawn flat (matches the 3D plates) ----------
 
-const ACCENT = { steel: "#d8dadd", crimson: "#c8102e", purple: "#8b3fd1" };
+const ACCENT = { steel: "#d8dadd", crimson: "#b0122d", purple: "#8b3fd1" };
 
 function dodecagon(R, cut) {
   const pts = [];
@@ -126,7 +125,7 @@ export function PlateArt({ plan, className = "" }) {
       <circle r="0.86" fill="none" stroke={c} strokeWidth="0.035" />
       <circle r="0.25" fill={`url(#hub-${uid})`} />
       <circle r="0.105" fill="#050506" />
-      <text y="0.66" textAnchor="middle" fill="#f4f4f5" fontSize="0.21" fontWeight="900" style={{ fontVariationSettings: '"wdth" 125' }}>{p.plate} KG</text>
+      <text y="0.66" textAnchor="middle" fill="#f4f4f5" fontSize="0.21" fontWeight="900" style={{ fontFamily: "var(--display)", fontVariationSettings: '"wdth" 125' }}>{p.plate} KG</text>
     </svg>
   );
 }
@@ -192,7 +191,7 @@ export function Pillars() {
     <section className="section pillars-sec" aria-label="What makes it different">
       <div className="wrap pillars">
         <Pillar title="Built from your answers">A questionnaire on your goals, body, schedule, kit and food comes first. Nothing is copied and pasted.</Pillar>
-        <Pillar title="Checked by Simon">Every plan and every check-in is read and approved before you see it.</Pillar>
+        <Pillar title="Checked by your coach">Every plan and every check-in is read and approved before you see it.</Pillar>
         <Pillar title="Changes as you do">Your logs show what's working. Stalled lift, weight not moving? The plan changes.</Pillar>
       </div>
     </section>
@@ -286,54 +285,6 @@ export function PlanCards() {
         <p className="lead" style={{ marginTop: 16, maxWidth: "46ch" }}>Every plan includes a training plan and a food plan built for you. Heavier plate, more coaching.</p>
         <div className="plans2">{PLANS.map((p) => <PlanCard key={p.id} p={p} />)}</div>
         <p className="small muted" style={{ marginTop: 22 }}>Monthly and Premium renew each month until you cancel. Prices include everything; no extra fees.</p>
-      </div>
-    </section>
-  );
-}
-
-// ---------- protein calculator ----------
-
-const toStone = (kg) => {
-  const lb = Math.round(kg * 2.20462);
-  return `${Math.floor(lb / 14)} st ${lb % 14} lb`;
-};
-
-export function ProteinCalc() {
-  const [kg, setKg] = useState(75);
-  const lowRef = useRef(null), highRef = useRef(null);
-  const shown = useRef({ lo: Math.round(75 * 1.6), hi: Math.round(75 * 2.2) });
-  useEffect(() => {
-    const lo = Math.round(kg * 1.6), hi = Math.round(kg * 2.2);
-    if (prefersReduced()) {
-      lowRef.current.textContent = lo; highRef.current.textContent = hi;
-      return;
-    }
-    gsap.to(shown.current, {
-      lo, hi, duration: 0.45, ease: "power2.out", overwrite: true,
-      onUpdate: () => {
-        lowRef.current.textContent = Math.round(shown.current.lo);
-        highRef.current.textContent = Math.round(shown.current.hi);
-      },
-    });
-  }, [kg]);
-  const fill = ((kg - 40) / (160 - 40)) * 100;
-  const spot = useSpotlight();
-  return (
-    <section className="section calc-sec" aria-labelledby="calc-h">
-      <div ref={spot} className="wrap calc">
-        <div>
-          <h2 id="calc-h">How much protein do you need?</h2>
-          <p className="lead" style={{ marginTop: 16 }}>Slide to your bodyweight. This is the range the research supports: 1.6 to 2.2 g of protein per kg, every day.</p>
-          <label className="calc-slider">
-            <span className="calc-w"><b>{kg} kg</b> <span className="muted">({toStone(kg)})</span></span>
-            <input type="range" min="40" max="160" step="1" value={kg} onChange={(e) => setKg(+e.target.value)} style={{ "--fill": fill + "%" }} aria-label="Your bodyweight in kilograms" />
-          </label>
-        </div>
-        <div className="calc-out" aria-live="polite">
-          <span className="calc-label">Protein a day</span>
-          <div className="calc-num"><span ref={lowRef}>{Math.round(75 * 1.6)}</span><i>–</i><span ref={highRef}>{Math.round(75 * 2.2)}</span><small>g</small></div>
-          <p className="small muted">A rough guide only. Your food plan sets your exact numbers, and they change as you go.</p>
-        </div>
       </div>
     </section>
   );

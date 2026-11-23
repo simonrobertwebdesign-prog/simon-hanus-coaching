@@ -84,7 +84,7 @@ export const FOOD_JAMIE = {
       name: "Breakfast",
       items: [
         { food: "Oats", amount: "100 g" },
-        { food: "Whey protein", amount: "30 g" },
+        { food: "Greek yoghurt", amount: "200 g" },
         { food: "Semi-skimmed milk", amount: "250 ml" },
         { food: "Banana", amount: "1" },
       ],
@@ -228,7 +228,7 @@ export const FOOD_TOM_DRAFT = {
   water_l: 3,
   summary: "Small surplus with meals he can make in 10 minutes.",
   meals: [
-    { name: "Breakfast", items: [{ food: "Overnight oats with whey", amount: "1 pot" }, { food: "Banana", amount: "1" }] },
+    { name: "Breakfast", items: [{ food: "Overnight oats with Greek yoghurt", amount: "1 pot" }, { food: "Banana", amount: "1" }] },
     { name: "Lunch", items: [{ food: "Meal-deal: chicken sandwich", amount: "1" }, { food: "Protein yoghurt", amount: "1" }, { food: "Fruit", amount: "1" }] },
     { name: "Dinner", items: [{ food: "Chicken thighs", amount: "200 g" }, { food: "Microwave rice", amount: "1 pouch" }, { food: "Frozen veg", amount: "150 g" }] },
     { name: "Evening", items: [{ food: "Milk", amount: "400 ml" }, { food: "Peanut butter on toast", amount: "2 slices" }] },

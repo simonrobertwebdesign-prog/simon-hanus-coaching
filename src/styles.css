@@ -1056,3 +1056,6 @@ h4 { font-weight: 700; font-variation-settings: "wdth" 105; }
   .plan-pick > :first-child { grid-row: span 2; }
   .plan-pick .pp-price { grid-column: 2; font-size: 1.15rem; }
 }
+
+.adjust-list { margin: 6px 0 0; padding-left: 18px; color: var(--graphite); display: grid; gap: 6px; }
+.adjust-list li::marker { color: var(--red-ink); }

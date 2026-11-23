@@ -93,7 +93,7 @@ export function Portal({ route, session }) {
     return shell(`Hi ${name}`, null, (
       <div className="panel">
         <Empty title="Let's get you started">
-          <p>You haven't filled in the questionnaire yet. It takes about 8 minutes.</p>
+          <p>You haven't filled in the questionnaire yet. It takes about 10 minutes.</p>
           <button className="btn" style={{ marginTop: 18 }} onClick={() => go("start")}>Start the questionnaire</button>
         </Empty>
       </div>
@@ -583,7 +583,10 @@ function CheckinsView({ d, reload }) {
   return (
     <div className="stack" style={{ "--gap": "16px" }}>
       {!plan.checkinDays ? (
-        <div className="notice">The one-off plan doesn't include check-ins. Move to monthly coaching any time to get a check-in every 2 weeks.</div>
+        <>
+          <div className="notice">The one-off plan doesn't include check-ins. Move to monthly coaching any time to get a check-in every 2 weeks.</div>
+          <SelfAdjust />
+        </>
       ) : (
         <div className="panel">
           <div className="panel-head">
@@ -618,7 +621,7 @@ function CheckinsView({ d, reload }) {
         </div>
       )}
 
-      <div className="panel">
+      {(plan.checkinDays || sent.length > 0) && <div className="panel">
         <h3 style={{ marginBottom: 12 }}>From your coach</h3>
         {sent.length === 0 ? (
           <p className="muted">Your check-in replies will appear here.</p>
@@ -638,7 +641,7 @@ function CheckinsView({ d, reload }) {
             ))}
           </div>
         )}
-      </div>
+      </div>}
 
       <div className="panel">
         <h3 style={{ marginBottom: 12 }}>Messages</h3>
@@ -663,6 +666,48 @@ function CheckinsView({ d, reload }) {
           <input className="input" style={{ flex: 1 }} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Message your coach" aria-label="Message your coach" />
           <button className="btn ink">Send</button>
         </form>
+      </div>
+    </div>
+  );
+}
+
+// One-off clients have no check-ins, so they get the same rules the coach uses, written simply (Coaching Rules, section 4).
+const ADJUST = [
+  ["Your weight", [
+    "Weigh in most mornings, after the toilet and before food. Look at the weekly average, not single days.",
+    "Ignore the jump in the first week of a new plan. It's water and food, not fat.",
+  ]],
+  ["Losing fat", [
+    "Losing less than 0.25% of your weight a week for 2 weeks, and sticking to the plan? Eat 100–200 kcal less (from carbs or fat), or walk about 2,000 more steps a day.",
+    "Losing more than 1% a week? Eat 100–200 kcal more.",
+    "Dieting for 8–12 weeks, or hunger, mood or training falling apart? Have 1–2 weeks at maintenance.",
+  ]],
+  ["Building muscle", [
+    "Not gaining for 2–3 weeks? Eat 100–200 kcal more.",
+    "Gaining more than about 0.5% of your weight a week? Eat 100–200 kcal less.",
+  ]],
+  ["Your lifts", [
+    "Hit the top of the rep range on every set? Add the smallest weight jump next time.",
+    "Stuck for 2–3 weeks while sleeping and eating well? Check you're 0–2 reps from failure, then change the rep range or swap the exercise.",
+    "Lifts dropping 2 sessions in a row, joints aching, sleeping badly? Take an easy week: half the sets, 3–4 reps from failure.",
+    "Pain, not just effort? Swap the exercise. If it lasts, see a GP or physio.",
+  ]],
+  ["Sticking to it", [
+    "Doing less than about 4 in 5 sessions or food days? Make the plan easier to fit your life before you change the numbers.",
+  ]],
+];
+
+function SelfAdjust() {
+  return (
+    <div className="panel">
+      <div className="panel-head"><h3>Adjust it yourself</h3><span className="small muted">The rules your coach uses</span></div>
+      <div className="stack" style={{ "--gap": "16px" }}>
+        {ADJUST.map(([title, items]) => (
+          <div key={title}>
+            <b>{title}</b>
+            <ul className="adjust-list">{items.map((x) => <li key={x}>{x}</li>)}</ul>
+          </div>
+        ))}
       </div>
     </div>
   );

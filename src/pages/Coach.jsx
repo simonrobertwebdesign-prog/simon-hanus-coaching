@@ -5,7 +5,7 @@ import { planById } from "../config";
 import { Brand, Empty, Field, Icon, Loading, Modal, Plate, PlanChip, useToast } from "../components/ui";
 import { LineChart, Bars } from "../components/Chart";
 import { PhotoCompare } from "../components/PhotoCompare";
-import { adherence, bodySummary, checkinState, checkinSummary, lastLogged, lifts, sheetRow, strengthSeries, weeklySessions } from "../lib/insights";
+import { adherence, bodySummary, checkinState, checkinSummary, lastLogged, lifts, sheetRow, startingCalories, strengthSeries, weeklySessions } from "../lib/insights";
 import { cx, fmtDate, fmtDay, initials, kg, relDay, today } from "../lib/util";
 import { installAgent } from "../lib/agent";
 
@@ -502,11 +502,14 @@ function Overview({ b, reload }) {
 }
 
 const LABELS = {
-  age: "Age", sex: "Sex", height_cm: "Height (cm)", weight_kg: "Weight (kg)", goal: "Goal", target: "Specific goal", why_now: "Why now",
-  holding_back: "Held back by", experience: "Training for", days: "Days a week", session: "Session length", where: "Trains at", equipment: "Kit",
-  routine: "Current training", lifts: "Best lifts", likes_ex: "Loves", dislikes_ex: "Hates / can't do", injuries: "Injuries", work: "Job / day",
-  steps: "Steps", sleep: "Sleep", stress: "Stress", train_time: "Trains at (time)", diet: "Diet", allergies: "Allergies", likes: "Foods loved",
-  dislikes: "Won't eat", meals: "Meals a day", cooking: "Cooking", budget: "Budget", alcohol: "Alcohol", tracking: "Tracked before", supplements: "Supplements",
+  age: "Age", sex: "Sex", height_cm: "Height (cm)", weight_kg: "Weight (kg)",
+  goal: "Goal", target: "Specific goal", goal_weight: "Goal weight", body_now: "Body now", why_now: "Why now", holding_back: "Held back by",
+  experience: "Training for", days: "Days a week", train_days: "Days that work", session: "Session length", where: "Trains at", equipment: "Kit",
+  routine: "Current training", lifts: "Best lifts", priority: "Priority muscles", likes_ex: "Loves", dislikes_ex: "Hates / can't do", injuries: "Injuries",
+  work: "Job / day", steps: "Steps", other_activity: "Other sport / cardio", sleep: "Sleep", stress: "Stress", train_time: "Trains at (time)",
+  weight_trend: "Weight, last month", dieting: "Dieting now", tracking: "Tracks calories", calories_now: "Calories now (kcal)", protein_now: "Protein now (g)",
+  maintenance_known: "Their maintenance (kcal)", scales: "Scales at home",
+  diet: "Diet", allergies: "Allergies", likes: "Foods loved", dislikes: "Won't eat", meals: "Meals a day", cooking: "Cooking", budget: "Budget", alcohol: "Alcohol", supplements: "Supplements",
   health_details: "Health details", peds: "Steroids / PEDs", peds_details: "PED details",
   guardian_name: "Parent / guardian", guardian_email: "Guardian email",
 };
@@ -515,7 +518,19 @@ function Answers({ a }) {
   if (!a) return <div className="panel"><Empty title="No answers">This client hasn't filled in the questionnaire.</Empty></div>;
   const rows = Object.entries(LABELS).filter(([k]) => a[k] !== undefined && a[k] !== "" && !(Array.isArray(a[k]) && !a[k].length));
   const yes = Object.entries(a.health || {}).filter(([, v]) => v === "Yes" || v === true).map(([k]) => k);
+  const sc = startingCalories(a);
   return (
+    <div className="stack" style={{ "--gap": "16px" }}>
+    {sc && (
+      <div className="panel">
+        <div className="panel-head"><h3>Starting point</h3><span className="small muted">From their answers</span></div>
+        <div className="stats">
+          <div className="stat"><span>Maintenance guess</span><b>{sc.formula[0].toLocaleString()}–{sc.formula[1].toLocaleString()}</b><small>kcal, {a.weight_kg} kg {sc.multiplier}</small></div>
+          <div className="stat"><span>From their tracking</span><b>{sc.tracked ? sc.tracked.toLocaleString() : "—"}</b><small>{sc.trackedFrom || (a.calories_now ? `eats ${(+a.calories_now).toLocaleString()} kcal, weight ${String(a.weight_trend || "unknown").toLowerCase()}` : "doesn't track")}</small></div>
+          <div className="stat"><span>Protein</span><b>{sc.protein[0]}–{sc.protein[1]} g</b><small>1.6–2.2 g per kg of {sc.proteinFrom}{a.protein_now ? `, eats ${a.protein_now} g now` : ""}</small></div>
+        </div>
+      </div>
+    )}
     <div className="panel">
       <table className="ex-table">
         <tbody>
@@ -523,6 +538,7 @@ function Answers({ a }) {
           <tr><td>Health check</td><td style={{ fontWeight: 400 }}>{yes.length ? <span className="chip amber">Yes to: {yes.join(", ")}</span> : "All no"}</td></tr>
         </tbody>
       </table>
+    </div>
     </div>
   );
 }

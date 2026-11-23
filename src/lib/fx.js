@@ -34,7 +34,10 @@ export function countUp(root = document) {
     const o = { v: 0 };
     gsap.to(o, {
       v: end, duration: 1.1, ease: "power3.out",
-      onUpdate: () => { el.textContent = m[1] + o.v.toFixed(dec) + m[3]; },
+      onUpdate: () => {
+        const n = m[2].includes(",") ? Math.round(o.v).toLocaleString("en-GB") : o.v.toFixed(dec);
+        el.textContent = m[1] + n + m[3];
+      },
       onComplete: () => { el.textContent = text; },
     });
   });

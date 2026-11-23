@@ -2,7 +2,7 @@
 // logged in as Simon, so the database rules still apply.
 // In the browser console: await SHC.todo()
 import { api } from "./api";
-import { checkinState, checkinSummary } from "./insights";
+import { checkinState, checkinSummary, startingCalories } from "./insights";
 import { planById } from "../config";
 import { today } from "./util";
 
@@ -13,7 +13,7 @@ export function installAgent() {
     help() {
       return {
         "todo()": "Everything that needs doing today, grouped.",
-        "client(id)": "All data for one client, plus a summary for check-ins.",
+        "client(id)": "All data for one client, plus a summary for check-ins and a starting point (maintenance guess, tracked numbers, protein) for new plans.",
         "confirmPayment(id, stripeSessionId)": "After checking the payment in Stripe.",
         "draftPlan(clientId, 'training'|'nutrition', content, why[])": "New plan draft for Simon to approve.",
         "redoPlan(planId, content, why[])": "Replace a plan Simon sent back.",
@@ -54,7 +54,7 @@ export function installAgent() {
     },
     async client(id) {
       const b = await api.bundle(id);
-      return { ...b, photos: b.photos.map((p) => ({ date: p.date, angle: p.angle, url: p.url })), summary: checkinSummary(b) };
+      return { ...b, photos: b.photos.map((p) => ({ date: p.date, angle: p.angle, url: p.url })), summary: checkinSummary(b), start: startingCalories(b.answers) };
     },
     async confirmPayment(id, sessionId) {
       await api.confirmPayment(id, sessionId);

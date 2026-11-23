@@ -35,8 +35,9 @@ export const PLANS = [
       "Food plan built for you",
       "Client area to log every set",
       "Progress charts and photos",
+      "Guide to adjusting it yourself",
     ],
-    missing: ["Check-ins with your coach", "Plan changes as you progress"],
+    missing: ["Check-ins with your coach", "Plan changes by your coach"],
     // Stripe payment links. TEST MODE ("buy.stripe.com/test_...") until the coaching Stripe account is live.
     paymentLink: "https://buy.stripe.com/test_eVq4gybnn04kaLnbw60RG00",
   },

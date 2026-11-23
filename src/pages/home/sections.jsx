@@ -202,7 +202,7 @@ export function Pillars() {
 
 const STEPS = [
   ["Pick your plate", "One-off, monthly or premium. The heavier the plate, the more often you check in."],
-  ["Answer the questions", "About 8 minutes on your goals, training, food and health. Under 18? A parent or guardian signs off."],
+  ["Answer the questions", "About 10 minutes on your goals, training, food and health. Under 18? A parent or guardian signs off."],
   ["Get your plans", "Training and food plans made for you, in your client area within 48 hours."],
   ["Train and log", "Weights, reps, sets and bodyweight, straight from your phone in the gym."],
   ["Check in and grow", "Your numbers get read and your plan moves on, every week or every 2 weeks."],
@@ -318,7 +318,7 @@ export function FinalCta() {
     <section className="wrap" style={{ paddingBottom: 40 }}>
       <div ref={spot} className="cta2">
         <div>
-          <h2>Your first plan is 8 minutes away.</h2>
+          <h2>Your first plan is 10 minutes away.</h2>
           <p>Answer the questions, pick your plate, and your plans get built for you.</p>
         </div>
         <div className="mag-zone">

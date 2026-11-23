@@ -164,6 +164,7 @@ function InsideSection() {
 
 const FAQ = [
   ["Who are the plans for?", "Anyone aged 14 or over who wants to build muscle, lose fat, get stronger or just get fitter, from complete beginners to people who've trained for years. Under 18? A parent or guardian signs off in the questionnaire. Gym or home: the questionnaire asks what you have."],
+  ["What do I need to start?", "Somewhere to train (a gym, or home with the kit you have), your phone to log sessions, and bathroom scales for morning weigh-ins. Kitchen scales help with the food plan but aren't a must."],
   ["How fast do I get my plans?", "Within 48 hours of paying. Your coach checks every plan before it reaches you."],
   ["What happens at a check-in?", "You send your weight, how training went and how you feel. Your coach looks at everything you've logged and sends back what's working, what changes, and why."],
   ["Can I cancel?", "Yes. Monthly and Premium have no minimum term. Cancel any time and you won't be charged again."],
@@ -219,11 +220,11 @@ export function Home({ session }) {
         <StackSteps />
         <Method />
         <WeekPlanner />
+        <StartingNumbers />
 
         <InsideSection />
 
         <PlanCards />
-        <StartingNumbers />
 
         <section className="section" id="faq">
           <div className="wrap">

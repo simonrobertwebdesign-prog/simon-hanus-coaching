@@ -413,11 +413,17 @@ export function buildSeed() {
       days: 3, session: "60 min", where: "Commercial gym", diet: "Anything", allergies: "None", work: "Shift work in a warehouse",
       why_now: "Want to actually look like I train.", holding_back: "Never had a plan, don't know what to do in the gym.",
       likes: "Chicken, rice, pasta", dislikes: "Fish", cooking: "Basic", budget: "Tight", health: {},
+      body_now: "Lean", train_days: ["Mon", "Wed", "Fri"], priority: ["Chest", "Arms"], steps: "8,000–12,000",
+      other_activity: "Five-a-side on Sundays", weight_trend: "About the same", dieting: "No", tracking: "Never",
+      scales: ["Bathroom scales"], meals: "3",
     },
     "c-liam": {
       age: 27, sex: "Male", height_cm: 176, weight_kg: 84, goal: "Lose fat", experience: "2–5 years",
       days: 4, session: "75 min", where: "Commercial gym", diet: "Halal", allergies: "None",
       injuries: "Left knee hurts on deep squats.", health: { joints: true },
+      goal_weight: "78 kg", body_now: "Carrying extra fat", work: "Mostly sitting", steps: "5,000–8,000",
+      weight_trend: "Going up", dieting: "No", tracking: "Yes, right now", calories_now: 2900, protein_now: 130,
+      maintenance_known: 2700, scales: ["Bathroom scales", "Kitchen scales"],
     },
     "c-jamie": { age: 24, sex: "Male", height_cm: 178, weight_kg: 72.5, goal: "Build muscle", experience: "2–5 years", days: 4, session: "75 min", where: "Commercial gym", diet: "Anything", health: {} },
   };

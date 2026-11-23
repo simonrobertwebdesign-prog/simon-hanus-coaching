@@ -133,3 +133,42 @@ export function checkinSummary(b) {
 }
 
 export { e1rm };
+
+// Starting calories from the questionnaire (Coaching Rules section 3).
+// Formula: bodyweight (kg) × 31–40 by activity (the higher of job and steps).
+// If they track food and their weight has held steady, what they eat now is the better number.
+const JOB_LEVEL = { "Mostly sitting": 0, Student: 0, "On my feet a lot": 1, "Physical / manual": 2 };
+const STEP_LEVEL = { "Under 5,000": 0, "5,000–8,000": 1, "8,000–12,000": 1, "12,000+": 2 };
+const MULT = [[31, 33], [34, 36], [37, 40]];
+export function startingCalories(a) {
+  if (!a || !a.weight_kg) return null;
+  const levels = [JOB_LEVEL[a.work], STEP_LEVEL[a.steps]].filter((x) => x !== undefined);
+  const level = levels.length ? Math.max(...levels) : 1;
+  const [lo, hi] = MULT[level];
+  const r10 = (x) => Math.round(x / 10) * 10;
+  const formula = [r10(a.weight_kg * lo), r10(a.weight_kg * hi)];
+  const tracked = +a.maintenance_known || (a.weight_trend === "About the same" && +a.calories_now) || null;
+  return {
+    formula,
+    multiplier: `× ${lo}–${hi}`,
+    tracked,
+    trackedFrom: +a.maintenance_known ? "their own maintenance number" : tracked ? "what they eat now, weight steady" : null,
+    ...protein(a),
+  };
+}
+
+// "76 kg", "76", "11 st 10", "11st 10lb" → kg
+export function parseWeight(s) {
+  const t = String(s || "").toLowerCase();
+  const st = t.match(/(\d+(?:\.\d+)?)\s*st(?:one)?s?\s*(?:(\d+(?:\.\d+)?)\s*(?:lb|lbs|pounds)?)?/);
+  if (st) return Math.round((+st[1] * 14 + +(st[2] || 0)) * 0.4536 * 10) / 10;
+  const kg = t.match(/(\d+(?:\.\d+)?)/);
+  return kg && +kg[1] >= 30 && +kg[1] <= 250 ? +kg[1] : null;
+}
+
+// Protein 1.6–2.2 g per kg; with lots of fat to lose, from goal weight (Coaching Rules, section 3).
+function protein(a) {
+  const goal = a.body_now === "Carrying extra fat" ? parseWeight(a.goal_weight) : null;
+  const base = goal && goal < a.weight_kg ? goal : a.weight_kg;
+  return { protein: [Math.round(base * 1.6), Math.round(base * 2.2)], proteinFrom: base === a.weight_kg ? "bodyweight" : `goal weight, ${base} kg` };
+}

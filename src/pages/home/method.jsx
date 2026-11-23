@@ -247,7 +247,7 @@ export function StartingNumbers() {
             <span className="calc-label">Protein a day</span>
             <div className="calc-num small-num"><span ref={refs.pLo}>{pLo}</span><i>–</i><span ref={refs.pHi}>{pHi}</span><small>g</small></div>
           </div>
-          <p className="small muted">A first guess only. Your plan sets your real numbers from your answers, then fixes them from your weigh-ins.</p>
+          <p className="small muted">A first guess only. If you already track your food, the questionnaire asks what you eat now, so your plan can start from your real numbers. Your weigh-ins fine-tune it from there.</p>
         </div>
       </div>
     </section>

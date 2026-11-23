@@ -65,7 +65,8 @@ export function Start({ route, session }) {
     };
     if (s === 1) {
       need("first_name"); need("last_name"); need("age"); need("sex");
-      if (a.age && !(Number.isInteger(+a.age) && +a.age >= 5 && +a.age <= 100)) e.age = "Please enter your age in years.";
+      if (a.age && !(Number.isInteger(+a.age) && +a.age > 0 && +a.age <= 100)) e.age = "Please enter your age in years.";
+      else if (a.age && +a.age < 14) e.age = "Coaching is for people aged 14 and over.";
       if (a.height_unit === "cm") need("height_cm"); else need("height_ft");
       if (a.weight_unit === "kg") need("weight_kg"); else need("weight_st");
     }

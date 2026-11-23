@@ -25,7 +25,7 @@ Paid → `await SHC.confirmPayment(id, sessionId)`. Not found → leave it and p
 `await SHC.client(id)` gives the answers, flags and logs.
 - Heart, chest pain, dizziness/fainting, pregnancy or eating-disorder answers: **don't draft**. Tell Simon first.
 - Flag "Using steroids or other PEDs now": **don't draft**. Tell Simon first. Never give advice on steroids or PEDs. Past use: just note it.
-- Flag "Under 18": follow `Research/Clients - Under 18.md` (no cuts or calorie deficits unless Simon says, no supplements, technique first, no photos).
+- Flag "Under 18": coach exactly like everyone else (Coaching Rules). There are no progress photos for under-18s; use lifts, weigh-ins and check-ins. Mark any calorie deficit or supplement suggestion as `big_change` so Simon sees it.
 - Injuries and joint problems: plan around them and say how in the notes.
 - Draft the training plan and the food plan from Coaching Rules (sections 0–3) and the lessons.
 - Every plan gets 2–5 short `why` notes: `{ point, why, effect }`, in plain words.

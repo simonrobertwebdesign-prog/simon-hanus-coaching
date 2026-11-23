@@ -22,7 +22,12 @@ export function go(name) {
 }
 
 export function scrollToId(id) {
-  const run = () => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const run = () => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (window.__lenis) window.__lenis.scrollTo(el, { offset: -68, duration: 1.4 });
+    else el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   if ((location.hash || "#home") !== "#home" && location.hash !== "") {
     location.hash = "home";
     setTimeout(run, 60);

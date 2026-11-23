@@ -18,7 +18,8 @@ export const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY || "sb_publishable
 // The clickable preview is built in "preview" mode and always uses demo data.
 export const DEMO = import.meta.env.MODE === "preview" || !SUPABASE_URL || !SUPABASE_KEY;
 
-// Plate colours: a heavier plate means more coaching.
+// Plates: a heavier plate means more coaching. Each level has its own accent ring:
+// steel (one-off), crimson (monthly), purple (premium).
 export const PLANS = [
   {
     id: "oneoff",
@@ -26,7 +27,7 @@ export const PLANS = [
     price: 80,
     period: "once",
     plate: 15,
-    colour: "yellow",
+    colour: "steel",
     checkinDays: null,
     blurb: "Your training plan and food plan, built from your answers. Yours to keep.",
     includes: [
@@ -45,7 +46,7 @@ export const PLANS = [
     price: 60,
     period: "month",
     plate: 20,
-    colour: "blue",
+    colour: "crimson",
     checkinDays: 14,
     popular: true,
     blurb: "Your plans, plus a check-in every 2 weeks that moves them forward with you.",
@@ -66,7 +67,7 @@ export const PLANS = [
     price: 100,
     period: "month",
     plate: 25,
-    colour: "red",
+    colour: "purple",
     checkinDays: 7,
     blurb: "Weekly check-ins for faster changes and closer support.",
     includes: [

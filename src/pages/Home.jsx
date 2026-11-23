@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+import { IronStory, prefersReduced } from "./home/IronStory";
+import { Marquee, Pillars, StackSteps, PlanCards, ProteinCalc, FinalCta, useTilt, useSpotlight } from "./home/sections";
 import { PLANS, BRAND } from "../config";
 import { go, scrollToId } from "../lib/router";
-import { Plate, Brand, Icon } from "../components/ui";
+import { Plate, Brand } from "../components/ui";
 import { LineChart } from "../components/Chart";
 import { PhotoCompare } from "../components/PhotoCompare";
 import { buildSeed, TRAINING_JAMIE, FOOD_JAMIE } from "../lib/seed";
@@ -24,7 +30,6 @@ export function Nav({ session }) {
           <button onClick={() => scrollToId("how")}>How it works</button>
           <button onClick={() => scrollToId("inside")}>Your client area</button>
           <button onClick={() => scrollToId("plans")}>Plans</button>
-          <button onClick={() => scrollToId("about")}>About Simon</button>
         </nav>
         <span className="push" />
         {session ? (
@@ -41,61 +46,6 @@ export function Nav({ session }) {
         </button>
       </div>
     </header>
-  );
-}
-
-// The hero's phone: a real-looking training log, the weight going up week by week.
-const BENCH = [
-  { w: 62.5, r: "8, 8, 7" },
-  { w: 62.5, r: "8, 8, 8" },
-  { w: 65, r: "8, 7, 6" },
-  { w: 65, r: "8, 8, 7" },
-  { w: 67.5, r: "7, 7, 6" },
-  { w: 67.5, r: "8, 8, 7" },
-  { w: 70, r: "8, 7, 7" },
-];
-
-function PhoneDemo() {
-  const pts = BENCH.map((b, i) => [i, b.w]);
-  const x = (i) => 12 + (i / (BENCH.length - 1)) * 276;
-  const y = (v) => 76 - ((v - 60) / 12) * 64;
-  const d = pts.map(([i, v], k) => `${k ? "L" : "M"}${x(i)},${y(v)}`).join(" ");
-  return (
-    <div className="phone anim" aria-label="Example: the client area on a phone">
-      <div className="phone-screen">
-        <div className="phone-top">
-          <div>
-            <div className="small muted">Upper A</div>
-            <b>Bench press</b>
-          </div>
-          <span className="small muted">3 × 6–8</span>
-        </div>
-        <div className="phone-body">
-          <div style={{ background: "var(--surface)", borderRadius: 14, border: "1px solid var(--rule-soft)", padding: "8px 6px 2px" }}>
-            <svg viewBox="0 0 300 86" width="100%" aria-hidden="true">
-              <line x1="12" x2="288" y1={y(65)} y2={y(65)} stroke="var(--rule-soft)" />
-              <line x1="12" x2="288" y1={y(70)} y2={y(70)} stroke="var(--rule-soft)" />
-              <path className="draw" d={d} fill="none" stroke="var(--blue)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-              <circle className="pop" cx={x(6)} cy={y(70)} r="5" fill="var(--red)" />
-            </svg>
-          </div>
-          {BENCH.map((b, i) => (
-            <div key={i} className={"logrow" + (i === BENCH.length - 1 ? " pr" : "")} style={{ "--i": i }}>
-              <span className="wk">Wk {i + 1}</span>
-              <span>
-                <span className="w">{b.w} kg</span> <span className="reps">× {b.r}</span>
-              </span>
-              {i === BENCH.length - 1 ? <span className="pr-tag pop">New best</span> : <span />}
-            </div>
-          ))}
-        </div>
-        <div className="phone-tabs" aria-hidden="true">
-          {[["today", "Today"], ["training", "Training"], ["progress", "Progress"], ["photos", "Photos"]].map(([i, l]) => (
-            <span key={i} className={i === "training" ? "on" : ""}><Icon name={i} />{l}</span>
-          ))}
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -116,7 +66,7 @@ function Showcase() {
       <div>
         <h2>Everything in one place</h2>
         <p className="lead" style={{ marginTop: 16 }}>
-          Your own area on the site, on your phone or laptop. Simon sees the same numbers you do.
+          Your own area on the site, on your phone or laptop. Your coach sees the same numbers you do.
         </p>
         <div className="show-tabs" role="tablist" aria-label="Client area">
           {tabs.map(([id, t, s]) => (
@@ -127,7 +77,7 @@ function Showcase() {
           ))}
         </div>
       </div>
-      <div className="screen" role="tabpanel">
+      <TiltScreen>
         {tab === "training" && (
           <div className="stack">
             <div className="row between">
@@ -184,150 +134,91 @@ function Showcase() {
           <div className="stack">
             <div className="row between"><h3>Week 1 vs week 8</h3><span className="small muted">Drag the handle</span></div>
             <PhotoCompare before={photos[0]} after={photos[photos.length - 1]} />
-            <p className="small muted">Photos are private: only you and Simon can see them.</p>
+            <p className="small muted">Photos are private: only you and your coach can see them.</p>
           </div>
         )}
         <p className="small muted" style={{ marginTop: 18 }}>Example client with made-up numbers.</p>
-      </div>
+      </TiltScreen>
     </div>
+  );
+}
+
+function TiltScreen({ children }) {
+  const ref = useTilt(5);
+  return <div ref={ref} className="screen" role="tabpanel">{children}</div>;
+}
+
+function InsideSection() {
+  const spot = useSpotlight();
+  return (
+    <section ref={spot} className="section inside-sec" id="inside">
+      <div className="wrap">
+        <Showcase />
+      </div>
+    </section>
   );
 }
 
 const FAQ = [
   ["Who are the plans for?", "Anyone aged 14 or over who wants to build muscle, lose fat, get stronger or just get fitter, from complete beginners to people who've trained for years. Under 18? A parent or guardian signs off in the questionnaire. Gym or home: the questionnaire asks what you have."],
   ["How fast do I get my plans?", "Within 48 hours of paying. Simon checks every plan himself before it reaches you."],
-  ["What happens at a check-in?", "You send your weight, how training went and how you feel. Simon looks at everything you've logged and sends back what's working, what changes, and why."],
+  ["What happens at a check-in?", "You send your weight, how training went and how you feel. Your coach looks at everything you've logged and sends back what's working, what changes, and why."],
   ["Can I cancel?", "Yes. Monthly and Premium have no minimum term. Cancel any time and you won't be charged again."],
   ["Do I need to count calories?", "Your food plan gives you meals and amounts, so you don't have to track every bite. If you like tracking, the targets are there too."],
-  ["I have an injury or a health condition. Can I still join?", "Tell us in the questionnaire. Simon looks at it personally, plans around it, and may ask you to check with your GP first."],
-  ["Is it really natural?", "Yes. No steroids, no shortcuts. Just training, food, sleep and patience, done properly."],
+  ["I have an injury or a health condition. Can I still join?", "Tell us in the questionnaire. Your coach looks at it personally, plans around it, and may ask you to check with your GP first."],
 ];
 
+// Smooth scroll for the home page only (the forms and client area keep normal scrolling).
+function useSmoothScroll() {
+  useEffect(() => {
+    if (prefersReduced()) return;
+    const lenis = new Lenis({ lerp: 0.11 });
+    window.__lenis = lenis;
+    lenis.on("scroll", ScrollTrigger.update);
+    const tick = (t) => lenis.raf(t * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+    return () => {
+      gsap.ticker.remove(tick);
+      lenis.destroy();
+      window.__lenis = null;
+    };
+  }, []);
+}
+
+// Section headings stretch out to full width as they scroll into view.
+function useKineticHeadings() {
+  useEffect(() => {
+    if (prefersReduced()) return;
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray("main > .section h2").forEach((h) => {
+        gsap.fromTo(h, { fontVariationSettings: '"wdth" 72' }, {
+          fontVariationSettings: '"wdth" 125',
+          ease: "none",
+          scrollTrigger: { trigger: h, start: "top 95%", end: "top 62%", scrub: true },
+        });
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+}
+
 export function Home({ session }) {
+  useSmoothScroll();
+  useKineticHeadings();
   return (
     <>
       <Nav session={session} />
       <main>
-        <section className="hero ruled">
-          <div className="wrap hero-grid">
-            <div>
-              <h1>Get bigger and stronger. Naturally.</h1>
-              <p className="lead">
-                Training and food plans built for you by Simon Hanus, a natural bodybuilder for 5 years. Log every set, watch the numbers climb, and check in with your coach.
-              </p>
-              <div className="row">
-                <button className="btn" onClick={() => go("start")}>Start the questionnaire</button>
-                <button className="btn ghost" onClick={() => scrollToId("plans")}>See plans and prices</button>
-              </div>
-              <div className="hero-facts">
-                <div><b>From £60</b>a month</div>
-                <div><b>48 hours</b>to your plans</div>
-                <div><b>No minimum</b>term</div>
-              </div>
-            </div>
-            <PhoneDemo />
-          </div>
-        </section>
+        <IronStory />
+        <Marquee />
+        <Pillars />
+        <StackSteps />
 
-        <section className="wrap" aria-label="What makes it different">
-          <div className="facts">
-            <div>
-              <h3>Built from your answers</h3>
-              <p className="muted">A questionnaire on your goals, body, schedule, kit and food comes first. Nothing is copied and pasted.</p>
-            </div>
-            <div>
-              <h3>Checked by Simon</h3>
-              <p className="muted">Every plan and every check-in is read and approved by Simon before you see it.</p>
-            </div>
-            <div>
-              <h3>Changes as you do</h3>
-              <p className="muted">Your logs show what's working. Stalled lift, weight not moving? The plan changes.</p>
-            </div>
-          </div>
-        </section>
+        <InsideSection />
 
-        <section className="section" id="how">
-          <div className="wrap">
-            <h2>How it works</h2>
-            <ol className="steps">
-              <li><h3>Pick a plan</h3><p>One-off, monthly or premium. The difference is how often Simon checks in.</p></li>
-              <li><h3>Answer the questions</h3><p>About 8 minutes on your goals, training, food and health.</p></li>
-              <li><h3>Get your plans</h3><p>Training and food plans made for you, in your client area within 48 hours.</p></li>
-              <li><h3>Train and log</h3><p>Weights, reps, sets, bodyweight and photos, straight from your phone in the gym.</p></li>
-              <li><h3>Check in and adjust</h3><p>Simon reviews your numbers and moves your plan on, every 1 or 2 weeks.</p></li>
-            </ol>
-          </div>
-        </section>
-
-        <section className="section" id="inside" style={{ background: "var(--paper-2)" }}>
-          <div className="wrap">
-            <Showcase />
-          </div>
-        </section>
-
-        <section className="section" id="plans">
-          <div className="wrap">
-            <h2>Plans and prices</h2>
-            <p className="lead" style={{ marginTop: 16, maxWidth: "48ch" }}>
-              Every plan includes a training plan and a food plan built for you. Heavier plate, more coaching.
-            </p>
-            <div className="plans">
-              {PLANS.map((p) => (
-                <article key={p.id} className={"plan" + (p.popular ? " popular" : "")}>
-                  {p.popular && <span className="ribbon">Most popular</span>}
-                  <div className="plan-head">
-                    <Plate plan={p.id} size={54} />
-                    <div>
-                      <h3>{p.name}</h3>
-                      <span className="small muted">{p.checkinDays ? `Check-in every ${p.checkinDays === 7 ? "week" : "2 weeks"}` : "No check-ins"}</span>
-                    </div>
-                  </div>
-                  <div className="price">
-                    <b>£{p.price}</b>
-                    <span>{p.period === "once" ? "one payment" : "a month"}</span>
-                  </div>
-                  <p className="muted">{p.blurb}</p>
-                  <ul>
-                    {p.includes.map((i) => (
-                      <li key={i}><span className="tick" aria-hidden="true">✓</span>{i}</li>
-                    ))}
-                    {p.missing.map((i) => (
-                      <li key={i} className="no"><span className="cross" aria-hidden="true">–</span><span><span className="sr-only">Not included: </span>{i}</span></li>
-                    ))}
-                  </ul>
-                  <button className={"btn block" + (p.popular ? "" : " ghost")} onClick={() => go("start-" + p.id)}>
-                    Choose {p.name.toLowerCase()}
-                  </button>
-                </article>
-              ))}
-            </div>
-            <p className="small muted" style={{ marginTop: 22 }}>
-              Monthly and Premium renew each month until you cancel. Prices include everything; no extra fees.
-            </p>
-          </div>
-        </section>
-
-        <section className="section" id="about" style={{ background: "var(--paper-2)" }}>
-          <div className="wrap about">
-            <div className="portrait">
-              <div className="ring" aria-hidden="true" />
-              <span className="mono" aria-hidden="true">SH</span>
-              <span className="note">Simon's photo goes here.</span>
-            </div>
-            <div className="stack" style={{ "--gap": "18px" }}>
-              <h2>Hi, I'm Simon</h2>
-              <p className="lead" style={{ maxWidth: "44ch" }}>
-                I've trained as a natural bodybuilder for 5 years, and I've already helped loads of people get their training and food sorted.
-              </p>
-              <p className="measure muted">
-                Everything I coach is what I do myself: train hard, eat properly, sleep, and track the numbers so you know it's working. No steroids, no fads, no copy-and-paste plans. You tell me where you are and where you want to be, and I build the plan that gets you there.
-              </p>
-              <div className="row">
-                <button className="btn" onClick={() => go("start")}>Start the questionnaire</button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <PlanCards />
+        <ProteinCalc />
 
         <section className="section" id="faq">
           <div className="wrap">
@@ -343,15 +234,7 @@ export function Home({ session }) {
           </div>
         </section>
 
-        <section className="wrap" style={{ paddingBottom: 40 }}>
-          <div className="cta">
-            <div>
-              <h2>Your first plan is 8 minutes away</h2>
-              <p>Answer the questions, pick your plan, and Simon gets to work.</p>
-            </div>
-            <button className="btn" onClick={() => go("start")}>Start the questionnaire</button>
-          </div>
-        </section>
+        <FinalCta />
       </main>
       <Footer />
     </>

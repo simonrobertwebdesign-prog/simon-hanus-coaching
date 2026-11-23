@@ -123,6 +123,10 @@ export const FOOD_JAMIE = {
       ],
     },
   ],
+  supplements: [
+    { name: "Creatine monohydrate", dose: "5 g", when: "Once a day, any time, with a drink", why: "Helps strength and size over time" },
+    { name: "Vitamin D3", dose: "10 µg (400 IU)", when: "With breakfast, October to March", why: "Little sun in a UK winter" },
+  ],
   swaps: [
     "Chicken ↔ turkey mince, white fish or tofu (same weight)",
     "Rice ↔ potatoes (×3 the weight) or wraps (2)",

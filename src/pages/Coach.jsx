@@ -357,6 +357,12 @@ function FoodPreview({ c }) {
           </div>
         ))}
       </div>
+      {c.supplements?.length > 0 && (
+        <div className="meal">
+          <b>Supplements</b>
+          <ul>{c.supplements.map((s, i) => <li key={i}><span>{s.name}{s.why ? ` (${s.why})` : ""}</span><span>{s.dose}, {s.when}</span></li>)}</ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -612,7 +618,7 @@ function MessagesTab({ b, reload }) {
 
 // ---------------- plan editor ----------------
 const blankTraining = { title: "", summary: "", days_per_week: 3, schedule: "", effort: "", progression: "", days: [{ name: "Day 1", focus: "", exercises: [{ name: "", sets: 3, reps: "8-12", rest: "2 min", notes: "" }] }], notes: [] };
-const blankFood = { title: "", summary: "", calories: 2200, protein_g: 150, carbs_g: 240, fat_g: 70, water_l: 3, meals: [{ name: "Breakfast", items: [{ food: "", amount: "" }] }], swaps: [], notes: [] };
+const blankFood = { title: "", summary: "", calories: 2200, protein_g: 150, carbs_g: 240, fat_g: 70, water_l: 3, meals: [{ name: "Breakfast", items: [{ food: "", amount: "" }] }], supplements: [], swaps: [], notes: [] };
 
 function PlanEditor({ plan, onClose, onSaved }) {
   const toast = useToast();
@@ -702,6 +708,26 @@ function PlanEditor({ plan, onClose, onSaved }) {
               </div>
             ))}
             <button className="btn sm ghost" onClick={() => set("meals", [...c.meals, { name: "Snack", items: [{ food: "", amount: "" }] }])}>+ Add meal</button>
+            <div className="panel" style={{ padding: 14 }}>
+              <b>Supplements</b> <span className="small muted">Shown in their own section, apart from meals</span>
+              <table className="ed-table" style={{ marginTop: 8 }}>
+                <tbody>
+                  {(c.supplements || []).map((s, si) => {
+                    const up = (k, v) => set("supplements", c.supplements.map((x, i) => (i === si ? { ...x, [k]: v } : x)));
+                    return (
+                      <tr key={si}>
+                        <td><input className="input" value={s.name} placeholder="What" onChange={(e) => up("name", e.target.value)} aria-label="Supplement" /></td>
+                        <td style={{ width: 120 }}><input className="input" value={s.dose} placeholder="How much" onChange={(e) => up("dose", e.target.value)} aria-label="Dose" /></td>
+                        <td style={{ width: 170 }}><input className="input" value={s.when} placeholder="When" onChange={(e) => up("when", e.target.value)} aria-label="When" /></td>
+                        <td><input className="input" value={s.why || ""} placeholder="Why (optional)" onChange={(e) => up("why", e.target.value)} aria-label="Why" /></td>
+                        <td style={{ width: 40 }}><button className="x" aria-label="Remove supplement" onClick={() => set("supplements", c.supplements.filter((_, i) => i !== si))}>✕</button></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <button className="textbtn small" onClick={() => set("supplements", [...(c.supplements || []), { name: "", dose: "", when: "", why: "" }])}>+ Add supplement</button>
+            </div>
             <Field label="Swaps (one per line)"><textarea className="textarea" value={lines("swaps")} onChange={(e) => set("swaps", e.target.value.split("\n").filter(Boolean))} /></Field>
           </>
         )}

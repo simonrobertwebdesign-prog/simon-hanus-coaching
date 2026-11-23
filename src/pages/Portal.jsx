@@ -405,6 +405,23 @@ function FoodView({ plan }) {
           </div>
         ))}
       </div>
+      {c.supplements?.length > 0 && (
+        <div className="panel">
+          <div className="panel-head"><h3>Supplements</h3><span className="small muted">Separate from your meals</span></div>
+          <table className="ex-table">
+            <thead><tr><th>What</th><th>How much</th><th>When</th></tr></thead>
+            <tbody>
+              {c.supplements.map((s, i) => (
+                <tr key={i}>
+                  <td>{s.name}{s.why && <div className="small muted" style={{ fontWeight: 400 }}>{s.why}</div>}</td>
+                  <td style={{ fontWeight: 400 }}>{s.dose}</td>
+                  <td style={{ fontWeight: 400 }}>{s.when}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <div className="cols">
         {c.swaps?.length > 0 && <div className="panel"><h3>Easy swaps</h3><ul>{c.swaps.map((s) => <li key={s}>{s}</li>)}</ul></div>}
         {c.notes?.length > 0 && <div className="panel"><h3>Notes</h3><ul>{c.notes.map((s) => <li key={s}>{s}</li>)}</ul></div>}

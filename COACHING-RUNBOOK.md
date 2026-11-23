@@ -26,7 +26,8 @@ Paid → `await SHC.confirmPayment(id, sessionId)`. Not found → leave it and p
 - Heart, chest pain, dizziness/fainting, pregnancy or eating-disorder answers: **don't draft**. Tell Simon first.
 - Flag "Using steroids or other PEDs now": **don't draft**. Tell Simon first. Never give advice on steroids or PEDs. Past use: just note it.
 - Flag "Under 18": coach exactly like everyone else (Coaching Rules), food included. There are no progress photos for under-18s; use lifts, weigh-ins and check-ins.
-- Plans are food and training only. **Never recommend supplements** (no protein powder, creatine, caffeine, pre-workout or anything else). If a client already takes something that looks like a health risk, tell Simon; otherwise don't comment.
+- Food plans: meals are mostly whole, natural foods. Protein powder is fine in a meal if it's needed to hit protein.
+- Any other supplements go in the food plan's own `supplements` list (`{ name, dose, when, why }`), never mixed into the meals. Keep doses within official safe upper limits (e.g. extra magnesium from supplements: 250–350 mg a day); anything above that, or for a client on medicine or with a health condition, mark `big_change` and say why in the report.
 - Injuries and joint problems: plan around them and say how in the notes.
 - Draft the training plan and the food plan from Coaching Rules (sections 0–3) and the lessons.
 - Every plan gets 2–5 short `why` notes: `{ point, why, effect }`, in plain words.

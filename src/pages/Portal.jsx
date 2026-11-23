@@ -109,7 +109,7 @@ export function Portal({ route, session }) {
   if (route === "app-photos")
     return d.minor
       ? shell("Photos", null, <div className="panel"><Empty title="No photos needed">We track your progress with your lifts, weigh-ins and check-ins instead.</Empty></div>)
-      : shell("Photos", "Private: only you and Simon can see these.", <PhotosView d={d} reload={reload} />);
+      : shell("Photos", "Private: only you and your coach can see these.", <PhotosView d={d} reload={reload} />);
   if (route === "app-checkins") return shell("Check-ins", null, <CheckinsView d={d} reload={reload} />);
   return shell(`Hi ${name}`, fmtDate(today(), { weekday: "long", day: "numeric", month: "long" }), <TodayView d={d} onLog={setLogDay} reload={reload} waiting={waiting} />);
 }
@@ -119,14 +119,14 @@ function Waiting({ d }) {
   const steps = [
     ["Answers received", true],
     ["Payment", c.status !== "new"],
-    ["Simon builds your plans", false],
+    ["Your coach builds your plans", false],
     ["Plans in your area", false],
   ];
   if (c.status === "new")
     return (
       <div className="panel">
         <Empty title="One step left">
-          <p>Your answers are saved. Pay for your {planById(c.plan).name.toLowerCase()} and Simon starts on your plans.</p>
+          <p>Your answers are saved. Pay for your {planById(c.plan).name.toLowerCase()} and your coach starts on your plans.</p>
           <button className="btn" style={{ marginTop: 18 }} onClick={() => go("start")}>Go to payment</button>
         </Empty>
       </div>
@@ -134,7 +134,7 @@ function Waiting({ d }) {
   return (
     <div className="panel">
       <h3>Your plans are being built</h3>
-      <p className="muted" style={{ marginTop: 6 }}>Simon is reading your answers. Your training and food plans will be here within 48 hours of paying.</p>
+      <p className="muted" style={{ marginTop: 6 }}>Your coach is reading your answers. Your training and food plans will be here within 48 hours of paying.</p>
       <ol className="track">
         {steps.map(([st, done], i) => (
           <li key={st} className={done ? "done" : steps.findIndex(([, d]) => !d) === i ? "now" : ""}>
@@ -181,7 +181,7 @@ function TodayView({ d, onLog, reload, waiting }) {
       <QuickWeigh reload={reload} />
       {lastMsg && (
         <div className="panel">
-          <div className="panel-head"><h3>Latest from Simon</h3><span className="small muted">{fmtDate(lastMsg.sent_at?.slice(0, 10))}</span></div>
+          <div className="panel-head"><h3>Latest from your coach</h3><span className="small muted">{fmtDate(lastMsg.sent_at?.slice(0, 10))}</span></div>
           <p className="quote">{lastMsg.message}</p>
           <button className="link" style={{ marginTop: 12 }} onClick={() => go("app-checkins")}>All check-ins</button>
         </div>
@@ -369,7 +369,7 @@ function Logger({ day, workouts, onClose, onSaved }) {
           </div>
         ))}
       </div>
-      <Field label="Notes for Simon (optional)">
+      <Field label="Notes for your coach (optional)">
         <textarea className="textarea" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="How did it feel? Any pain?" />
       </Field>
       <div className="row between" style={{ marginTop: 20, position: "sticky", bottom: -26, background: "var(--surface)", padding: "14px 0" }}>
@@ -591,7 +591,7 @@ function CheckinsView({ d, reload }) {
               <h3>{ck ? (ck.due ? "Your check-in is due" : `Next check-in: ${relDay(ck.date).toLowerCase()}`) : "Check-ins start with your plans"}</h3>
               {ck && <div className="small muted">{fmtDate(ck.date, { weekday: "long", day: "numeric", month: "long" })}</div>}
             </div>
-            {open?.form && <span className="chip green">Sent to Simon</span>}
+            {open?.form && <span className="chip green">Sent to your coach</span>}
           </div>
           <form
             className="stack"
@@ -599,7 +599,7 @@ function CheckinsView({ d, reload }) {
             onSubmit={async (e) => {
               e.preventDefault();
               await api.submitCheckinForm({ ...f, weight: +f.weight || null, adherence: +f.adherence || null });
-              toast("Check-in sent to Simon");
+              toast("Check-in sent to your coach");
               reload();
             }}
           >
@@ -612,14 +612,14 @@ function CheckinsView({ d, reload }) {
             <Field label="How closely did you follow the food plan?"><Choices options={["50", "60", "70", "80", "90", "100"]} value={String(f.adherence)} onChange={set("adherence")} label="Food plan percentage" /></Field>
             <Field label="Wins"><textarea className="textarea" value={f.wins} onChange={set("wins")} placeholder="PRs, good days, things that felt easier" /></Field>
             <Field label="Struggles"><textarea className="textarea" value={f.struggles} onChange={set("struggles")} /></Field>
-            <Field label="Questions for Simon"><textarea className="textarea" value={f.questions} onChange={set("questions")} /></Field>
+            <Field label="Questions for your coach"><textarea className="textarea" value={f.questions} onChange={set("questions")} /></Field>
             <div><button className="btn">{open?.form ? "Update my check-in" : "Send check-in"}</button></div>
           </form>
         </div>
       )}
 
       <div className="panel">
-        <h3 style={{ marginBottom: 12 }}>From Simon</h3>
+        <h3 style={{ marginBottom: 12 }}>From your coach</h3>
         {sent.length === 0 ? (
           <p className="muted">Your check-in replies will appear here.</p>
         ) : (
@@ -660,7 +660,7 @@ function CheckinsView({ d, reload }) {
             reload();
           }}
         >
-          <input className="input" style={{ flex: 1 }} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Message Simon" aria-label="Message Simon" />
+          <input className="input" style={{ flex: 1 }} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Message your coach" aria-label="Message your coach" />
           <button className="btn ink">Send</button>
         </form>
       </div>

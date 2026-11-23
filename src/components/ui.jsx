@@ -128,8 +128,8 @@ export function Loading() {
 
 export function Brand({ onClick, light }) {
   return (
-    <button className="brand" onClick={onClick} style={light ? { color: "var(--paper)" } : undefined}>
-      <span className="plate red" style={{ "--s": "30px" }} aria-hidden="true" />
+    <button className="brand" onClick={onClick} style={light ? { color: "#fff" } : undefined}>
+      <span className="plate crimson" style={{ "--s": "30px" }} aria-hidden="true" />
       <span>
         Simon Hanus
         <small>Coaching</small>

@@ -3,6 +3,7 @@ import { api } from "./lib/api";
 import { go, useRoute } from "./lib/router";
 import { store } from "./lib/util";
 import { ToastHost, Loading } from "./components/ui";
+import { startGlow, countUp } from "./lib/fx";
 import { Home } from "./pages/Home";
 import { Start, Paid } from "./pages/Start";
 import { Login, ResetPassword } from "./pages/Auth";
@@ -13,6 +14,14 @@ import { Coach } from "./pages/Coach";
 export default function App() {
   const route = useRoute();
   const [session, setSession] = useState(undefined);
+
+  useEffect(() => startGlow(), []);
+
+  // stat numbers roll up when a page shows (and again shortly after, for data that loads late)
+  useEffect(() => {
+    const ts = [120, 700, 1600].map((ms) => setTimeout(() => countUp(), ms));
+    return () => ts.forEach(clearTimeout);
+  }, [route, session]);
 
   useEffect(() => {
     api.session().then(setSession);

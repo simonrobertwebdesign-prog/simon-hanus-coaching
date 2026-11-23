@@ -69,7 +69,7 @@ export function Login({ initialMode = "login" }) {
         </form>
         {api.demo && (
           <div className="notice amber" style={{ marginTop: 22 }}>
-            <b>This is a demo.</b> Look around as a client or as Simon:
+            <b>This is a demo.</b> Look around as a client or as the coach:
             <div className="row" style={{ marginTop: 12 }}>
               <button className="btn sm ink" onClick={async () => { await api.demoAs("client"); go("app"); }}>Client area</button>
               <button className="btn sm ink" onClick={async () => { await api.demoAs("coach"); go("coach"); }}>Coach area</button>

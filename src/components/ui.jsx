@@ -114,7 +114,7 @@ export function Modal({ onClose, children, label }) {
 export function Empty({ title, children }) {
   return (
     <div className="empty">
-      <h3>{title}</h3>
+      <h2 data-h="3">{title}</h2>
       <div className="measure" style={{ marginInline: "auto" }}>
         {children}
       </div>

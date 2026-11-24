@@ -40,10 +40,10 @@ export function Login({ initialMode = "login" }) {
   }
 
   return (
-    <div className="wrap auth">
+    <main className="wrap auth">
       <Brand onClick={() => go("home")} />
       <div className="wizard-main" style={{ marginTop: 28 }}>
-        <h2>{mode === "reset" ? "Reset your password" : mode === "signup" ? "Create an account" : "Log in"}</h2>
+        <h1>{mode === "reset" ? "Reset your password" : mode === "signup" ? "Create an account" : "Log in"}</h1>
         <form className="wizard-body" onSubmit={submit}>
           {mode === "signup" && (
             <Field label="Your name">
@@ -77,7 +77,7 @@ export function Login({ initialMode = "login" }) {
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -85,7 +85,7 @@ export function ResetPassword() {
   const [pw, setPw] = useState("");
   const [note, setNote] = useState(null);
   return (
-    <div className="wrap auth">
+    <main className="wrap auth">
       <Brand onClick={() => go("home")} />
       <form
         className="wizard-main stack"
@@ -100,13 +100,13 @@ export function ResetPassword() {
           }
         }}
       >
-        <h2>New password</h2>
+        <h1>New password</h1>
         <Field label="New password" hint="At least 8 characters.">
           <input className="input" type="password" minLength={8} value={pw} onChange={(e) => setPw(e.target.value)} required autoComplete="new-password" />
         </Field>
         {note && <div className="notice red">{note}</div>}
         <button className="btn">Save password</button>
       </form>
-    </div>
+    </main>
   );
 }

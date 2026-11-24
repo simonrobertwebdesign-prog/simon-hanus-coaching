@@ -188,7 +188,8 @@ function Pillar({ title, children }) {
 
 export function Pillars() {
   return (
-    <section className="section pillars-sec" aria-label="What makes it different">
+    <section className="section pillars-sec" aria-labelledby="pillars-h">
+      <h2 className="sr-only" id="pillars-h">What makes it different</h2>
       <div className="wrap pillars">
         <Pillar title="Built from your answers">A questionnaire on your goals, body, schedule, kit and food comes first. Nothing is copied and pasted.</Pillar>
         <Pillar title="Checked by your coach">Every plan and every check-in is read and approved before you see it.</Pillar>
@@ -267,6 +268,7 @@ function PlanCard({ p }) {
         <b ref={priceRef}>£{p.price}</b>
         <span>{p.period === "once" ? "one payment" : "a month"}</span>
       </div>
+      <span className="small muted per-week">{p.period === "once" ? "No subscription" : `About £${Math.round((p.price * 12) / 52)} a week`}</span>
       <p className="muted">{p.blurb}</p>
       <ul>
         {p.includes.map((i) => <li key={i}><span className="tick" aria-hidden="true">✓</span>{i}</li>)}
@@ -319,7 +321,7 @@ export function FinalCta() {
       <div ref={spot} className="cta2">
         <div>
           <h2>Your first plan is 10 minutes away.</h2>
-          <p>Answer the questions, pick your plate, and your plans get built for you.</p>
+          <p>Pick your plate, answer the questions, and your plans get built for you.</p>
         </div>
         <div className="mag-zone">
           <button ref={mag} className="btn big-btn" onClick={() => go("start")}>Start the questionnaire</button>

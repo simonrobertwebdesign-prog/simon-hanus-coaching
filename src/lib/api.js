@@ -1,11 +1,4 @@
 import { DEMO } from "../config";
-import { demoApi } from "./demoApi";
 
-// Demo until Supabase keys are added; then the real database.
-let impl = demoApi;
-if (!DEMO) {
-  const mod = await import("./supabaseApi");
-  impl = mod.supabaseApi;
-}
-
-export const api = impl;
+// Demo until Supabase keys are added; then the real database. Only the one in use gets downloaded.
+export const api = DEMO ? (await import("./demoApi")).demoApi : (await import("./supabaseApi")).supabaseApi;

@@ -147,7 +147,7 @@ export function WeekPlanner() {
           <div className="seg week-seg" role="group" aria-label="Days a week">
             {[2, 3, 4, 5, 6].map((d) => <button key={d} aria-pressed={n === d} onClick={() => setN(d)}>{d} days</button>)}
           </div>
-          <p className="small muted" style={{ marginTop: 14 }}>Your real days get picked around when you said you can train. Miss days a lot? Fewer days beats a plan you can't finish.</p>
+          <p className="small muted" style={{ marginTop: 14 }}>Your real week is laid out on the days you tell us suit you. Miss days a lot? Fewer days beats a plan you can't finish.</p>
         </div>
         <div>
           <div ref={grid} className="week-grid">

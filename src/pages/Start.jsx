@@ -21,10 +21,10 @@ const STEPS = ["Plan", "About you", "Your goal", "Training", "Your day", "Food",
 const blank = {
   first_name: "", last_name: "", age: "", sex: "", height_unit: "cm", height_cm: "", height_ft: "", height_in: "",
   weight_unit: "kg", weight_kg: "", weight_st: "", weight_lb: "",
-  goal: "", target: "", goal_weight: "", body_now: "", why_now: "", holding_back: "",
+  goal: "", target: "", goal_weight: "", body_now: "", why_now: "", holding_back: "", coached_before: "",
   experience: "", days: "", train_days: [], session: "", where: "", equipment: [], routine: "", lifts: "", priority: [], likes_ex: "", dislikes_ex: "", injuries: "",
   work: "", steps: "", other_activity: "", sleep: "", stress: "", train_time: "",
-  weight_trend: "", dieting: "", calories_now: "", protein_now: "", maintenance_known: "", scales: [],
+  weight_trend: "", dieting: "", calories_now: "", protein_now: "", maintenance_known: "", scales: [], normal_day: "", found_us: "", anything_else: "",
   diet: "", allergies: "", likes: "", dislikes: "", meals: "", cooking: "", budget: "", alcohol: "", tracking: "", supplements: "",
   health: {}, health_details: "", peds: "", peds_details: "",
   guardian_name: "", guardian_email: "", guardian_agree: false,
@@ -211,7 +211,7 @@ export function Start({ route, session }) {
           <span className="small muted hide-sm">Your answers are saved as you go</span>
         </div>
       </header>
-      <div className="wrap wizard">
+      <main className="wrap wizard">
         <aside className="wizard-side">
           <div className="row" style={{ gap: 12 }}>
             <Plate plan={plan} size={44} />
@@ -236,7 +236,7 @@ export function Start({ route, session }) {
 
           {step === 0 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Pick your plan</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Pick your plan</h1>
               <p className="intro">You can change plan later. All three include a training plan and a food plan built for you.</p>
               <div className="wizard-body">
                 {PLANS.map((x) => (
@@ -261,7 +261,7 @@ export function Start({ route, session }) {
 
           {step === 1 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>About you</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>About you</h1>
               <p className="intro">The basics, so your calories and training start in the right place.</p>
               <div className="wizard-body">
                 <div className="two">
@@ -304,7 +304,7 @@ export function Start({ route, session }) {
 
           {step === 2 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Your goal</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Your goal</h1>
               <p className="intro">Be honest. The more your coach knows, the better the plan.</p>
               <div className="wizard-body">
                 <Field label="Main goal" error={E("goal")}>
@@ -327,13 +327,16 @@ export function Start({ route, session }) {
                 <Field label="What's held you back before?">
                   <textarea className="textarea" value={a.holding_back} onChange={set("holding_back")} />
                 </Field>
+                <Field label="Have you had a coach before?">
+                  <Choices options={["No", "Yes, it went well", "Yes, it didn't work out"]} value={a.coached_before} onChange={set("coached_before")} label="Coached before" />
+                </Field>
               </div>
             </>
           )}
 
           {step === 3 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Your training</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Your training</h1>
               <p className="intro">So the plan fits your level, your week and your kit.</p>
               <div className="wizard-body">
                 <Field label="How long have you been training properly?" error={E("experience")}>
@@ -378,7 +381,7 @@ export function Start({ route, session }) {
 
           {step === 4 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Your day</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Your day</h1>
               <p className="intro">How active you are outside the gym changes how much you need to eat.</p>
               <div className="wizard-body">
                 <Field label="Your job or day" error={E("work")}>
@@ -405,7 +408,7 @@ export function Start({ route, session }) {
 
           {step === 5 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Food</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Food</h1>
               <p className="intro">Where you're starting from, then the food you like and can afford.</p>
               <div className="wizard-body">
                 <Field label="Your weight over the last month" error={E("weight_trend")}>
@@ -446,6 +449,9 @@ export function Start({ route, session }) {
                   <Field label="Foods you love"><textarea className="textarea" value={a.likes} onChange={set("likes")} /></Field>
                   <Field label="Foods you won't eat"><textarea className="textarea" value={a.dislikes} onChange={set("dislikes")} /></Field>
                 </div>
+                <Field label="What does a normal day of eating look like?" hint="Rough is fine, e.g. cereal, a meal deal, chicken and pasta, crisps in the evening.">
+                  <textarea className="textarea" value={a.normal_day} onChange={set("normal_day")} />
+                </Field>
                 <Field label="Meals a day you'd like" error={E("meals")}>
                   <Choices options={["2", "3", "4", "5"]} value={a.meals} onChange={set("meals")} label="Meals" />
                 </Field>
@@ -467,7 +473,7 @@ export function Start({ route, session }) {
 
           {step === 6 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Health check</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Health check</h1>
               <p className="intro">Standard questions before starting any training plan. A yes doesn't stop you joining: your coach reads it personally, and may ask you to check with your GP first.</p>
               <div className="wizard-body" style={{ gap: 0 }}>
                 {HEALTH.map(([k, q]) => (
@@ -509,7 +515,7 @@ export function Start({ route, session }) {
 
           {step === 7 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Before you pay</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Before you pay</h1>
               <p className="intro">{minor ? "Because you're under 18, a parent or guardian needs to agree too." : "A couple of quick ticks so we can coach you properly."}</p>
               <div className="wizard-body" style={{ gap: 4 }}>
                 {minor && (
@@ -547,13 +553,21 @@ export function Start({ route, session }) {
                     <span>Optional: my coach can share my progress (without my name or face) as a result on the website.</span>
                   </label>
                 )}
+                <div className="stack" style={{ "--gap": "18px", marginTop: 18 }}>
+                  <Field label="Anything else your coach should know?" hint="Holidays coming up, questions, anything at all. Leave blank if not.">
+                    <textarea className="textarea" value={a.anything_else} onChange={set("anything_else")} />
+                  </Field>
+                  <Field label="How did you find us?">
+                    <Choices options={["Instagram", "TikTok", "YouTube", "Google", "A friend", "Other"]} value={a.found_us} onChange={set("found_us")} label="Found us" />
+                  </Field>
+                </div>
               </div>
             </>
           )}
 
           {step === 8 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Make your account</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Make your account</h1>
               <p className="intro">This is where your plans, logs and check-ins will live.</p>
               <form className="wizard-body" onSubmit={createAccount} noValidate>
                 <Field label="Email" error={E("email")}>
@@ -573,7 +587,7 @@ export function Start({ route, session }) {
 
           {step === 9 && (
             <>
-              <h2 id="step-title" style={{ marginTop: 8 }}>Pay and you're in</h2>
+              <h1 id="step-title" style={{ marginTop: 8 }}>Pay and you're in</h1>
               <p className="intro">Payments are taken securely by Stripe. Your plans will be in your client area within 48 hours.</p>
               <div className="wizard-body">
                 <div className="panel summary-row">
@@ -613,7 +627,7 @@ export function Start({ route, session }) {
             </div>
           )}
         </section>
-      </div>
+      </main>
     </div>
   );
 }
@@ -625,7 +639,7 @@ export function Paid({ session }) {
     store("shc-q", null);
   }, [session]);
   return (
-    <div className="wrap auth" style={{ maxWidth: 620 }}>
+    <main className="wrap auth" style={{ maxWidth: 620 }}>
       <Brand onClick={() => go("home")} />
       <div className="stack" style={{ marginTop: 40, "--gap": "18px" }}>
         <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.4rem)" }}>You're in.</h1>
@@ -637,6 +651,6 @@ export function Paid({ session }) {
           <button className="btn" onClick={() => go("app")}>Go to my area</button>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

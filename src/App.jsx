@@ -1,21 +1,32 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { api } from "./lib/api";
 import { go, useRoute } from "./lib/router";
 import { store } from "./lib/util";
 import { ToastHost, Loading } from "./components/ui";
 import { startGlow, countUp } from "./lib/fx";
 import { Home } from "./pages/Home";
-import { Start, Paid } from "./pages/Start";
 import { Login, ResetPassword } from "./pages/Auth";
 import { Legal } from "./pages/Legal";
-import { Portal } from "./pages/Portal";
-import { Coach } from "./pages/Coach";
+
+// The questionnaire, client area and coach area load when they're first needed,
+// so the home page shows sooner.
+const loadStart = () => import("./pages/Start");
+const Start = lazy(() => loadStart().then((m) => ({ default: m.Start })));
+const Paid = lazy(() => loadStart().then((m) => ({ default: m.Paid })));
+const Portal = lazy(() => import("./pages/Portal").then((m) => ({ default: m.Portal })));
+const Coach = lazy(() => import("./pages/Coach").then((m) => ({ default: m.Coach })));
 
 export default function App() {
   const route = useRoute();
   const [session, setSession] = useState(undefined);
 
   useEffect(() => startGlow(), []);
+
+  // Once the page is quiet, fetch the questionnaire so "Start" opens straight away.
+  useEffect(() => {
+    const idle = window.requestIdleCallback || ((f) => setTimeout(f, 2500));
+    idle(() => loadStart().catch(() => {}), { timeout: 5000 });
+  }, []);
 
   // stat numbers roll up when a page shows (and again shortly after, for data that loads late)
   useEffect(() => {
@@ -44,7 +55,9 @@ export default function App() {
     }
   }, [route, session]);
 
-  if (session === undefined) return <Loading />;
+  // Public pages don't wait for the login check.
+  const isPublic = route === "home" || ["terms", "privacy", "health"].includes(route);
+  if (session === undefined && !isPublic) return <Loading />;
 
   const needLogin = (r) => (r.startsWith("app") || r.startsWith("coach")) && !session;
   let page;
@@ -62,14 +75,14 @@ export default function App() {
   return (
     <ToastHost>
       {api.demo && (
-        <div className="demo-bar">
+        <div className="demo-bar" role="region" aria-label="Demo notice">
           Demo: nothing here is real yet.
           <button onClick={async () => { await api.demoAs("client"); go("app"); }}>Client area</button>
           <button onClick={async () => { await api.demoAs("coach"); go("coach"); }}>Coach area</button>
           <button onClick={() => { api.resetDemo(); location.hash = "home"; location.reload(); }}>Reset</button>
         </div>
       )}
-      {page}
+      <Suspense fallback={<Loading />}>{page}</Suspense>
     </ToastHost>
   );
 }

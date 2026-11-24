@@ -80,6 +80,9 @@ export function Story() {
     const start = async () => {
       try {
         await Promise.all([document.fonts?.load('900 66px "Anybody"'), document.fonts?.load('900 italic 66px "Anybody"')]).catch(() => {});
+        // Let the headline land first; build the 3D when the browser has a quiet moment.
+        await new Promise((r) => (window.requestIdleCallback ? requestIdleCallback(r, { timeout: 1200 }) : setTimeout(r, 500)));
+        if (dead) return;
         const probe = document.createElement("canvas");
         if (!(probe.getContext("webgl2") || probe.getContext("webgl"))) throw new Error("no WebGL");
         const { createIronWorld } = await import("./ironWorld.js");
@@ -123,7 +126,7 @@ export function Story() {
       onSplit: (self) =>
         gsap.from(self.chars, { yPercent: 110, fontVariationSettings: '"wdth" 50', opacity: 0, duration: 1, ease: "expo.out", stagger: 0.035, delay: 0.15 }),
     });
-    gsap.from(q(".ch-hero .hero-rest > *"), { opacity: 0, y: 18, duration: 0.7, ease: "power3.out", stagger: 0.08, delay: 0.8 });
+    gsap.from(q(".ch-hero .hero-rest > *"), { opacity: 0, y: 18, duration: 0.6, ease: "power3.out", stagger: 0.07, delay: 0.45 });
 
     const rail = q(".story-rail i")[0];
     const tl = gsap.timeline({
@@ -241,7 +244,7 @@ export function Story() {
                         {p.popular && <span className="chip red">Most popular</span>}
                       </span>
                       <span className="pr-meta">
-                        <span className="sr-only">{p.plate} kg plate, {priceText(p)}, {detailText(p)}</span>
+                        <span className="sr-only">{p.plate} kg plate, {priceText(p)}, {detailText(p).toLowerCase()}</span>
                         <span aria-hidden="true">
                           <span className="scr-kg">{still ? `${p.plate} kg` : ""}</span>
                           <span className="dotsep" />

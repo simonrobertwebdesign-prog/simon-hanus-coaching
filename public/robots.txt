@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://simon-hanus-coaching.netlify.app/sitemap.xml

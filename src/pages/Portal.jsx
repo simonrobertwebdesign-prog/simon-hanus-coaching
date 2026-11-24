@@ -133,7 +133,7 @@ function Waiting({ d }) {
     );
   return (
     <div className="panel">
-      <h3>Your plans are being built</h3>
+      <h2 data-h="3">Your plans are being built</h2>
       <p className="muted" style={{ marginTop: 6 }}>Your coach is reading your answers. Your training and food plans will be here within 48 hours of paying.</p>
       <ol className="track">
         {steps.map(([st, done], i) => (
@@ -163,7 +163,7 @@ function TodayView({ d, onLog, reload, waiting }) {
           <div className="panel-head">
             <div>
               <div className="small muted">Next workout</div>
-              <h3 style={{ fontSize: "1.6rem" }}>{nd?.name}</h3>
+              <h2 data-h="3" style={{ fontSize: "1.6rem" }}>{nd?.name}</h2>
               <div className="muted">{nd?.focus}, {nd?.exercises.length} exercises</div>
             </div>
             <button className="btn" onClick={() => onLog(nd)}>Start workout</button>
@@ -181,7 +181,7 @@ function TodayView({ d, onLog, reload, waiting }) {
       <QuickWeigh reload={reload} />
       {lastMsg && (
         <div className="panel">
-          <div className="panel-head"><h3>Latest from your coach</h3><span className="small muted">{fmtDate(lastMsg.sent_at?.slice(0, 10))}</span></div>
+          <div className="panel-head"><h2 data-h="3">Latest from your coach</h2><span className="small muted">{fmtDate(lastMsg.sent_at?.slice(0, 10))}</span></div>
           <p className="quote">{lastMsg.message}</p>
           <button className="link" style={{ marginTop: 12 }} onClick={() => go("app-checkins")}>All check-ins</button>
         </div>
@@ -238,7 +238,7 @@ function TrainingView({ plan, workouts, onLog }) {
       </div>
       <div className="panel">
         <div className="panel-head">
-          <h3>{day.name}</h3>
+          <h2 data-h="3">{day.name}</h2>
           <button className="btn" onClick={() => onLog(day)}>Start this workout</button>
         </div>
         <table className="ex-table">
@@ -271,7 +271,7 @@ function History({ workouts }) {
   if (!workouts.length) return null;
   return (
     <div className="panel">
-      <div className="panel-head"><h3>Logged workouts</h3><span className="small muted">{workouts.length} in total</span></div>
+      <div className="panel-head"><h2 data-h="3">Logged workouts</h2><span className="small muted">{workouts.length} in total</span></div>
       <div className="hist">
         {workouts.slice(0, 12).map((w) => {
           const top = (w.entries || []).map((e) => ({ e, b: bestSet(e.sets) })).filter((x) => x.b).slice(0, 2);
@@ -286,7 +286,7 @@ function History({ workouts }) {
       </div>
       {open && (
         <Modal onClose={() => setOpen(null)} label="Workout">
-          <h3>{open.day_name}</h3>
+          <h2 data-h="3">{open.day_name}</h2>
           <p className="muted">{fmtDay(open.date)}</p>
           {(open.entries || []).map((e) => (
             <div key={e.exercise} style={{ marginTop: 14 }}>
@@ -341,7 +341,7 @@ function Logger({ day, workouts, onClose, onSaved }) {
     <Modal onClose={onClose} label={`Log ${day.name}`}>
       <div className="row between">
         <div>
-          <h3 style={{ fontSize: "1.6rem" }}>{day.name}</h3>
+          <h2 data-h="3" style={{ fontSize: "1.6rem" }}>{day.name}</h2>
           <span className="muted small">Fill in each set, then tick it.</span>
         </div>
         <input className="input" type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} style={{ width: "auto" }} aria-label="Date" />
@@ -350,7 +350,7 @@ function Logger({ day, workouts, onClose, onSaved }) {
         {entries.map((e, i) => (
           <div className="logger-ex" key={e.exercise}>
             <div className="row between">
-              <h4>{e.exercise}</h4>
+              <h3 data-h="4">{e.exercise}</h3>
               <span className="chip">{e.target}</span>
             </div>
             {e.last && <div className="last">Last time ({fmtDate(e.last.date)}): {e.last.sets.map((s) => `${s.weight}×${s.reps}`).join(", ")}</div>}
@@ -386,7 +386,7 @@ function FoodView({ plan }) {
     <div className="stack" style={{ "--gap": "16px" }}>
       <div className="panel">
         <div className="panel-head">
-          <div><div className="small muted">Every day</div><h3 style={{ fontSize: "2rem" }}>{c.calories?.toLocaleString()} kcal</h3></div>
+          <div><div className="small muted">Every day</div><h2 data-h="3" style={{ fontSize: "2rem" }}>{c.calories?.toLocaleString()} kcal</h2></div>
           <p className="muted" style={{ maxWidth: "46ch" }}>{c.summary}</p>
         </div>
         <div className="macros">
@@ -397,7 +397,7 @@ function FoodView({ plan }) {
         </div>
       </div>
       <div className="panel">
-        <h3>Your meals</h3>
+        <h2 data-h="3">Your meals</h2>
         {c.meals.map((m) => (
           <div className="meal" key={m.name}>
             <b>{m.name}</b>
@@ -407,7 +407,7 @@ function FoodView({ plan }) {
       </div>
       {c.supplements?.length > 0 && (
         <div className="panel">
-          <div className="panel-head"><h3>Supplements</h3><span className="small muted">Separate from your meals</span></div>
+          <div className="panel-head"><h2 data-h="3">Supplements</h2><span className="small muted">Separate from your meals</span></div>
           <table className="ex-table">
             <thead><tr><th>What</th><th>How much</th><th>When</th></tr></thead>
             <tbody>
@@ -423,8 +423,8 @@ function FoodView({ plan }) {
         </div>
       )}
       <div className="cols">
-        {c.swaps?.length > 0 && <div className="panel"><h3>Easy swaps</h3><ul>{c.swaps.map((s) => <li key={s}>{s}</li>)}</ul></div>}
-        {c.notes?.length > 0 && <div className="panel"><h3>Notes</h3><ul>{c.notes.map((s) => <li key={s}>{s}</li>)}</ul></div>}
+        {c.swaps?.length > 0 && <div className="panel"><h2 data-h="3">Easy swaps</h2><ul>{c.swaps.map((s) => <li key={s}>{s}</li>)}</ul></div>}
+        {c.notes?.length > 0 && <div className="panel"><h2 data-h="3">Notes</h2><ul>{c.notes.map((s) => <li key={s}>{s}</li>)}</ul></div>}
       </div>
     </div>
   );
@@ -449,14 +449,14 @@ function ProgressView({ d, reload }) {
       <QuickWeigh reload={reload} />
       <div className="panel">
         <div className="panel-head">
-          <h3>Bodyweight</h3>
+          <h2 data-h="3">Bodyweight</h2>
           <div className="legend"><span><i style={{ background: "var(--muted)" }} />Weigh-ins</span><span><i style={{ background: "var(--red)" }} />7-day trend</span></div>
         </div>
         {b ? <LineChart series={[{ name: "Weigh-ins", colour: "var(--muted)", points: b.points, faint: true, width: 1.5 }, { name: "Trend", colour: "var(--red)", points: b.smooth }]} showDots={false} /> : <Empty title="No weigh-ins yet">Weigh yourself 3–4 mornings a week and add it above.</Empty>}
       </div>
       <div className="panel">
         <div className="panel-head">
-          <h3>Strength</h3>
+          <h2 data-h="3">Strength</h2>
           {list.length > 0 && (
             <select className="select" style={{ width: "auto" }} value={pick} onChange={(e) => setEx(e.target.value)} aria-label="Exercise">
               {list.map((l) => <option key={l.name}>{l.name}</option>)}
@@ -474,7 +474,7 @@ function ProgressView({ d, reload }) {
       </div>
       {list.length > 0 && (
         <div className="panel">
-          <h3 style={{ marginBottom: 12 }}>All lifts</h3>
+          <h2 data-h="3" style={{ marginBottom: 12 }}>All lifts</h2>
           <table className="ex-table">
             <thead><tr><th>Exercise</th><th>First</th><th>Now</th><th>Change</th></tr></thead>
             <tbody>
@@ -491,7 +491,7 @@ function ProgressView({ d, reload }) {
         </div>
       )}
       <div className="panel">
-        <div className="panel-head"><h3>Sessions a week</h3></div>
+        <div className="panel-head"><h2 data-h="3">Sessions a week</h2></div>
         <Bars data={weeks} target={perWeek} />
       </div>
     </div>
@@ -512,7 +512,7 @@ function PhotosView({ d, reload }) {
   return (
     <div className="stack" style={{ "--gap": "16px" }}>
       <div className="panel">
-        <div className="panel-head"><h3>Add photos</h3><span className="small muted">Same spot, same light, every 2 weeks</span></div>
+        <div className="panel-head"><h2 data-h="3">Add photos</h2><span className="small muted">Same spot, same light, every 2 weeks</span></div>
         <div className="row" style={{ alignItems: "flex-end" }}>
           <Field label="Angle"><Choices options={["Front", "Side", "Back"]} value={angle} onChange={setAngle} label="Angle" /></Field>
           <Field label="Date"><input className="input" type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} /></Field>
@@ -543,7 +543,7 @@ function PhotosView({ d, reload }) {
       </div>
       <div className="panel">
         <div className="panel-head">
-          <h3>Then vs now</h3>
+          <h2 data-h="3">Then vs now</h2>
           <Choices options={["Front", "Side", "Back"]} value={angle} onChange={(v) => { setAngle(v); setPair([]); }} label="Show angle" />
         </div>
         {shown.length >= 2 ? (
@@ -591,7 +591,7 @@ function CheckinsView({ d, reload }) {
         <div className="panel">
           <div className="panel-head">
             <div>
-              <h3>{ck ? (ck.due ? "Your check-in is due" : `Next check-in: ${relDay(ck.date).toLowerCase()}`) : "Check-ins start with your plans"}</h3>
+              <h2 data-h="3">{ck ? (ck.due ? "Your check-in is due" : `Next check-in: ${relDay(ck.date).toLowerCase()}`) : "Check-ins start with your plans"}</h2>
               {ck && <div className="small muted">{fmtDate(ck.date, { weekday: "long", day: "numeric", month: "long" })}</div>}
             </div>
             {open?.form && <span className="chip green">Sent to your coach</span>}
@@ -622,7 +622,7 @@ function CheckinsView({ d, reload }) {
       )}
 
       {(plan.checkinDays || sent.length > 0) && <div className="panel">
-        <h3 style={{ marginBottom: 12 }}>From your coach</h3>
+        <h2 data-h="3" style={{ marginBottom: 12 }}>From your coach</h2>
         {sent.length === 0 ? (
           <p className="muted">Your check-in replies will appear here.</p>
         ) : (
@@ -644,7 +644,7 @@ function CheckinsView({ d, reload }) {
       </div>}
 
       <div className="panel">
-        <h3 style={{ marginBottom: 12 }}>Messages</h3>
+        <h2 data-h="3" style={{ marginBottom: 12 }}>Messages</h2>
         <div className="stack" style={{ "--gap": "8px" }}>
           {d.messages.map((m) => (
             <div key={m.id} style={{ justifySelf: m.from === "client" ? "end" : "start", maxWidth: "80%", background: m.from === "client" ? "var(--ink)" : "var(--paper-2)", color: m.from === "client" ? "var(--paper)" : "var(--ink)", padding: "10px 14px", borderRadius: 14, marginLeft: m.from === "client" ? "auto" : 0, width: "fit-content" }}>
@@ -700,7 +700,7 @@ const ADJUST = [
 function SelfAdjust() {
   return (
     <div className="panel">
-      <div className="panel-head"><h3>Adjust it yourself</h3><span className="small muted">The rules your coach uses</span></div>
+      <div className="panel-head"><h2 data-h="3">Adjust it yourself</h2><span className="small muted">The rules your coach uses</span></div>
       <div className="stack" style={{ "--gap": "16px" }}>
         {ADJUST.map(([title, items]) => (
           <div key={title}>

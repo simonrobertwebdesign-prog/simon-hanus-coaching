@@ -336,7 +336,7 @@ p { margin: 0; }
 .wizard-side li.now { color: var(--ink); }
 .wizard-side li.now i { border-color: var(--red); color: var(--red); }
 .wizard-main { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-lg); padding: clamp(22px, 4vw, 44px); box-shadow: var(--shadow); }
-.wizard-main h2 { font-size: clamp(1.8rem, 3.4vw, 2.5rem); }
+.wizard-main h2, .wizard-main h1 { font-size: clamp(1.8rem, 3.4vw, 2.5rem); }
 .wizard-main .intro { margin-top: 10px; color: var(--graphite); max-width: 56ch; }
 .wizard-body { margin-top: 30px; display: grid; gap: 22px; }
 .wizard-foot { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--rule-soft); display: flex; justify-content: space-between; gap: 12px; align-items: center; }
@@ -660,7 +660,7 @@ p { margin: 0; }
   --ink: #f4f4f5;
   --ink-2: #d4d4d8;
   --graphite: #a1a1aa;
-  --muted: #7c7c86;
+  --muted: #8e8e98;
   --rule: #34343b;
   --rule-soft: #28282e;
   --red: #9e1028;            /* dark crimson: the action colour */
@@ -729,7 +729,7 @@ body { background: var(--paper); }
   .tabbar { background: #000; border-top: 1px solid var(--rule-soft); }
   .tabbar button { color: #8b8b94; }
 }
-.days button[aria-pressed="true"] small { color: var(--muted); }
+.days button[aria-pressed="true"] small { color: #55555e; }
 .sheet tbody tr:hover td { background: var(--surface-2); }
 .avatar { background: var(--surface-2); color: var(--ink); }
 .filters button[aria-pressed="true"] .n { color: var(--red); }
@@ -836,7 +836,7 @@ body { background: var(--paper); }
 .plan2 li.no { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--rule); }
 .plan2 .btn { margin-top: auto; }
 .plan2 .price b { font-variant-numeric: tabular-nums; }
-@media (max-width: 900px) { .plans2 { grid-template-columns: minmax(0, 1fr); } .plan2 { min-width: 0; } .plan2.popular { order: -1; } }
+@media (max-width: 900px) { .plans2 { grid-template-columns: minmax(0, 1fr); } .plan2 { min-width: 0; } }
 
 /* ---------- protein calculator ---------- */
 .calc {
@@ -899,7 +899,7 @@ body { background: var(--paper); }
 /* ---------- type: Anybody for headings and big numbers, Instrument Sans for reading ---------- */
 h1, h2, h3, h4, .display, .brand, .plate span, .phone-top b, .logrow .w, .steps li::before, .price b, .portrait .mono,
 .stat b, .macro b, .pr-top b, .climb-kg, .climb-unit, .story-h1, .mq-item, .step-n, .calc-w b, .calc-num, .ribbon,
-.main-head h1, .wizard-main h2, .days button b, .chip, .btn, .pr-tag, .avatar, .faq summary, .show-tabs button b, .tabs button,
+.main-head h1, .wizard-main h1, .wizard-main h2, .days button b, .chip, .btn, .pr-tag, .avatar, .faq summary, .show-tabs button b, .tabs button,
 .side nav button, .tabbar button, .filters button, .seg button, .choice, .climb-week, .wk-label, .method-num, .week-cell b {
   font-family: var(--display);
 }
@@ -981,7 +981,7 @@ h4 { font-weight: 700; font-variation-settings: "wdth" 105; }
 .method-card h3 { font-size: 1.15rem; }
 .method-card p { color: var(--graphite); font-size: 0.95rem; margin-top: 8px; }
 @media (max-width: 1000px) { .method-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 560px) { .method-grid { grid-template-columns: minmax(0, 1fr); } .method-card { min-height: 0; } .method-num { padding-bottom: 18px; } .method-tabs { width: 100%; } .method-tabs button { flex: 1; padding: 11px 8px; } }
+@media (max-width: 560px) { .method-grid { grid-template-columns: minmax(0, 1fr); } .method-card { min-height: 0; } .method-num { padding-bottom: 18px; } .method-tabs { width: 100%; } .method-tabs button { flex: 1; padding: 11px 6px; white-space: nowrap; font-size: 0.95rem; font-variation-settings: "wdth" 96; } }
 
 /* ---------- how many days ---------- */
 .week { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
@@ -997,7 +997,7 @@ h4 { font-weight: 700; font-variation-settings: "wdth" 105; }
 .week-cell.crimson { --acc: var(--red-hot); background: linear-gradient(180deg, rgba(158, 16, 40, 0.28), #18181c 65%); }
 .week-cell.purple { --acc: #8b3fd1; background: linear-gradient(180deg, rgba(109, 40, 184, 0.3), #18181c 65%); }
 .week-cell.steel { --acc: var(--steel); background: linear-gradient(180deg, rgba(216, 218, 221, 0.13), #18181c 65%); }
-.week-cell.rest { opacity: 0.5; }
+.week-cell.rest { background: transparent; border-style: dashed; }
 .week-cell.rest b { color: var(--muted); font-weight: 600; }
 .week-name { margin-top: 18px; font-family: var(--display); font-size: clamp(1.25rem, 2.3vw, 1.8rem); font-weight: 800; font-variation-settings: "wdth" 115; }
 @media (max-width: 860px) { .week { grid-template-columns: minmax(0, 1fr); } }
@@ -1059,3 +1059,16 @@ h4 { font-weight: 700; font-variation-settings: "wdth" 105; }
 
 .adjust-list { margin: 6px 0 0; padding-left: 18px; color: var(--graphite); display: grid; gap: 6px; }
 .adjust-list li::marker { color: var(--red-ink); }
+
+/* App pages: section headings are h2/h3 for screen readers, sized like before */
+h2[data-h="3"] { font-size: 1.35rem; line-height: 1.1; font-weight: 750; font-variation-settings: "wdth" 104; letter-spacing: -0.01em; }
+.panel-head h2[data-h="3"] { font-size: 1.15rem; }
+.empty h2[data-h="3"] { color: var(--ink); margin-bottom: 8px; }
+h3[data-h="4"] { margin: 0; font-size: 1rem; line-height: 1.2; font-weight: 700; font-variation-settings: "wdth" 105; letter-spacing: 0; }
+.logger-ex h3[data-h="4"] { font-size: 1.05rem; }
+.approval-title { margin: 0; font-family: var(--font); font-size: 1rem; line-height: 1.3; font-weight: 700; font-variation-settings: normal; letter-spacing: 0; }
+
+/* Plans: price per week */
+.per-week { display: block; margin-top: -6px; margin-bottom: 4px; }
+
+

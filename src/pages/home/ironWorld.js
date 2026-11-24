@@ -387,7 +387,7 @@ export function createIronWorld(host, { phone = false, still = false } = {}) {
   let shown = progress;
   const pointer = new Vector2(), pointerSmooth = new Vector2(), dustPointer = new Vector2(9, 9);
   const ZERO = new Vector2(0, 0), FAR = new Vector2(9, 9);
-  let pointerActive = false, aspect = 1, visible = true, raf = 0, last = performance.now(), time = 0, slowFrames = 0, frames = 0;
+  let pointerActive = false, aspect = 1, visible = true, raf = 0, last = performance.now(), time = 0, slowFrames = 0, frames = 0, halfRate = false, acc = 0, slow2 = 0;
   const camPos = new Vector3(), camTgt = new Vector3(), tmpA = new Vector3(), tmpB = new Vector3();
 
   function shotAt(p, outPos, outTgt) {
@@ -467,8 +467,19 @@ export function createIronWorld(host, { phone = false, still = false } = {}) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     if (!visible) return;
-    draw(dt);
     frames++;
+    // Weak phones: after dropping to 1× pixels, still slow → draw every other frame.
+    if (halfRate) {
+      acc += dt;
+      if (frames & 1) return;
+      draw(acc); acc = 0;
+      return;
+    }
+    draw(dt);
+    if (pixelRatio === 1 && frames > 150 && frames < 300) {
+      if (dt > 0.03) slow2++;
+      if (slow2 > 90) halfRate = true;
+    }
     if (frames > 30 && frames < 150) {
       if (dt > 0.026) slowFrames++;
       if (slowFrames > 45 && pixelRatio > 1) {
@@ -485,13 +496,21 @@ export function createIronWorld(host, { phone = false, still = false } = {}) {
   const onVis = () => { visible = !document.hidden; last = performance.now(); };
   document.addEventListener("visibilitychange", onVis);
   resize();
-  if (!still) raf = requestAnimationFrame(loop);
+  let dead = false;
+  const begin = () => {
+    if (dead || still) return;
+    last = performance.now();
+    raf = requestAnimationFrame(loop);
+  };
+  // Let the browser compile the shaders in the background where it can, then start drawing.
+  if (!still) (renderer.compileAsync ? renderer.compileAsync(scene, camera) : Promise.resolve()).then(begin, begin);
   window.addEventListener("resize", resize);
 
   return {
     setProgress(p) { progress = clamp01(p); },
     setPointer(x, y, active = true) { pointer.set(x, y); pointerActive = active; },
     dispose() {
+      dead = true;
       cancelAnimationFrame(raf);
       io.disconnect();
       document.removeEventListener("visibilitychange", onVis);

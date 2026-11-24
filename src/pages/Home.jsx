@@ -195,7 +195,7 @@ function useKineticHeadings() {
   useEffect(() => {
     if (prefersReduced()) return;
     const ctx = gsap.context(() => {
-      gsap.utils.toArray("main > .section h2").forEach((h) => {
+      gsap.utils.toArray("main > .section h2:not(.sr-only)").forEach((h) => {
         gsap.fromTo(h, { fontVariationSettings: '"wdth" 60' }, {
           fontVariationSettings: '"wdth" 108',
           ease: "none",

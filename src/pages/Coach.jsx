@@ -211,7 +211,7 @@ function PlanApproval({ p, onDone }) {
         <div className="row">
           <span className="avatar">{initials(p.client?.full_name)}</span>
           <div>
-            <b>{p.client?.full_name}: new {p.kind === "training" ? "training" : "food"} plan</b>
+            <h2 className="approval-title">{p.client?.full_name}: new {p.kind === "training" ? "training" : "food"} plan</h2>
             <div className="small muted">{planById(p.client?.plan).name}. Drafted by {p.created_by === "claude" ? "Claude" : "you"}, {fmtDate(p.created_at?.slice(0, 10))}</div>
           </div>
         </div>
@@ -223,7 +223,7 @@ function PlanApproval({ p, onDone }) {
       <div className="approval-body">
         {p.why?.length > 0 && (
           <div>
-            <h4 style={{ marginBottom: 10 }}>Why it's built like this</h4>
+            <h3 data-h="4" style={{ marginBottom: 10 }}>Why it's built like this</h3>
             <div className="why">
               {p.why.map((w, i) => (
                 <div className="why-item" key={i}>
@@ -257,7 +257,7 @@ function CheckinApproval({ k, onDone }) {
         <div className="row">
           <span className="avatar">{initials(k.client?.full_name)}</span>
           <div>
-            <b>{k.client?.full_name}: check-in</b>
+            <h2 className="approval-title">{k.client?.full_name}: check-in</h2>
             <div className="small muted">Due {fmtDate(k.due_date)}</div>
           </div>
         </div>
@@ -269,19 +269,19 @@ function CheckinApproval({ k, onDone }) {
       <div className="approval-body">
         {k.report && (
           <div>
-            <h4 style={{ marginBottom: 8 }}>Report for you</h4>
+            <h3 data-h="4" style={{ marginBottom: 8 }}>Report for you</h3>
             <p>{k.report}</p>
           </div>
         )}
         {k.changes?.length > 0 && (
           <div>
-            <h4 style={{ marginBottom: 8 }}>Changes to the plan</h4>
+            <h3 data-h="4" style={{ marginBottom: 8 }}>Changes to the plan</h3>
             <ul className="changes">{k.changes.map((c) => <li key={c}>{c}</li>)}</ul>
           </div>
         )}
         <div>
           <div className="row between" style={{ marginBottom: 8 }}>
-            <h4>Message to {k.client?.full_name.split(" ")[0]}</h4>
+            <h3 data-h="4">Message to {k.client?.full_name.split(" ")[0]}</h3>
             <button className="link small" onClick={() => setEditing(!editing)}>{editing ? "Done" : "Edit message"}</button>
           </div>
           {editing ? <textarea className="textarea" style={{ minHeight: 160 }} value={message} onChange={(e) => setMessage(e.target.value)} /> : <p className="quote">{message}</p>}
@@ -323,7 +323,7 @@ function TrainingPreview({ c }) {
   return (
     <div className="stack">
       <div>
-        <h3>{c.title}</h3>
+        <h2 data-h="3">{c.title}</h2>
         <p className="muted" style={{ marginTop: 4 }}>{c.summary}</p>
         <p className="small" style={{ marginTop: 6 }}><b>When:</b> {c.schedule}. <b>Effort:</b> {c.effort}</p>
       </div>
@@ -346,7 +346,7 @@ function FoodPreview({ c }) {
   return (
     <div className="stack">
       <div className="row between">
-        <div><h3>{c.title}</h3><p className="muted" style={{ marginTop: 4 }}>{c.summary}</p></div>
+        <div><h2 data-h="3">{c.title}</h2><p className="muted" style={{ marginTop: 4 }}>{c.summary}</p></div>
         <span className="chip">{c.calories} kcal, P {c.protein_g} g, C {c.carbs_g} g, F {c.fat_g} g</span>
       </div>
       <div>
@@ -452,17 +452,17 @@ function Overview({ b, reload }) {
       </div>
       <div className="cols">
         <div className="panel">
-          <div className="panel-head"><h3>Bodyweight</h3></div>
+          <div className="panel-head"><h2 data-h="3">Bodyweight</h2></div>
           {s.body ? <LineChart series={[{ name: "Weigh-ins", colour: "var(--muted)", points: s.body.points, faint: true, width: 1.5 }, { name: "Trend", colour: "var(--red)", points: s.body.smooth }]} showDots={false} height={200} /> : <p className="muted">No weigh-ins.</p>}
         </div>
         <div className="panel">
-          <div className="panel-head"><h3>Sessions a week</h3></div>
+          <div className="panel-head"><h2 data-h="3">Sessions a week</h2></div>
           <Bars data={weeklySessions(b.workouts, 8)} target={training?.content?.days_per_week} height={200} />
         </div>
       </div>
       {list.length > 0 && (
         <div className="panel">
-          <h3 style={{ marginBottom: 12 }}>Lifts</h3>
+          <h2 data-h="3" style={{ marginBottom: 12 }}>Lifts</h2>
           <table className="ex-table">
             <thead><tr><th>Exercise</th><th>Start</th><th>Now</th><th>Change</th><th>Last 3 sessions</th></tr></thead>
             <tbody>
@@ -480,7 +480,7 @@ function Overview({ b, reload }) {
         </div>
       )}
       <div className="panel">
-        <div className="panel-head"><h3>Recent workouts</h3></div>
+        <div className="panel-head"><h2 data-h="3">Recent workouts</h2></div>
         <div className="hist">
           {b.workouts.slice(0, 6).map((w) => (
             <div key={w.id} className="hist-row">
@@ -493,7 +493,7 @@ function Overview({ b, reload }) {
         </div>
       </div>
       <div className="panel">
-        <div className="panel-head"><h3>Your notes on {b.client.full_name.split(" ")[0]}</h3><span className="small muted">Only you and Claude see these</span></div>
+        <div className="panel-head"><h2 data-h="3">Your notes on {b.client.full_name.split(" ")[0]}</h2><span className="small muted">Only you and Claude see these</span></div>
         <textarea className="textarea" value={notes} onChange={(e) => setNotes(e.target.value)} />
         <button className="btn sm ink" style={{ marginTop: 10 }} onClick={async () => { await api.updateClient(b.client.id, { coach_notes: notes }); toast("Notes saved"); reload(); }}>Save notes</button>
       </div>
@@ -503,15 +503,16 @@ function Overview({ b, reload }) {
 
 const LABELS = {
   age: "Age", sex: "Sex", height_cm: "Height (cm)", weight_kg: "Weight (kg)",
-  goal: "Goal", target: "Specific goal", goal_weight: "Goal weight", body_now: "Body now", why_now: "Why now", holding_back: "Held back by",
+  goal: "Goal", target: "Specific goal", goal_weight: "Goal weight", body_now: "Body now", why_now: "Why now", holding_back: "Held back by", coached_before: "Coached before",
   experience: "Training for", days: "Days a week", train_days: "Days that work", session: "Session length", where: "Trains at", equipment: "Kit",
   routine: "Current training", lifts: "Best lifts", priority: "Priority muscles", likes_ex: "Loves", dislikes_ex: "Hates / can't do", injuries: "Injuries",
   work: "Job / day", steps: "Steps", other_activity: "Other sport / cardio", sleep: "Sleep", stress: "Stress", train_time: "Trains at (time)",
   weight_trend: "Weight, last month", dieting: "Dieting now", tracking: "Tracks calories", calories_now: "Calories now (kcal)", protein_now: "Protein now (g)",
   maintenance_known: "Their maintenance (kcal)", scales: "Scales at home",
-  diet: "Diet", allergies: "Allergies", likes: "Foods loved", dislikes: "Won't eat", meals: "Meals a day", cooking: "Cooking", budget: "Budget", alcohol: "Alcohol", supplements: "Supplements",
+  diet: "Diet", allergies: "Allergies", likes: "Foods loved", dislikes: "Won't eat", normal_day: "Normal day of eating", meals: "Meals a day", cooking: "Cooking", budget: "Budget", alcohol: "Alcohol", supplements: "Supplements",
   health_details: "Health details", peds: "Steroids / PEDs", peds_details: "PED details",
   guardian_name: "Parent / guardian", guardian_email: "Guardian email",
+  anything_else: "Anything else", found_us: "Found us through",
 };
 
 function Answers({ a }) {
@@ -523,7 +524,7 @@ function Answers({ a }) {
     <div className="stack" style={{ "--gap": "16px" }}>
     {sc && (
       <div className="panel">
-        <div className="panel-head"><h3>Starting point</h3><span className="small muted">From their answers</span></div>
+        <div className="panel-head"><h2 data-h="3">Starting point</h2><span className="small muted">From their answers</span></div>
         <div className="stats">
           <div className="stat"><span>Maintenance guess</span><b>{sc.formula[0].toLocaleString()}–{sc.formula[1].toLocaleString()}</b><small>kcal, {a.weight_kg} kg {sc.multiplier}</small></div>
           <div className="stat"><span>From their tracking</span><b>{sc.tracked ? sc.tracked.toLocaleString() : "—"}</b><small>{sc.trackedFrom || (a.calories_now ? `eats ${(+a.calories_now).toLocaleString()} kcal, weight ${String(a.weight_trend || "unknown").toLowerCase()}` : "doesn't track")}</small></div>
@@ -651,7 +652,7 @@ function PlanEditor({ plan, onClose, onSaved }) {
 
   return (
     <Modal onClose={onClose} label="Edit plan">
-      <h3 style={{ fontSize: "1.5rem" }}>{isTraining ? "Training plan" : "Food plan"}</h3>
+      <h2 data-h="3" style={{ fontSize: "1.5rem" }}>{isTraining ? "Training plan" : "Food plan"}</h2>
       <div className="stack" style={{ "--gap": "14px", marginTop: 16 }}>
         <Field label="Title"><input className="input" value={c.title} onChange={(e) => set("title", e.target.value)} /></Field>
         <Field label="Summary for the client"><textarea className="textarea" value={c.summary} onChange={(e) => set("summary", e.target.value)} /></Field>

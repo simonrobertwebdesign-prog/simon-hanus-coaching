@@ -77,6 +77,8 @@ export function Start({ route, session }) {
     if (a.injuries?.trim()) f.push("Injury: " + a.injuries.trim());
     return f;
   }, [a]);
+  // Only a "Yes" in the health check needs more detail; injuries are already described on the training step.
+  const healthYes = HEALTH.some(([k]) => a.health[k] === "Yes");
 
   // Logged in already? Skip the account step.
   const loggedIn = !!session?.user && session.user.role !== "coach";
@@ -107,7 +109,7 @@ export function Start({ route, session }) {
       num("protein_now", 10, 500, "Enter grams a day, e.g. 140");
     }
     if (s === 6) HEALTH.forEach(([k]) => { if (!a.health[k]) e["h_" + k] = "Please answer yes or no"; });
-    if (s === 6 && flags.length && !a.health_details.trim()) e.health_details = "Tell us a little more so your coach can plan around it";
+    if (s === 6 && healthYes && !a.health_details.trim()) e.health_details = "Tell us a little more so your coach can plan around it";
     if (s === 6) need("peds", "Please pick one");
     if (s === 7) {
       if (minor) {
@@ -590,7 +592,7 @@ export function Start({ route, session }) {
                     </Field>
                   </div>
                 )}
-                {flags.length > 0 && (
+                {healthYes && (
                   <div style={{ marginTop: 22 }} className="stack">
                     <Field label="Tell us more" error={E("health_details")} hint="What it is, and anything your doctor has said.">
                       <textarea className={cx("textarea", E("health_details") && "err")} value={a.health_details} onChange={set("health_details")} />
@@ -689,7 +691,7 @@ export function Start({ route, session }) {
                   </div>
                   <b style={{ fontSize: "1.5rem" }}>£{p.price}{p.period === "month" ? "/mo" : ""}</b>
                 </div>
-                {flags.length > 0 && <div className="notice amber">You told us about something in the health check. Your coach will read it before building your plan.</div>}
+                {healthYes && <div className="notice amber">You told us about something in the health check. Your coach will read it before building your plan.</div>}
                 {(api.demo || !p.paymentLink) && (
                   <div className="notice">
                     <b>Test mode.</b> Real payments aren't switched on yet, so this button pretends you've paid.

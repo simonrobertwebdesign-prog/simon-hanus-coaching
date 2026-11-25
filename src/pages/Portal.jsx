@@ -152,7 +152,7 @@ function TodayView({ d, onLog, reload, waiting }) {
   const ck = checkinState(d.client);
   const nd = nextDay(d.plans.training, d.workouts);
   const b = bodySummary(d.body);
-  const adh = adherence(d.workouts, d.plans.training, 14);
+  const adh = adherence(d.workouts, d.plans.training, 14, today(), d.client.start_date);
   const lastMsg = d.checkins.find((k) => k.status === "sent");
   return (
     <div className="stack" style={{ "--gap": "16px" }}>
@@ -162,7 +162,7 @@ function TodayView({ d, onLog, reload, waiting }) {
         <div className="panel" style={{ borderColor: "var(--ink)", borderWidth: 2 }}>
           <div className="panel-head">
             <div>
-              <div className="small muted">Next workout</div>
+              <div className="small muted">{nd?.when === "Today" ? "Today's workout" : nd?.when ? `Next workout: ${nd.when}` : "Next workout"}</div>
               <h2 data-h="3" style={{ fontSize: "1.6rem" }}>{nd?.name}</h2>
               <div className="muted">{nd?.focus}, {nd?.exercises.length} exercises</div>
             </div>
@@ -175,7 +175,7 @@ function TodayView({ d, onLog, reload, waiting }) {
       )}
       <div className="stats">
         <div className="stat"><span>Next check-in</span><b>{ck ? relDay(ck.date) : "—"}</b><small>{ck ? fmtDate(ck.date) : planById(d.client.plan).checkinDays ? "Starts with your plans" : "Not on your plan"}</small></div>
-        <div className="stat"><span>Last 2 weeks</span><b>{adh ? `${adh.done}/${adh.planned}` : d.workouts.length}</b><small>sessions done</small></div>
+        <div className="stat"><span>{adh?.fresh ? "Since you started" : "Last 2 weeks"}</span><b>{adh ? (adh.planned ? `${adh.done}/${adh.planned}` : adh.done) : d.workouts.length}</b><small>sessions done</small></div>
         <div className="stat"><span>Bodyweight</span><b>{b ? kg(b.last.value) : "—"}</b><small>{b?.rate != null ? `${b.rate > 0 ? "+" : ""}${b.rate.toFixed(2)} kg a week` : "Add your first weigh-in"}</small></div>
       </div>
       <QuickWeigh reload={reload} />
@@ -216,7 +216,8 @@ function QuickWeigh({ reload }) {
 
 function TrainingView({ plan, workouts, onLog }) {
   const c = plan.content;
-  const [i, setI] = useState(0);
+  // Open on the session that's up next, not always the first one.
+  const [i, setI] = useState(() => Math.max(0, c.days.findIndex((d) => d.name === nextDay(plan, workouts || [])?.name)));
   const day = c.days[i];
   return (
     <div className="stack" style={{ "--gap": "16px" }}>
@@ -597,6 +598,9 @@ function CheckinsView({ d, reload }) {
             </div>
             {open?.form && <span className="chip green">Sent to your coach</span>}
           </div>
+          {!ck ? (
+            <p className="muted">Your first check-in opens {plan.checkinDays === 7 ? "a week" : "2 weeks"} after your plans arrive. Until then, log your sessions and weigh in most mornings: that's what the check-in looks at. Questions before then? Send your coach a message below.</p>
+          ) : (
           <form
             className="stack"
             style={{ "--gap": "18px" }}
@@ -619,6 +623,7 @@ function CheckinsView({ d, reload }) {
             <Field label="Questions for your coach"><textarea className="textarea" value={f.questions} onChange={set("questions")} /></Field>
             <div><button className="btn">{open?.form ? "Update my check-in" : "Send check-in"}</button></div>
           </form>
+          )}
         </div>
       )}
 
@@ -732,7 +737,7 @@ function ShoppingList({ plan }) {
     <div className="panel">
       <div className="panel-head">
         <h2 data-h="3">Shopping list</h2>
-        <span className="small muted">{total > 0 ? `About £${total.toFixed(2)} a week` : "For a week"}</span>
+        <span className="small muted">{total > 0 ? `About £${total.toFixed(2)} for this list` : "For a week"}</span>
       </div>
       <div className="stack" style={{ "--gap": "16px" }}>
         {shops.map((shop) => (

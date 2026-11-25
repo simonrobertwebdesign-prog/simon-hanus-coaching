@@ -4,7 +4,7 @@ import { buildSeed } from "./seed";
 import { addDays, today, uid, store, sessionStore } from "./util";
 import { planById } from "../config";
 
-const KEY = "shc-demo-v3";
+const KEY = "shc-demo-v4";
 let db = store(KEY) || buildSeed();
 const save = () => store(KEY, db);
 const wait = (v) => new Promise((r) => setTimeout(() => r(structuredClone(v)), 120));

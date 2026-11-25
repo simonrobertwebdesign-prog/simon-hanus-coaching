@@ -1,6 +1,9 @@
 // Demo data so the site can be clicked through before the database is connected.
 // Every person here is made up and labelled as demo data on screen.
 import { addDays, today, rng, round, uid } from "./util";
+// Sam Carter: the playthrough client from 25 Nov 2026. He has paid and his plans
+// are drafted, waiting for Simon in Approvals. Built from real Tesco products.
+import SAM from "./seed-sam.json";
 
 const ex = (name, sets, reps, rest, notes = "") => ({ name, sets, reps, rest, notes });
 
@@ -350,6 +353,11 @@ export function buildSeed() {
       flags: ["Knee pain on deep squats (answer in questionnaire)"], coach_notes: "", created_at: t,
     },
     {
+      id: "c-sam", full_name: "Sam Carter", email: "sam.carter@example.com", plan: "monthly",
+      status: "paid", start_date: null, next_checkin: null, payment_confirmed: true, stripe_session_id: "demo-sam",
+      flags: ["Injury: Lower back gets tight after deadlifts. Fine otherwise."], coach_notes: "Holiday in Spain 20 June. Stag do 14 to 16 March. Plays 5-a-side on Wednesdays.", created_at: t,
+    },
+    {
       id: "c-ellie", full_name: "Ellie Morgan", email: "ellie@example.com", plan: "monthly",
       status: "active", start_date: ellieStart, next_checkin: t, payment_confirmed: true,
       flags: [], coach_notes: "", created_at: ellieStart,
@@ -365,6 +373,8 @@ export function buildSeed() {
     { id: "p-e-f", client_id: "c-ellie", kind: "nutrition", status: "live", version: 1, content: { ...FOOD_PRIYA, calories: 1850, protein_g: 135 }, why: [], created_by: "coach", created_at: ellieStart, approved_at: ellieStart },
     { id: "p-t-t", client_id: "c-tom", kind: "training", status: "draft", version: 1, content: TRAINING_TOM_DRAFT, why: WHY_TOM, created_by: "claude", created_at: t },
     { id: "p-t-f", client_id: "c-tom", kind: "nutrition", status: "draft", version: 1, content: FOOD_TOM_DRAFT, why: WHY_TOM_FOOD, created_by: "claude", created_at: t },
+    { id: "p-s-t", client_id: "c-sam", kind: "training", status: "draft", version: 1, content: SAM.training, why: SAM.whyTraining, created_by: "claude", created_at: t },
+    { id: "p-s-f", client_id: "c-sam", kind: "nutrition", status: "draft", version: 1, content: SAM.nutrition, why: SAM.whyFood, created_by: "claude", created_at: t },
   ];
 
   const workouts = {
@@ -426,6 +436,7 @@ export function buildSeed() {
   ];
 
   const answers = {
+    "c-sam": SAM.answers,
     "c-tom": {
       age: 22, sex: "Male", height_cm: 180, weight_kg: 70, goal: "Lean bulk / maingain: build slowly, little fat", experience: "Under 6 months",
       days: 3, session: "60 min", where: "Commercial gym", diet: "Anything", allergies: "None", work: "Shift work in a warehouse",

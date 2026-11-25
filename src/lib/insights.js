@@ -45,13 +45,18 @@ export function weeklySessions(workouts, weeks = 8) {
   return out;
 }
 
-export function adherence(workouts, trainingPlan, days = 14, end = today()) {
+// Sessions done vs planned. If the plan started inside the window, only count
+// from the start date, so a new client isn't shown as behind on day one.
+export function adherence(workouts, trainingPlan, days = 14, end = today(), start = null) {
   const perWeek = trainingPlan?.content?.days_per_week || trainingPlan?.days_per_week || 0;
   if (!perWeek) return null;
-  const from = addDays(end, -days + 1);
+  let from = addDays(end, -days + 1);
+  const fresh = !!(start && start > from);
+  if (fresh) from = start;
+  const counted = daysBetween(from, end) + 1;
   const done = workouts.filter((w) => w.date >= from && w.date <= end).length;
-  const planned = Math.round((perWeek * days) / 7);
-  return { done, planned, missed: Math.max(0, planned - done), pct: planned ? Math.min(100, Math.round((done / planned) * 100)) : 0 };
+  const planned = fresh ? Math.floor((perWeek * counted) / 7) : Math.round((perWeek * counted) / 7);
+  return { done, planned, fresh, missed: Math.max(0, planned - done), pct: planned ? Math.min(100, Math.round((done / planned) * 100)) : 100 };
 }
 
 export function bodySummary(body) {
@@ -80,10 +85,26 @@ export function checkinState(client) {
 }
 
 // What the client needs next (for the next workout suggestion).
-export function nextDay(trainingPlan, workouts) {
+const WEEKDAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+const weekdayOf = (name) => WEEKDAYS.indexOf(String(name || "").trim().slice(0, 3).toLowerCase());
+
+// Next session to do. If every day is named after a weekday ("Monday: Lower A"),
+// go by the calendar: today's session if it isn't logged yet, else the next one.
+// Otherwise go round the days in order after the last one logged.
+export function nextDay(trainingPlan, workouts, now = today()) {
   const days = trainingPlan?.content?.days || [];
   if (!days.length) return null;
   const last = workouts[0];
+  if (days.every((d) => weekdayOf(d.name) >= 0)) {
+    const dow = new Date(now + "T12:00:00").getDay();
+    for (let k = 0; k < 7; k++) {
+      const want = (dow + k) % 7;
+      const d = days.find((x) => weekdayOf(x.name) === want);
+      if (!d) continue;
+      if (k === 0 && last?.date === now && last.day_name === d.name) continue;
+      return { ...d, when: k === 0 ? "Today" : k === 1 ? "Tomorrow" : d.name.split(/[:\s]/)[0] };
+    }
+  }
   const i = last ? days.findIndex((d) => d.name === last.day_name) : -1;
   return days[(i + 1) % days.length];
 }
@@ -117,7 +138,7 @@ export function checkinSummary(b) {
   return {
     period_days: period,
     since: sinceLast,
-    adherence: adherence(b.workouts, training, period),
+    adherence: adherence(b.workouts, training, period, today(), b.client.start_date),
     sessions_logged: recent.length,
     body: bodySummary(b.body),
     lifts: lifts(b.workouts).slice(0, 8).map((l) => ({

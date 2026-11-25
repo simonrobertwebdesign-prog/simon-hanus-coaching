@@ -326,6 +326,7 @@ function TrainingPreview({ c }) {
         <h2 data-h="3">{c.title}</h2>
         <p className="muted" style={{ marginTop: 4 }}>{c.summary}</p>
         <p className="small" style={{ marginTop: 6 }}><b>When:</b> {c.schedule}. <b>Effort:</b> {c.effort}</p>
+        {c.progression && <p className="small" style={{ marginTop: 4 }}><b>Progress:</b> {c.progression}</p>}
       </div>
       <div className="cols" style={{ "--n": Math.min(3, c.days.length) }}>
         {c.days.map((d) => (
@@ -333,21 +334,39 @@ function TrainingPreview({ c }) {
             <b>{d.name}</b>
             <div className="small muted">{d.focus}</div>
             <table className="ex-table small" style={{ marginTop: 6 }}>
-              <tbody>{d.exercises.map((e) => <tr key={e.name}><td style={{ padding: "6px 4px" }}>{e.name}</td><td style={{ padding: "6px 4px", whiteSpace: "nowrap" }}>{e.sets} × {e.reps}</td></tr>)}</tbody>
+              <tbody>{d.exercises.map((e) => (
+                <tr key={e.name}>
+                  <td style={{ padding: "6px 4px" }}>{e.name}{e.notes && <div className="muted" style={{ fontWeight: 400, marginTop: 2 }}>{e.notes}</div>}</td>
+                  <td style={{ padding: "6px 4px", whiteSpace: "nowrap", verticalAlign: "top" }}>{e.sets} × {e.reps}{e.rest && <div className="muted">{e.rest} rest</div>}</td>
+                </tr>
+              ))}</tbody>
             </table>
           </div>
         ))}
       </div>
+      <PreviewList title="Notes for the client" items={c.notes} />
     </div>
   );
 }
+
+function PreviewList({ title, items }) {
+  if (!items?.length) return null;
+  return (
+    <div className="meal">
+      <b>{title}</b>
+      <ul className="preview-list">{items.map((x, i) => <li key={i}>{x}</li>)}</ul>
+    </div>
+  );
+}
+
+const shopTotal = (list = []) => list.reduce((n, x) => n + (parseFloat(String(x.price || "").replace(/[^0-9.]/g, "")) || 0), 0);
 
 function FoodPreview({ c }) {
   return (
     <div className="stack">
       <div className="row between">
         <div><h2 data-h="3">{c.title}</h2><p className="muted" style={{ marginTop: 4 }}>{c.summary}</p></div>
-        <span className="chip">{c.calories} kcal, P {c.protein_g} g, C {c.carbs_g} g, F {c.fat_g} g</span>
+        <span className="chip">{Number(c.calories).toLocaleString("en-GB")} kcal, P {c.protein_g} g, C {c.carbs_g} g, F {c.fat_g} g</span>
       </div>
       <div>
         {c.meals.map((m) => (
@@ -365,10 +384,12 @@ function FoodPreview({ c }) {
       )}
       {c.shopping?.length > 0 && (
         <div className="meal">
-          <b>Shopping list</b>
-          <ul>{c.shopping.map((s, i) => <li key={i}><span>{s.shop ? `${s.shop}: ` : ""}{s.item}</span><span>{s.amount}{s.price ? `, ${s.price}` : ""}</span></li>)}</ul>
+          <b>Shopping list{shopTotal(c.shopping) > 0 && <span className="small muted" style={{ display: "block", fontWeight: 400 }}>About £{shopTotal(c.shopping).toFixed(2)} for this list</span>}</b>
+          <ul>{c.shopping.map((s, i) => <li key={i}><span>{s.shop ? `${s.shop}: ` : ""}{s.item}{s.note && <span className="muted"> {s.note}</span>}</span><span>{s.amount}{s.price ? `, ${s.price}` : ""}</span></li>)}</ul>
         </div>
       )}
+      <PreviewList title="Swaps" items={c.swaps} />
+      <PreviewList title="Notes for the client" items={c.notes} />
     </div>
   );
 }
@@ -444,14 +465,14 @@ function ClientDetail({ id, onChange }) {
 function Overview({ b, reload }) {
   const s = useMemo(() => checkinSummary(b), [b]);
   const training = b.plans.find((p) => p.kind === "training" && p.status === "live");
-  const adh = adherence(b.workouts, training, 14);
+  const adh = adherence(b.workouts, training, 14, today(), b.client.start_date);
   const list = lifts(b.workouts);
   const [notes, setNotes] = useState(b.client.coach_notes || "");
   const toast = useToast();
   return (
     <div className="stack" style={{ "--gap": "16px" }}>
       <div className="stats">
-        <div className="stat"><span>Sessions, last 2 weeks</span><b>{adh ? `${adh.done}/${adh.planned}` : "—"}</b><small>{adh ? `${adh.missed} missed` : "No plan yet"}</small></div>
+        <div className="stat"><span>{adh?.fresh ? "Sessions since start" : "Sessions, last 2 weeks"}</span><b>{adh ? (adh.planned ? `${adh.done}/${adh.planned}` : adh.done) : "—"}</b><small>{adh ? `${adh.missed} missed` : "No plan yet"}</small></div>
         <div className="stat"><span>Bodyweight now</span><b>{s.body ? kg(s.body.avgNow) : "—"}</b><small>7-day average</small></div>
         <div className="stat"><span>Per week</span><b>{s.body?.rate != null ? `${s.body.rate > 0 ? "+" : ""}${s.body.rate.toFixed(2)} kg` : "—"}</b></div>
         <div className="stat"><span>Lifts up / stalled</span><b>{list.filter((l) => l.change > 0).length} / {list.filter((l) => l.stalled).length}</b></div>

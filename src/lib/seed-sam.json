@@ -1,0 +1,693 @@
+{
+ "answers": {
+  "first_name": "Sam",
+  "last_name": "Carter",
+  "age": "26",
+  "sex": "Male",
+  "height_unit": "cm",
+  "height_cm": 182,
+  "height_ft": "",
+  "height_in": "",
+  "weight_unit": "kg",
+  "weight_kg": 88,
+  "weight_st": "",
+  "weight_lb": "",
+  "goal": "Cut: lose fat",
+  "cut_pace": "Steady: about 0.5% of my weight a week",
+  "target": "Lose the belly and see some abs",
+  "event": "Holiday in Spain on 20 June",
+  "compete": "No",
+  "goal_weight": "80 kg",
+  "body_now": "Carrying extra fat",
+  "waist": "94 cm",
+  "why_now": "Holiday booked, and I've let things slip since starting a desk job last year.",
+  "holding_back": "No real plan. I go to the gym and do whatever I feel like, then eat badly in the evenings.",
+  "coached_before": "No",
+  "experience": "2–5 years",
+  "consistent": "On and off",
+  "days": "4",
+  "train_days": [
+   "Mon",
+   "Tue",
+   "Thu",
+   "Fri"
+  ],
+  "session": "60 min",
+  "where": "Commercial gym",
+  "gym_name": "PureGym Oxford Central",
+  "equipment": [],
+  "dumbbell_max": "",
+  "routine": "Bro split: chest Monday, back Wednesday, arms Friday. Skip legs a lot.",
+  "lifts": "Bench 90 kg × 5, squat 110 kg × 5, lat pulldown 70 kg × 10",
+  "style_pref": "A mix",
+  "priority": [
+   "Chest",
+   "Back"
+  ],
+  "likes_ex": "Bench press, pull-ups",
+  "dislikes_ex": "Deadlifts (lower back gets sore)",
+  "injuries": "Lower back gets tight after deadlifts. Fine otherwise.",
+  "cardio_likes": [
+   "Walking",
+   "Cycling"
+  ],
+  "work": "Mostly sitting",
+  "steps": "5,000–8,000",
+  "other_activity": "5-a-side football on Wednesday evenings",
+  "sleep": "6–7 h",
+  "stress": "Medium",
+  "train_time": "After work",
+  "weight_trend": "About the same",
+  "dieting": "No",
+  "calories_now": "2700",
+  "protein_now": "110",
+  "maintenance_known": "",
+  "scales": [
+   "Bathroom scales",
+   "Kitchen scales"
+  ],
+  "normal_day": "Skip breakfast, meal deal at lunch, pasta or a takeaway for tea, crisps and chocolate in the evening.",
+  "eating_out": "1–2 times",
+  "food_style": "Mostly whole foods, plus protein powder",
+  "supps_open": "Just protein powder",
+  "shops": [
+   "Tesco",
+   "Aldi"
+  ],
+  "shops_other": "",
+  "shop_size": "A big supermarket",
+  "shop_where": "Tesco Extra Kidlington, Aldi Witney",
+  "found_us": "Instagram",
+  "anything_else": "Away on a stag do 14 to 16 March.",
+  "diet": "Anything",
+  "allergies": "",
+  "likes": "Chicken, steak, rice, pasta, curry, eggs, Greek yoghurt",
+  "dislikes": "Mushrooms, fish",
+  "meals": "4",
+  "cooking": "Basic meals",
+  "budget": "£40–£60",
+  "alcohol": "1–5 drinks",
+  "tracking": "I have before",
+  "supplements": "Whey protein sometimes",
+  "health": {
+   "heart": "No",
+   "chest": "No",
+   "dizzy": "No",
+   "bp": "No",
+   "joints": "No",
+   "meds": "No",
+   "pregnant": "No",
+   "ed": "No"
+  },
+  "health_details": "",
+  "peds": "Never",
+  "peds_details": "",
+  "guardian_name": "",
+  "guardian_email": "",
+  "guardian_agree": false,
+  "agree_terms": true,
+  "agree_data": true,
+  "agree_results": false
+ },
+ "training": {
+  "title": "Upper / lower, 4 days",
+  "summary": "Four 60-minute sessions. Chest and back get extra work, legs come back in gently, and nothing loads your lower back the way deadlifts do.",
+  "days_per_week": 4,
+  "schedule": "Mon lower, Tue upper, Wed football, Thu upper, Fri lower",
+  "effort": "Weeks 1 and 2: stop every set with 2 to 3 reps left. From week 3: 1 to 2 reps left on the big lifts, and take the last set of the smaller exercises close to failure.",
+  "progression": "When you hit the top of the rep range on every set, add the smallest weight jump next time. Log every set so your coach can see it.",
+  "days": [
+   {
+    "name": "Monday: Lower A",
+    "focus": "Quads, hamstrings, calves",
+    "exercises": [
+     {
+      "name": "Hack squat",
+      "sets": 3,
+      "reps": "8-12",
+      "rest": "2-3 min",
+      "notes": "Leg press if it's taken. Weeks 1 and 2: 2 sets."
+     },
+     {
+      "name": "Seated leg curl",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "2 min",
+      "notes": ""
+     },
+     {
+      "name": "Leg press",
+      "sets": 3,
+      "reps": "10-15",
+      "rest": "2 min",
+      "notes": "Lower until your knees reach 90°. Weeks 1 and 2: 2 sets."
+     },
+     {
+      "name": "Leg extension",
+      "sets": 2,
+      "reps": "12-15",
+      "rest": "1 min",
+      "notes": ""
+     },
+     {
+      "name": "Standing calf raise",
+      "sets": 3,
+      "reps": "10-15",
+      "rest": "1 min",
+      "notes": "Pause for a second at the bottom."
+     },
+     {
+      "name": "Cable crunch",
+      "sets": 2,
+      "reps": "10-15",
+      "rest": "1 min",
+      "notes": ""
+     },
+     {
+      "name": "EZ-bar curl",
+      "sets": 2,
+      "reps": "10-12",
+      "rest": "1 min",
+      "notes": ""
+     }
+    ]
+   },
+   {
+    "name": "Tuesday: Upper A",
+    "focus": "Chest first",
+    "exercises": [
+     {
+      "name": "Barbell bench press",
+      "sets": 3,
+      "reps": "5-8",
+      "rest": "3 min",
+      "notes": "2 lighter warm-up sets first. Start around 80 kg for 6 and build back past 90 × 5."
+     },
+     {
+      "name": "Pull-up",
+      "sets": 3,
+      "reps": "6-10",
+      "rest": "2-3 min",
+      "notes": "Once you get 10 on every set, add weight with a belt."
+     },
+     {
+      "name": "Incline dumbbell press",
+      "sets": 3,
+      "reps": "8-12",
+      "rest": "2 min",
+      "notes": ""
+     },
+     {
+      "name": "Chest-supported row",
+      "sets": 3,
+      "reps": "8-12",
+      "rest": "2 min",
+      "notes": "Chest on the pad, so your lower back stays out of it."
+     },
+     {
+      "name": "Cable fly",
+      "sets": 2,
+      "reps": "12-15",
+      "rest": "1 min",
+      "notes": ""
+     },
+     {
+      "name": "Lateral raise",
+      "sets": 2,
+      "reps": "12-20",
+      "rest": "1 min",
+      "notes": ""
+     },
+     {
+      "name": "Triceps pushdown",
+      "sets": 2,
+      "reps": "10-15",
+      "rest": "1 min",
+      "notes": ""
+     }
+    ]
+   },
+   {
+    "name": "Thursday: Upper B",
+    "focus": "Back first",
+    "exercises": [
+     {
+      "name": "Lat pulldown",
+      "sets": 3,
+      "reps": "8-12",
+      "rest": "2 min",
+      "notes": "Start around 60 kg and build back to 70 × 10 and beyond."
+     },
+     {
+      "name": "Incline machine press",
+      "sets": 3,
+      "reps": "8-12",
+      "rest": "2 min",
+      "notes": "Smith machine incline press if there's no machine."
+     },
+     {
+      "name": "Seated cable row",
+      "sets": 3,
+      "reps": "8-12",
+      "rest": "2 min",
+      "notes": "Sit tall. Don't rock back to move the weight."
+     },
+     {
+      "name": "Machine chest press",
+      "sets": 3,
+      "reps": "8-12",
+      "rest": "2 min",
+      "notes": ""
+     },
+     {
+      "name": "Straight-arm cable pulldown",
+      "sets": 2,
+      "reps": "12-15",
+      "rest": "1 min",
+      "notes": ""
+     },
+     {
+      "name": "Lateral raise",
+      "sets": 3,
+      "reps": "12-20",
+      "rest": "1 min",
+      "notes": ""
+     }
+    ]
+   },
+   {
+    "name": "Friday: Lower B",
+    "focus": "Glutes, hamstrings, quads",
+    "exercises": [
+     {
+      "name": "Hip thrust",
+      "sets": 3,
+      "reps": "8-12",
+      "rest": "2 min",
+      "notes": "Barbell or machine. Squeeze at the top and keep your ribs down."
+     },
+     {
+      "name": "Lying leg curl",
+      "sets": 3,
+      "reps": "10-12",
+      "rest": "2 min",
+      "notes": ""
+     },
+     {
+      "name": "Dumbbell split squat",
+      "sets": 3,
+      "reps": "8-12 each leg",
+      "rest": "2 min",
+      "notes": "Weeks 1 and 2: bodyweight or light dumbbells, 2 sets."
+     },
+     {
+      "name": "Leg extension",
+      "sets": 2,
+      "reps": "12-15",
+      "rest": "1 min",
+      "notes": ""
+     },
+     {
+      "name": "Seated calf raise",
+      "sets": 3,
+      "reps": "12-20",
+      "rest": "1 min",
+      "notes": ""
+     },
+     {
+      "name": "Incline dumbbell curl",
+      "sets": 2,
+      "reps": "10-12",
+      "rest": "1 min",
+      "notes": ""
+     },
+     {
+      "name": "Overhead cable triceps extension",
+      "sets": 2,
+      "reps": "10-15",
+      "rest": "1 min",
+      "notes": ""
+     }
+    ]
+   }
+  ],
+  "notes": [
+   "Wednesday is football. That's your cardio for the day, and legs are trained Monday and Friday so they're fresh for it.",
+   "No deadlifts or back extensions for now. Say in your check-in how your lower back feels. If it's happy after 4 weeks, your coach may add Romanian deadlifts.",
+   "Walking and cycling both count towards your steps. Aim for 8,000 to 10,000 a day.",
+   "Machine taken? Use the closest swap and write it in your log."
+  ]
+ },
+ "nutrition": {
+  "title": "Steady cut, 4 meals",
+  "calories": 2400,
+  "protein_g": 160,
+  "carbs_g": 285,
+  "fat_g": 60,
+  "water_l": 3,
+  "summary": "About 300 kcal under what you eat now, plus a few more steps. That's roughly 0.3 to 0.5 kg a week, which gets you to 80 kg well before Spain without starving you.",
+  "meals": [
+   {
+    "name": "Lunch, 12 to 1pm: chicken, rice and veg box",
+    "items": [
+     {
+      "food": "Chicken breast (raw weight)",
+      "amount": "170 g"
+     },
+     {
+      "food": "Basmati rice (dry weight)",
+      "amount": "75 g"
+     },
+     {
+      "food": "Frozen mixed veg",
+      "amount": "150 g"
+     },
+     {
+      "food": "Sweet chilli and garlic sauce",
+      "amount": "1 tbsp"
+     },
+     {
+      "food": "Olive oil, to cook",
+      "amount": "1 tsp"
+     }
+    ]
+   },
+   {
+    "name": "Before the gym, about 4pm",
+    "items": [
+     {
+      "food": "0% Greek style yoghurt",
+      "amount": "250 g"
+     },
+     {
+      "food": "Porridge oats (stir in raw, or soak overnight)",
+      "amount": "40 g"
+     },
+     {
+      "food": "Banana",
+      "amount": "1"
+     }
+    ]
+   },
+   {
+    "name": "Dinner, 4 nights: beef bolognese",
+    "items": [
+     {
+      "food": "5% beef mince (cook the 500 g pack as 4 portions)",
+      "amount": "125 g"
+     },
+     {
+      "food": "Fusilli (dry weight)",
+      "amount": "85 g"
+     },
+     {
+      "food": "Chopped tomatoes",
+      "amount": "half a tin"
+     },
+     {
+      "food": "Onion",
+      "amount": "half"
+     },
+     {
+      "food": "Frozen mixed veg",
+      "amount": "80 g"
+     },
+     {
+      "food": "Olive oil",
+      "amount": "2 tsp"
+     }
+    ]
+   },
+   {
+    "name": "Dinner, 2 nights: chicken tikka curry",
+    "items": [
+     {
+      "food": "Chicken breast (raw weight)",
+      "amount": "170 g"
+     },
+     {
+      "food": "Basmati rice (dry weight)",
+      "amount": "70 g"
+     },
+     {
+      "food": "Tikka curry paste",
+      "amount": "50 g (a quarter of the jar)"
+     },
+     {
+      "food": "Chopped tomatoes",
+      "amount": "half a tin"
+     },
+     {
+      "food": "Onion",
+      "amount": "half"
+     },
+     {
+      "food": "0% Greek style yoghurt, stirred in at the end",
+      "amount": "50 g"
+     },
+     {
+      "food": "Olive oil",
+      "amount": "1 tsp"
+     }
+    ]
+   },
+   {
+    "name": "Evening, instead of crisps and chocolate",
+    "items": [
+     {
+      "food": "Your whey protein, in the milk",
+      "amount": "1 scoop (about 30 g)"
+     },
+     {
+      "food": "Semi-skimmed milk",
+      "amount": "300 ml"
+     },
+     {
+      "food": "Wholemeal toast",
+      "amount": "2 slices"
+     },
+     {
+      "food": "Peanut butter",
+      "amount": "25 g (a heaped tbsp)"
+     },
+     {
+      "food": "Dark chocolate",
+      "amount": "20 g (a fifth of the bar)"
+     }
+    ]
+   }
+  ],
+  "supplements": [
+   {
+    "name": "Whey protein (the tub you already have)",
+    "dose": "1 scoop",
+    "when": "Evening, in the milk",
+    "why": "About 24 g protein with no cooking. When it runs out, any whey with 20 g+ protein a scoop is fine; online tubs are usually cheaper than Tesco's."
+   }
+  ],
+  "shopping": [
+   {
+    "shop": "Tesco",
+    "item": "Large chicken breast fillet pack, 1.6 kg",
+    "amount": "1 pack",
+    "price": "£10.65",
+    "note": "(enough for 7 lunches and 2 curry nights)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Lean beef steak mince 5% fat, 500 g",
+    "amount": "1 pack",
+    "price": "£5.19",
+    "note": "(Aldi Price Match)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Basmati rice, 1 kg",
+    "amount": "1 bag",
+    "price": "£1.79",
+    "note": "(Aldi Price Match; lasts about 10 days)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Fusilli pasta twists, 1 kg",
+    "amount": "1 bag",
+    "price": "£1.19",
+    "note": "(Aldi Price Match; lasts about 3 weeks)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Grower's Harvest mixed vegetables (frozen), 1 kg",
+    "amount": "2 bags",
+    "price": "£1.98",
+    "note": "(Aldi Price Match)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "0% fat Greek style yogurt, 1 kg",
+    "amount": "2 tubs",
+    "price": "£3.90"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Grower's Harvest porridge oats, 1 kg",
+    "amount": "1 bag",
+    "price": "£0.85",
+    "note": "(Aldi Price Match; lasts about 3 weeks)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Bananas, loose",
+    "amount": "7",
+    "price": "£1.12",
+    "note": "(Aldi Price Match)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Grower's Harvest chopped tomatoes, 400 g",
+    "amount": "3 tins",
+    "price": "£1.29",
+    "note": "(Aldi Price Match)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Brown onions, loose",
+    "amount": "3",
+    "price": "£0.33"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Tikka curry paste, 200 g jar",
+    "amount": "1 jar",
+    "price": "£2.10",
+    "note": "(lasts 2 weeks)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Sweet chilli and garlic sauce, 250 ml",
+    "amount": "1 bottle",
+    "price": "£2.00",
+    "note": "(lasts about 2 weeks)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "British semi-skimmed milk, 4 pints",
+    "amount": "1 bottle",
+    "price": "£1.65",
+    "note": "(Aldi Price Match)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Wholemeal medium sliced bread, 800 g",
+    "amount": "1 loaf",
+    "price": "£0.75",
+    "note": "(Aldi Price Match)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Smooth peanut butter, 340 g",
+    "amount": "1 jar",
+    "price": "£1.25",
+    "note": "(lasts 2 weeks)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Ms Molly's dark chocolate, 100 g",
+    "amount": "2 bars",
+    "price": "£1.30",
+    "note": "(Aldi Price Match)"
+   },
+   {
+    "shop": "Tesco",
+    "item": "Olive oil, 500 ml",
+    "amount": "1 bottle",
+    "price": "£5.25",
+    "note": "(only if you don't have oil; lasts about 6 weeks)"
+   }
+  ],
+  "swaps": [
+   "Busy day, meal deal instead of the lunch box: a chicken or protein sandwich or wrap (25 g+ protein), a protein yoghurt or milk drink, and fruit instead of crisps. Aim for 550 to 650 kcal.",
+   "Chicken ↔ lean steak or turkey mince (same weight)",
+   "Rice ↔ pasta (same dry weight) or potatoes (3× the weight)",
+   "Peanut butter on toast ↔ 2 eggs on toast",
+   "Greek yoghurt ↔ skyr or a high-protein yoghurt pot",
+   "Shopping at Aldi Witney instead: the same list works with Aldi's own version of each item."
+  ],
+  "notes": [
+   "1 free night a week: takeaway, a meal out or drinks. Keep lunch, the 4pm snack and the shake as normal, and pick something with plenty of protein. A pint is about 200 kcal.",
+   "This list is about £43 (£37 if you already have oil). Rice, pasta, oats and the jars last 2 to 3 weeks, so most weeks after are about £33.",
+   "Batch cook twice a week (Sunday and Wednesday). Keep 2 days of boxes in the fridge and freeze the rest; move tomorrow's box to the fridge the night before.",
+   "Weigh yourself most mornings, after the toilet and before food. We go by the weekly average, not single days.",
+   "Steps: aim for 8,000 to 10,000 a day. A 20-minute walk at lunch covers most of the gap.",
+   "Christmas week: eat around 2,700 kcal, keep protein high, keep walking. Back to the plan after Boxing Day. Your coach will remind you nearer the time."
+  ]
+ },
+ "whyTraining": [
+  {
+   "point": "Upper / lower, 4 days (Mon, Tue, Thu, Fri)",
+   "why": "He picked those 4 days and 60 minutes. His bro split hits each muscle once a week, and he skips legs.",
+   "effect": "Every muscle is trained twice a week, which holds muscle better on a cut. Legs are half the plan, so they can't be skipped."
+  },
+  {
+   "point": "Legs on Monday and Friday",
+   "why": "He plays 5-a-side every Wednesday evening.",
+   "effect": "Two days between leg sessions and football, so he isn't sore for the game or hurt by it."
+  },
+  {
+   "point": "No deadlifts: hip thrusts and leg curls instead",
+   "why": "His lower back gets tight after deadlifts and he won't do them (flagged as an injury).",
+   "effect": "Glutes and hamstrings still get hard work with nothing heavy on his lower back. Look again at Romanian deadlifts after 4 weeks if his back is fine."
+  },
+  {
+   "point": "Hack squat and leg press, not barbell squats (for now)",
+   "why": "He's barely trained legs lately, and a heavy back squat loads the same lower back.",
+   "effect": "Legs get pushed hard with less risk while they come back. Barbell squats can return later if he wants them."
+  },
+  {
+   "point": "Extra chest and back: 14 sets each a week",
+   "why": "He picked chest and back as priorities and loves bench and pull-ups.",
+   "effect": "More work where he wants results, and his favourite lifts open each upper day, so he enjoys going."
+  },
+  {
+   "point": "Easier first 2 weeks (2 to 3 reps left, fewer leg sets)",
+   "why": "He trains on and off and hasn't done proper leg work in a while.",
+   "effect": "Less soreness, so he doesn't miss sessions or football in the first fortnight."
+  }
+ ],
+ "whyFood": [
+  {
+   "point": "2,400 kcal a day",
+   "why": "He eats about 2,700 and his weight is flat. The formula guess (2,990 to 3,170) is within 15% of that, so his own number wins. He picked the steady pace.",
+   "effect": "About 300 kcal under maintenance plus more steps: roughly 0.3 to 0.5 kg a week. He only needs 0.27 kg a week to reach 80 kg by 20 June, so Christmas and the stag do won't sink it."
+  },
+  {
+   "point": "160 g protein",
+   "why": "He eats about 110 g now. He's carrying extra fat, so protein is set from his 80 kg goal weight (2 g per kg).",
+   "effect": "Keeps his muscle while he loses fat, and keeps him fuller on fewer calories."
+  },
+  {
+   "point": "4 meals, starting at lunch",
+   "why": "He skips breakfast and asked for 4 meals a day.",
+   "effect": "No change to his mornings. The food lands in the afternoon and evening, when he's actually hungry and training."
+  },
+  {
+   "point": "Evening shake, toast and 20 g dark chocolate",
+   "why": "His evenings are crisps and chocolate, which is where the plan would break.",
+   "effect": "He still gets something sweet at night, but with about 50 g of protein instead of none."
+  },
+  {
+   "point": "Tesco list, mostly Aldi Price Match items",
+   "why": "He shops at Tesco Extra Kidlington and Aldi Witney, with a £40 to £60 budget and basic cooking.",
+   "effect": "One shop, at Aldi prices: about £37 the first week (plus £5.25 if he needs oil), then about £33. That leaves room for his free night."
+  },
+  {
+   "point": "1 free night a week",
+   "why": "He eats out or gets a takeaway 1 to 2 times a week and has 1 to 5 drinks.",
+   "effect": "The plan already allows for it, so one night out doesn't feel like failing."
+  },
+  {
+   "point": "Only his own whey, no other supplements",
+   "why": "He said he only wants protein powder.",
+   "effect": "No extra cost, and nothing he didn't ask for."
+  }
+ ]
+}

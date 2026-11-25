@@ -1072,3 +1072,7 @@ h3[data-h="4"] { margin: 0; font-size: 1rem; line-height: 1.2; font-weight: 700;
 .per-week { display: block; margin-top: -6px; margin-bottom: 4px; }
 
 
+
+/* Questionnaire: section headings inside a long step */
+.wizard-main .q-sub { margin: 18px 0 -4px; padding-top: 22px; border-top: 1px solid var(--rule); font-size: 1.15rem; line-height: 1.2; font-weight: 800; font-variation-settings: "wdth" 110; letter-spacing: -0.005em; color: var(--ink); }
+.wizard-main .wizard-body > .q-sub:first-child { margin-top: 0; padding-top: 0; border-top: 0; }

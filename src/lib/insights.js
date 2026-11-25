@@ -148,8 +148,10 @@ export function startingCalories(a) {
   const r10 = (x) => Math.round(x / 10) * 10;
   const formula = [r10(a.weight_kg * lo), r10(a.weight_kg * hi)];
   const tracked = +a.maintenance_known || (a.weight_trend === "About the same" && +a.calories_now) || null;
+  const base = tracked || (formula[0] + formula[1]) / 2;
   return {
     formula,
+    suggest: suggestCalories(a, base),
     multiplier: `× ${lo}–${hi}`,
     tracked,
     trackedFrom: +a.maintenance_known ? "their own maintenance number" : tracked ? "what they eat now, weight steady" : null,
@@ -171,4 +173,25 @@ function protein(a) {
   const goal = a.body_now === "Carrying extra fat" ? parseWeight(a.goal_weight) : null;
   const base = goal && goal < a.weight_kg ? goal : a.weight_kg;
   return { protein: [Math.round(base * 1.6), Math.round(base * 2.2)], proteinFrom: base === a.weight_kg ? "bodyweight" : `goal weight, ${base} kg` };
+}
+
+// A first suggestion for calories from the goal (Coaching Rules, section 3). Simon decides.
+function suggestCalories(a, base) {
+  const r50 = (x) => Math.round(x / 50) * 50;
+  const pct = (lo, hi) => [r50(base * (1 + lo)), r50(base * (1 + hi))];
+  const g = String(a.goal || "");
+  const lean = a.body_now === "Lean";
+  if (g.startsWith("Cut") || g === "Lose fat") {
+    if (lean) return { range: [r50(base - 400), r50(base - 250)], why: "cut, slow because they're lean (0.25–0.5% a week)" };
+    if (String(a.cut_pace).startsWith("Faster")) return { range: [r50(base - 750), r50(base - 500)], why: "cut, faster (up to 1% a week)" };
+    return { range: [r50(base - 500), r50(base - 300)], why: "cut, steady (0.5–0.7% a week)" };
+  }
+  const newish = ["Not yet", "Under 6 months"].includes(a.experience) || a.body_now === "Carrying extra fat" || a.body_now === "Not sure";
+  if (g.startsWith("Bulk") || g === "Build muscle")
+    return newish ? { range: pct(0, 0.05), why: "bulk, but new or unsure of body fat: maintenance to +5%" } : { range: pct(0.05, 0.1), why: "bulk: 5–10% over maintenance" };
+  if (g.startsWith("Lean bulk")) return { range: pct(0, 0.05), why: "lean bulk / maingain: maintenance to +5%" };
+  if (g.startsWith("Recomp") || g === "Build muscle and lose fat") return { range: pct(-0.1, 0), why: "recomp: maintenance to 10% under" };
+  if (g === "Get stronger") return { range: pct(0, 0.05), why: "strength: maintenance to +5%" };
+  if (g === "Get fitter and healthier") return { range: pct(-0.05, 0), why: "fitness: about maintenance" };
+  return null; // "coach decides"
 }

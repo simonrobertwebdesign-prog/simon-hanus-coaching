@@ -503,12 +503,12 @@ function Overview({ b, reload }) {
 
 const LABELS = {
   age: "Age", sex: "Sex", height_cm: "Height (cm)", weight_kg: "Weight (kg)",
-  goal: "Goal", target: "Specific goal", goal_weight: "Goal weight", body_now: "Body now", why_now: "Why now", holding_back: "Held back by", coached_before: "Coached before",
-  experience: "Training for", days: "Days a week", train_days: "Days that work", session: "Session length", where: "Trains at", equipment: "Kit",
-  routine: "Current training", lifts: "Best lifts", priority: "Priority muscles", likes_ex: "Loves", dislikes_ex: "Hates / can't do", injuries: "Injuries",
+  goal: "Goal", cut_pace: "Cut pace", target: "Specific goal", event: "Date to aim for", compete: "Compete", goal_weight: "Goal weight", waist: "Waist", body_now: "Body now", why_now: "Why now", holding_back: "Held back by", coached_before: "Coached before",
+  experience: "Training for", consistent: "Last 3 months", days: "Days a week", train_days: "Days that work", session: "Session length", where: "Trains at", gym_name: "Gym", equipment: "Kit", dumbbell_max: "Heaviest weights",
+  routine: "Current training", lifts: "Best lifts", style_pref: "Likes to train", priority: "Priority muscles", likes_ex: "Loves", dislikes_ex: "Won't / can't do", cardio_likes: "Cardio they like", injuries: "Injuries",
   work: "Job / day", steps: "Steps", other_activity: "Other sport / cardio", sleep: "Sleep", stress: "Stress", train_time: "Trains at (time)",
   weight_trend: "Weight, last month", dieting: "Dieting now", tracking: "Tracks calories", calories_now: "Calories now (kcal)", protein_now: "Protein now (g)",
-  maintenance_known: "Their maintenance (kcal)", scales: "Scales at home",
+  maintenance_known: "Their maintenance (kcal)", scales: "Scales at home", eating_out: "Eats out", food_style: "Food style", supps_open: "Supplements in plan",
   diet: "Diet", allergies: "Allergies", likes: "Foods loved", dislikes: "Won't eat", normal_day: "Normal day of eating", meals: "Meals a day", cooking: "Cooking", budget: "Budget", alcohol: "Alcohol", supplements: "Supplements",
   health_details: "Health details", peds: "Steroids / PEDs", peds_details: "PED details",
   guardian_name: "Parent / guardian", guardian_email: "Guardian email",
@@ -528,6 +528,7 @@ function Answers({ a }) {
         <div className="stats">
           <div className="stat"><span>Maintenance guess</span><b>{sc.formula[0].toLocaleString()}–{sc.formula[1].toLocaleString()}</b><small>kcal, {a.weight_kg} kg {sc.multiplier}</small></div>
           <div className="stat"><span>From their tracking</span><b>{sc.tracked ? sc.tracked.toLocaleString() : "—"}</b><small>{sc.trackedFrom || (a.calories_now ? `eats ${(+a.calories_now).toLocaleString()} kcal, weight ${String(a.weight_trend || "unknown").toLowerCase()}` : "doesn't track")}</small></div>
+          <div className="stat"><span>Suggested start</span><b>{sc.suggest ? `${sc.suggest.range[0].toLocaleString()}–${sc.suggest.range[1].toLocaleString()}` : "—"}</b><small>{sc.suggest ? `kcal, ${sc.suggest.why}` : "goal: coach decides"}</small></div>
           <div className="stat"><span>Protein</span><b>{sc.protein[0]}–{sc.protein[1]} g</b><small>1.6–2.2 g per kg of {sc.proteinFrom}{a.protein_now ? `, eats ${a.protein_now} g now` : ""}</small></div>
         </div>
       </div>

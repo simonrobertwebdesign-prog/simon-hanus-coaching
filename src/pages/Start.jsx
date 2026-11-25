@@ -18,13 +18,23 @@ const HEALTH = [
 
 const STEPS = ["Plan", "About you", "Your goal", "Training", "Your day", "Food", "Health", "Agree", "Account", "Pay"];
 
+export const GOALS = [
+  "Cut: lose fat",
+  "Bulk: build muscle",
+  "Lean bulk / maingain: build slowly, little fat",
+  "Recomp: lose fat and build muscle",
+  "Get stronger",
+  "Get fitter and healthier",
+  "Not sure: my coach decides",
+];
+
 const blank = {
   first_name: "", last_name: "", age: "", sex: "", height_unit: "cm", height_cm: "", height_ft: "", height_in: "",
   weight_unit: "kg", weight_kg: "", weight_st: "", weight_lb: "",
-  goal: "", target: "", goal_weight: "", body_now: "", why_now: "", holding_back: "", coached_before: "",
-  experience: "", days: "", train_days: [], session: "", where: "", equipment: [], routine: "", lifts: "", priority: [], likes_ex: "", dislikes_ex: "", injuries: "",
+  goal: "", cut_pace: "", target: "", event: "", compete: "", goal_weight: "", body_now: "", waist: "", why_now: "", holding_back: "", coached_before: "",
+  experience: "", consistent: "", days: "", train_days: [], session: "", where: "", gym_name: "", equipment: [], dumbbell_max: "", routine: "", lifts: "", style_pref: "", priority: [], likes_ex: "", dislikes_ex: "", injuries: "", cardio_likes: [],
   work: "", steps: "", other_activity: "", sleep: "", stress: "", train_time: "",
-  weight_trend: "", dieting: "", calories_now: "", protein_now: "", maintenance_known: "", scales: [], normal_day: "", found_us: "", anything_else: "",
+  weight_trend: "", dieting: "", calories_now: "", protein_now: "", maintenance_known: "", scales: [], normal_day: "", eating_out: "", food_style: "", supps_open: "", found_us: "", anything_else: "",
   diet: "", allergies: "", likes: "", dislikes: "", meals: "", cooking: "", budget: "", alcohol: "", tracking: "", supplements: "",
   health: {}, health_details: "", peds: "", peds_details: "",
   guardian_name: "", guardian_email: "", guardian_agree: false,
@@ -39,6 +49,9 @@ export function Start({ route, session }) {
     const s = { ...blank, ...(saved?.answers || {}) };
     // answers saved before the tracking question changed (23 Nov)
     s.tracking = { "A bit": "I have before", "Yes, regularly": "Yes, right now" }[s.tracking] || s.tracking;
+    // goals and budgets saved before 25 Nov
+    s.goal = { "Build muscle": "Bulk: build muscle", "Lose fat": "Cut: lose fat", "Build muscle and lose fat": "Recomp: lose fat and build muscle" }[s.goal] || s.goal;
+    s.budget = { Tight: "Under £40", Normal: "£40–£60", Flexible: "£90+" }[s.budget] || s.budget;
     return s;
   });
   const [step, setStep] = useState(fromRoute ? 1 : saved?.step ?? 0);
@@ -84,7 +97,7 @@ export function Start({ route, session }) {
     if (s === 4) { need("work"); need("sleep"); }
     if (s === 5) {
       need("weight_trend", "Please pick one"); need("dieting", "Please pick one"); need("tracking", "Please pick one");
-      need("diet"); need("cooking"); need("meals");
+      need("diet"); need("cooking"); need("meals"); need("food_style", "Please pick one");
       const num = (k, lo, hi, msg) => { if (a[k] !== "" && !(+a[k] >= lo && +a[k] <= hi)) e[k] = msg; };
       num("calories_now", 800, 8000, "Enter calories a day, e.g. 2400");
       num("maintenance_known", 1000, 8000, "Enter calories a day, e.g. 2600");
@@ -308,19 +321,38 @@ export function Start({ route, session }) {
               <p className="intro">Be honest. The more your coach knows, the better the plan.</p>
               <div className="wizard-body">
                 <Field label="Main goal" error={E("goal")}>
-                  <Choices options={["Build muscle", "Lose fat", "Build muscle and lose fat", "Get stronger", "Get fitter and healthier"]} value={a.goal} onChange={set("goal")} label="Main goal" />
+                  <Choices options={GOALS} value={a.goal} onChange={set("goal")} label="Main goal" />
                 </Field>
-                <Field label="Anything specific?" hint="E.g. lose 6 kg by the summer, bench 100 kg, bigger arms.">
+                {a.goal === "Cut: lose fat" && (
+                  <Field label="How fast do you want to lose it?" hint="Faster means more hunger. Very lean people are kept on the slower pace to protect muscle.">
+                    <Choices options={["Steady: about 0.5% of my weight a week", "Faster: up to 1% a week", "Not sure: coach decides"]} value={a.cut_pace} onChange={set("cut_pace")} label="Cut pace" />
+                  </Field>
+                )}
+                {a.goal === "Not sure: my coach decides" && (
+                  <p className="small muted">No problem. Your coach picks the best start from your answers and tells you why.</p>
+                )}
+                <Field label="Anything specific?" hint="E.g. lose 6 kg, bench 100 kg, bigger arms.">
                   <input className="input" value={a.target} onChange={set("target")} />
                 </Field>
+                <div className="two">
+                  <Field label="Got a date to aim for?" hint="E.g. holiday on 12 June. Leave blank if not.">
+                    <input className="input" value={a.event} onChange={set("event")} />
+                  </Field>
+                  <Field label="Want to compete one day?">
+                    <Choices options={["No", "Maybe one day", "Yes, I've got a show or meet booked"]} value={a.compete} onChange={set("compete")} label="Compete" />
+                  </Field>
+                </div>
                 <div className="two">
                   <Field label="Goal weight, if you have one" hint={a.weight_unit === "st" ? "E.g. 11 st 10 lb. Leave blank if not." : "E.g. 75 kg. Leave blank if not."}>
                     <input className="input" value={a.goal_weight} onChange={set("goal_weight")} />
                   </Field>
-                  <Field label="Which sounds most like you now?" hint="Helps set how fast to gain or lose.">
-                    <Choices options={["Lean", "In between", "Carrying extra fat", "Not sure"]} value={a.body_now} onChange={set("body_now")} label="Body now" />
+                  <Field label="Waist, if you know it" hint="Around your belly button, e.g. 84 cm or 33 in. A tape measure tells you more than the scales.">
+                    <input className="input" value={a.waist} onChange={set("waist")} />
                   </Field>
                 </div>
+                <Field label="Which sounds most like you now?" hint="Helps set how fast to gain or lose.">
+                  <Choices options={["Lean", "In between", "Carrying extra fat", "Not sure"]} value={a.body_now} onChange={set("body_now")} label="Body now" />
+                </Field>
                 <Field label="Why now?" error={E("why_now")}>
                   <textarea className={cx("textarea", E("why_now") && "err")} value={a.why_now} onChange={set("why_now")} />
                 </Field>
@@ -339,9 +371,23 @@ export function Start({ route, session }) {
               <h1 id="step-title" style={{ marginTop: 8 }}>Your training</h1>
               <p className="intro">So the plan fits your level, your week and your kit.</p>
               <div className="wizard-body">
+                <h2 className="q-sub">Your training now</h2>
                 <Field label="How long have you been training properly?" error={E("experience")}>
                   <Choices options={["Not yet", "Under 6 months", "6 months – 2 years", "2–5 years", "5+ years"]} value={a.experience} onChange={set("experience")} label="Experience" />
                 </Field>
+                {a.experience && a.experience !== "Not yet" && (
+                  <Field label="Have you trained regularly for the last 3 months?">
+                    <Choices options={["Yes", "On and off", "No, I'm coming back after a break"]} value={a.consistent} onChange={set("consistent")} label="Training lately" />
+                  </Field>
+                )}
+                <Field label="What does your training look like now?" hint="Rough is fine: days, split, favourite lifts.">
+                  <textarea className="textarea" value={a.routine} onChange={set("routine")} />
+                </Field>
+                <Field label="Best lifts, if you know them" hint="E.g. bench 80 kg × 5, squat 100 kg × 5.">
+                  <input className="input" value={a.lifts} onChange={set("lifts")} />
+                </Field>
+
+                <h2 className="q-sub">When and where</h2>
                 <Field label="Days a week you can train" error={E("days")}>
                   <Choices options={["2", "3", "4", "5", "6"]} value={a.days} onChange={set("days")} label="Days a week" />
                 </Field>
@@ -354,24 +400,36 @@ export function Start({ route, session }) {
                 <Field label="Where do you train?" error={E("where")}>
                   <Choices options={["Commercial gym", "Home gym", "Home with dumbbells", "Bodyweight only"]} value={a.where} onChange={set("where")} label="Where" />
                 </Field>
-                {a.where && a.where !== "Commercial gym" && (
-                  <Field label="What kit do you have?">
-                    <Choices multi options={["Barbell and plates", "Squat rack", "Bench", "Dumbbells", "Adjustable dumbbells", "Pull-up bar", "Cables", "Bands", "Kettlebells"]} value={a.equipment} onChange={set("equipment")} label="Equipment" />
+                {a.where === "Commercial gym" && (
+                  <Field label="Which gym?" hint="E.g. PureGym Oxford Central. Helps match your plan to the machines there. Leave blank if you'd rather not say.">
+                    <input className="input" value={a.gym_name} onChange={set("gym_name")} />
                   </Field>
                 )}
-                <Field label="What does your training look like now?" hint="Rough is fine: days, split, favourite lifts.">
-                  <textarea className="textarea" value={a.routine} onChange={set("routine")} />
-                </Field>
-                <Field label="Best lifts, if you know them" hint="E.g. bench 80 kg × 5, squat 100 kg × 5.">
-                  <input className="input" value={a.lifts} onChange={set("lifts")} />
+                {a.where && a.where !== "Commercial gym" && (
+                  <>
+                    <Field label="What kit do you have?">
+                      <Choices multi options={["Barbell and plates", "Squat rack", "Bench", "Dumbbells", "Adjustable dumbbells", "Pull-up bar", "Dip bars", "Cables", "Leg press or other machines", "Bands", "Kettlebells"]} value={a.equipment} onChange={set("equipment")} label="Equipment" />
+                    </Field>
+                    <Field label="Heaviest dumbbells or most weight you have" hint="E.g. dumbbells up to 30 kg, 100 kg of plates.">
+                      <input className="input" value={a.dumbbell_max} onChange={set("dumbbell_max")} />
+                    </Field>
+                  </>
+                )}
+
+                <h2 className="q-sub">What you like</h2>
+                <Field label="How do you like to train?">
+                  <Choices options={["Heavier weights, fewer reps", "Lighter weights, more reps", "A mix", "Not sure: coach decides"]} value={a.style_pref} onChange={set("style_pref")} label="Training style" />
                 </Field>
                 <Field label="Muscles you most want to grow" hint="Pick up to 2, or leave blank for an all-round plan.">
                   <Choices multi options={["Chest", "Back", "Shoulders", "Arms", "Legs", "Glutes"]} value={a.priority} onChange={(v) => set("priority")(v.slice(-2))} label="Priority muscles" />
                 </Field>
                 <div className="two">
-                  <Field label="Exercises you love"><input className="input" value={a.likes_ex} onChange={set("likes_ex")} /></Field>
-                  <Field label="Exercises you hate or can't do"><input className="input" value={a.dislikes_ex} onChange={set("dislikes_ex")} /></Field>
+                  <Field label="Exercises you love" hint="These stay in your plan where they fit."><input className="input" value={a.likes_ex} onChange={set("likes_ex")} /></Field>
+                  <Field label="Exercises you won't do or can't do" hint="These stay out."><input className="input" value={a.dislikes_ex} onChange={set("dislikes_ex")} /></Field>
                 </div>
+                <Field label="Cardio you'd happily do" hint="Pick any. Leave blank if none.">
+                  <Choices multi options={["Walking", "Running", "Cycling", "Rowing", "Stairs or stepper", "Swimming", "Classes or sport"]} value={a.cardio_likes} onChange={set("cardio_likes")} label="Cardio" />
+                </Field>
                 <Field label="Any injuries or pain?" hint="Leave blank if none.">
                   <input className="input" value={a.injuries} onChange={set("injuries")} />
                 </Field>
@@ -411,6 +469,7 @@ export function Start({ route, session }) {
               <h1 id="step-title" style={{ marginTop: 8 }}>Food</h1>
               <p className="intro">Where you're starting from, then the food you like and can afford.</p>
               <div className="wizard-body">
+                <h2 className="q-sub">Where you're starting</h2>
                 <Field label="Your weight over the last month" error={E("weight_trend")}>
                   <Choices options={["Going down", "About the same", "Going up", "Not sure"]} value={a.weight_trend} onChange={set("weight_trend")} label="Weight trend" />
                 </Field>
@@ -439,6 +498,17 @@ export function Start({ route, session }) {
                 <Field label="What do you have at home?" hint="Bathroom scales are for your morning weigh-ins. Kitchen scales help but aren't a must.">
                   <Choices multi options={["Bathroom scales", "Kitchen scales"]} value={a.scales} onChange={set("scales")} label="Scales" />
                 </Field>
+                <Field label="Takeaways or eating out in a normal week">
+                  <Choices options={["Rarely", "1–2 times", "3–5 times", "Most days"]} value={a.eating_out} onChange={set("eating_out")} label="Eating out" />
+                </Field>
+
+                <h2 className="q-sub">Your food plan</h2>
+                <Field label="How do you want your food?" error={E("food_style")}>
+                  <Choices options={["All natural, whole foods only", "Mostly whole foods, plus protein powder", "A mix: shakes and bars are fine", "Not sure: coach decides"]} value={a.food_style} onChange={set("food_style")} label="Food style" />
+                </Field>
+                <Field label="Supplements in your plan?" hint="Any supplement listed goes in its own table, with how much and when, within safe limits.">
+                  <Choices options={["None, food only", "Just protein powder", "Open to proven ones, like creatine", "Not sure: coach decides"]} value={a.supps_open} onChange={set("supps_open")} label="Supplements in plan" />
+                </Field>
                 <Field label="How do you eat?" error={E("diet")}>
                   <Choices options={["Anything", "Vegetarian", "Vegan", "Pescatarian", "Halal", "Kosher", "Other"]} value={a.diet} onChange={set("diet")} label="Diet" />
                 </Field>
@@ -458,8 +528,8 @@ export function Start({ route, session }) {
                 <Field label="Cooking" error={E("cooking")}>
                   <Choices options={["I love cooking", "Basic meals", "As little as possible"]} value={a.cooking} onChange={set("cooking")} label="Cooking" />
                 </Field>
-                <Field label="Food budget">
-                  <Choices options={["Tight", "Normal", "Flexible"]} value={a.budget} onChange={set("budget")} label="Budget" />
+                <Field label="Food budget a week, roughly">
+                  <Choices options={["Under £40", "£40–£60", "£60–£90", "£90+", "Not sure"]} value={a.budget} onChange={set("budget")} label="Budget" />
                 </Field>
                 <Field label="Alcohol in a normal week">
                   <Choices options={["None", "1–5 drinks", "6–14 drinks", "15+"]} value={a.alcohol} onChange={set("alcohol")} label="Alcohol" />

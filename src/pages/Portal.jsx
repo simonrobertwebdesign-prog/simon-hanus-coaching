@@ -422,6 +422,7 @@ function FoodView({ plan }) {
           </table>
         </div>
       )}
+      {c.shopping?.length > 0 && <ShoppingList plan={plan} />}
       <div className="cols">
         {c.swaps?.length > 0 && <div className="panel"><h2 data-h="3">Easy swaps</h2><ul>{c.swaps.map((s) => <li key={s}>{s}</li>)}</ul></div>}
         {c.notes?.length > 0 && <div className="panel"><h2 data-h="3">Notes</h2><ul>{c.notes.map((s) => <li key={s}>{s}</li>)}</ul></div>}
@@ -708,6 +709,53 @@ function SelfAdjust() {
             <ul className="adjust-list">{items.map((x) => <li key={x}>{x}</li>)}</ul>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+// Shopping list for the shops they told us about. Ticks stay on this phone only.
+function ShoppingList({ plan }) {
+  const items = plan.content.shopping || [];
+  const key = `shc-shop-${plan.id || "plan"}`;
+  const [ticked, setTicked] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch { return []; }
+  });
+  const save = (next) => {
+    setTicked(next);
+    try { localStorage.setItem(key, JSON.stringify(next)); } catch { /* storage off: ticks just aren't kept */ }
+  };
+  const shops = [...new Set(items.map((x) => x.shop || "Any shop"))];
+  const money = (s) => parseFloat(String(s || "").replace(/[^0-9.]/g, "")) || 0;
+  const total = items.reduce((n, x) => n + money(x.price), 0);
+  return (
+    <div className="panel">
+      <div className="panel-head">
+        <h2 data-h="3">Shopping list</h2>
+        <span className="small muted">{total > 0 ? `About £${total.toFixed(2)} a week` : "For a week"}</span>
+      </div>
+      <div className="stack" style={{ "--gap": "16px" }}>
+        {shops.map((shop) => (
+          <div key={shop} className="shop-group">
+            <b>{shop}</b>
+            <ul className="shop-list">
+              {items.map((x, i) => (x.shop || "Any shop") !== shop ? null : (
+                <li key={i} className={ticked.includes(i) ? "done" : ""}>
+                  <label>
+                    <input type="checkbox" checked={ticked.includes(i)} onChange={() => save(ticked.includes(i) ? ticked.filter((n) => n !== i) : [...ticked, i])} />
+                    <span className="shop-item">{x.item}{x.note && <small className="muted"> {x.note}</small>}</span>
+                    <span className="shop-amount">{x.amount}</span>
+                    {x.price && <span className="shop-price">{x.price}</span>}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div className="row between">
+          <span className="small muted">Prices are a guide and change. Out of stock? Use the easy swaps below.</span>
+          {ticked.length > 0 && <button className="textbtn small" onClick={() => save([])}>Clear ticks</button>}
+        </div>
       </div>
     </div>
   );

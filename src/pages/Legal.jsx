@@ -3,14 +3,14 @@ import { Nav, Footer } from "./Home";
 
 // First drafts. Simon should have these checked before taking real payments.
 const contact = BRAND.contactEmail ? `email ${BRAND.contactEmail}` : "send your coach a message from your client area";
-const UPDATED = "23 November 2026";
+const UPDATED = "25 November 2026";
 
 const pages = {
   terms: {
     title: "Terms",
     body: [
       ["Who we are", `${BRAND.name} is run by ${BRAND.coach}, a sole trader in England. "We" and "us" mean ${BRAND.coach}.`],
-      ["What you're buying", "A training plan and a food plan built for you from your questionnaire, and access to your client area. On Monthly and Premium, check-ins every 2 weeks or every week, where your plans are reviewed and updated. On the One-off plan, a guide to adjusting the plan yourself."],
+      ["What you're buying", "A training plan and a food plan built for you from your questionnaire, with a shopping list for the shops you use, and access to your client area. On Monthly and Premium, check-ins every 2 weeks or every week, where your plans are reviewed and updated. On the One-off plan, a guide to adjusting the plan yourself."],
       ["Who can join", "Anyone aged 14 or over can join. If you're under 18, a parent or guardian must agree in the questionnaire, and we may contact them about your coaching. Answer the questionnaire honestly, including the health questions. We may refuse or pause coaching if it isn't safe, and refund any unused payment."],
       ["Payments", "Payments are taken by Stripe. The One-off plan is a single payment. Monthly and Premium are charged every month on the day you joined until you cancel."],
       ["Cancelling", "Cancel a monthly plan any time and you won't be charged again; coaching continues to the end of the month you've paid for. Under UK consumer law you have 14 days to cancel, but because your plans are made for you, once your plans have been delivered you agree that this right ends and the payment is non-refundable for that month."],

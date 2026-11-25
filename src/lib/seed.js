@@ -127,6 +127,24 @@ export const FOOD_JAMIE = {
     { name: "Creatine monohydrate", dose: "5 g", when: "Once a day, any time, with a drink", why: "Helps strength and size over time" },
     { name: "Vitamin D3", dose: "10 µg (400 IU)", when: "With breakfast, October to March", why: "Little sun in a UK winter" },
   ],
+  shopping: [
+    { shop: "Tesco", item: "Porridge oats, 1 kg bag", amount: "1 bag", price: "£1.10" },
+    { shop: "Tesco", item: "Fat free Greek style yoghurt, 1 kg tub", amount: "3 tubs", price: "£5.25" },
+    { shop: "Tesco", item: "Semi-skimmed milk, 4 pints", amount: "1 bottle", price: "£1.55" },
+    { shop: "Tesco", item: "Bananas, loose", amount: "7", price: "£1.10" },
+    { shop: "Tesco", item: "Chicken breast fillets, 1 kg pack", amount: "1 pack, plus 300 g", price: "£7.40" },
+    { shop: "Tesco", item: "Long grain rice, 1 kg bag", amount: "1 bag", price: "£1.15" },
+    { shop: "Tesco", item: "Frozen mixed vegetables, 1 kg bag", amount: "1 bag", price: "£1.10" },
+    { shop: "Tesco", item: "Granola, 500 g box", amount: "1 box", price: "£1.75" },
+    { shop: "Tesco", item: "Frozen mixed berries, 750 g bag", amount: "1 bag", price: "£3.00" },
+    { shop: "Tesco", item: "5% fat beef mince, 500 g pack", amount: "3 packs", price: "£10.95" },
+    { shop: "Tesco", item: "Fusilli pasta, 1 kg bag", amount: "1 bag", price: "£0.95" },
+    { shop: "Tesco", item: "Tomato and basil pasta sauce, 500 g jar", amount: "2 jars", price: "£1.90" },
+    { shop: "Tesco", item: "Mixed salad leaves, bag", amount: "2 bags", price: "£1.70" },
+    { shop: "Tesco", item: "Wholemeal bread, 800 g loaf", amount: "1 loaf", price: "£0.85" },
+    { shop: "Tesco", item: "Smooth peanut butter, 340 g jar", amount: "1 jar", note: "(lasts 2 weeks)", price: "£1.30" },
+    { shop: "Tesco", item: "Olive oil, 500 ml", amount: "1 bottle", note: "(lasts about a month)", price: "" },
+  ],
   swaps: [
     "Chicken ↔ turkey mince, white fish or tofu (same weight)",
     "Rice ↔ potatoes (×3 the weight) or wraps (2)",
@@ -412,7 +430,7 @@ export function buildSeed() {
       age: 22, sex: "Male", height_cm: 180, weight_kg: 70, goal: "Lean bulk / maingain: build slowly, little fat", experience: "Under 6 months",
       days: 3, session: "60 min", where: "Commercial gym", diet: "Anything", allergies: "None", work: "Shift work in a warehouse",
       why_now: "Want to actually look like I train.", holding_back: "Never had a plan, don't know what to do in the gym.",
-      likes: "Chicken, rice, pasta", dislikes: "Fish", cooking: "Basic", budget: "Under £40", food_style: "Mostly whole foods, plus protein powder", supps_open: "Just protein powder", gym_name: "PureGym", consistent: "Yes", health: {},
+      likes: "Chicken, rice, pasta", dislikes: "Fish", cooking: "Basic", budget: "Under £40", food_style: "Mostly whole foods, plus protein powder", supps_open: "Just protein powder", gym_name: "PureGym", consistent: "Yes", shops: ["Aldi", "Co-op"], shop_size: "A mix", health: {},
       body_now: "Lean", train_days: ["Mon", "Wed", "Fri"], priority: ["Chest", "Arms"], steps: "8,000–12,000",
       other_activity: "Five-a-side on Sundays", weight_trend: "About the same", dieting: "No", tracking: "Never",
       scales: ["Bathroom scales"], meals: "3",
@@ -425,7 +443,7 @@ export function buildSeed() {
       weight_trend: "Going up", dieting: "No", tracking: "Yes, right now", calories_now: 2900, protein_now: 130,
       maintenance_known: 2700, scales: ["Bathroom scales", "Kitchen scales"],
     },
-    "c-jamie": { age: 24, sex: "Male", height_cm: 178, weight_kg: 72.5, goal: "Bulk: build muscle", experience: "2–5 years", days: 4, session: "75 min", where: "Commercial gym", diet: "Anything", health: {} },
+    "c-jamie": { age: 24, sex: "Male", height_cm: 178, weight_kg: 72.5, goal: "Bulk: build muscle", experience: "2–5 years", days: 4, session: "75 min", where: "Commercial gym", diet: "Anything", shops: ["Tesco"], shop_size: "A big supermarket", budget: "£40–£60", food_style: "Mostly whole foods, plus protein powder", health: {} },
   };
 
   const messages = [

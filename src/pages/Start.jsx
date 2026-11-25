@@ -18,6 +18,8 @@ const HEALTH = [
 
 const STEPS = ["Plan", "About you", "Your goal", "Training", "Your day", "Food", "Health", "Agree", "Account", "Pay"];
 
+export const SHOPS = ["Tesco", "Sainsbury's", "Asda", "Morrisons", "Aldi", "Lidl", "Co-op", "Waitrose", "M&S Food", "Iceland", "Ocado", "Local shop or market", "Other"];
+
 export const GOALS = [
   "Cut: lose fat",
   "Bulk: build muscle",
@@ -34,7 +36,7 @@ const blank = {
   goal: "", cut_pace: "", target: "", event: "", compete: "", goal_weight: "", body_now: "", waist: "", why_now: "", holding_back: "", coached_before: "",
   experience: "", consistent: "", days: "", train_days: [], session: "", where: "", gym_name: "", equipment: [], dumbbell_max: "", routine: "", lifts: "", style_pref: "", priority: [], likes_ex: "", dislikes_ex: "", injuries: "", cardio_likes: [],
   work: "", steps: "", other_activity: "", sleep: "", stress: "", train_time: "",
-  weight_trend: "", dieting: "", calories_now: "", protein_now: "", maintenance_known: "", scales: [], normal_day: "", eating_out: "", food_style: "", supps_open: "", found_us: "", anything_else: "",
+  weight_trend: "", dieting: "", calories_now: "", protein_now: "", maintenance_known: "", scales: [], normal_day: "", eating_out: "", food_style: "", supps_open: "", shops: [], shops_other: "", shop_size: "", shop_where: "", found_us: "", anything_else: "",
   diet: "", allergies: "", likes: "", dislikes: "", meals: "", cooking: "", budget: "", alcohol: "", tracking: "", supplements: "",
   health: {}, health_details: "", peds: "", peds_details: "",
   guardian_name: "", guardian_email: "", guardian_agree: false,
@@ -98,6 +100,7 @@ export function Start({ route, session }) {
     if (s === 5) {
       need("weight_trend", "Please pick one"); need("dieting", "Please pick one"); need("tracking", "Please pick one");
       need("diet"); need("cooking"); need("meals"); need("food_style", "Please pick one");
+      if (!a.shops?.length) e.shops = "Pick at least one";
       const num = (k, lo, hi, msg) => { if (a[k] !== "" && !(+a[k] >= lo && +a[k] <= hi)) e[k] = msg; };
       num("calories_now", 800, 8000, "Enter calories a day, e.g. 2400");
       num("maintenance_known", 1000, 8000, "Enter calories a day, e.g. 2600");
@@ -509,6 +512,24 @@ export function Start({ route, session }) {
                 <Field label="Supplements in your plan?" hint="Any supplement listed goes in its own table, with how much and when, within safe limits.">
                   <Choices options={["None, food only", "Just protein powder", "Open to proven ones, like creatine", "Not sure: coach decides"]} value={a.supps_open} onChange={set("supps_open")} label="Supplements in plan" />
                 </Field>
+                <Field label="Where do you buy your food?" hint="Pick any. Your food plan only uses things these shops sell, with a shopping list for each." error={E("shops")}>
+                  <Choices multi options={SHOPS} value={a.shops} onChange={set("shops")} label="Shops" />
+                </Field>
+                {a.shops?.includes("Other") && (
+                  <Field label="Which other shop?">
+                    <input className="input" value={a.shops_other} onChange={set("shops_other")} />
+                  </Field>
+                )}
+                {a.shops?.length > 0 && (
+                  <>
+                    <Field label="What kind of store, mostly?" hint="Small stores carry less, so the plan sticks to what they stock.">
+                      <Choices options={["A big supermarket", "A small local one (Express, Local, Metro)", "Online delivery", "A mix"]} value={a.shop_size} onChange={set("shop_size")} label="Store size" />
+                    </Field>
+                    <Field label="Which store or town?" hint="E.g. Tesco Extra, Witney. Helps check what's on the shelves there. Leave blank if you'd rather not say.">
+                      <input className="input" value={a.shop_where} onChange={set("shop_where")} />
+                    </Field>
+                  </>
+                )}
                 <Field label="How do you eat?" error={E("diet")}>
                   <Choices options={["Anything", "Vegetarian", "Vegan", "Pescatarian", "Halal", "Kosher", "Other"]} value={a.diet} onChange={set("diet")} label="Diet" />
                 </Field>

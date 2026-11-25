@@ -23,7 +23,7 @@ const METHOD = {
       ["1.6–2.2", "Grams of protein per kg", "Every day, spread over your meals, with about 0.4 g per kg in each one."],
       ["×31–40", "Your starting calories", "Bodyweight in kg times 31 to 40, depending on how active you are. Then fixed from your real weigh-ins."],
       ["0.5–0.7%", "Of bodyweight a week", "The pace when losing fat: quick enough to see, slow enough to keep your muscle and strength."],
-      ["Whole", "Food you actually like", "Mostly whole foods. Protein powder if it helps, and any supplements in their own list with dose and timing."],
+      ["Whole", "Food you like, from your shop", "Mostly whole foods you like, all sold at the shops you use, with a weekly shopping list. Powders and supplements only if you want them."],
     ],
   },
   checkins: {

@@ -363,6 +363,12 @@ function FoodPreview({ c }) {
           <ul>{c.supplements.map((s, i) => <li key={i}><span>{s.name}{s.why ? ` (${s.why})` : ""}</span><span>{s.dose}, {s.when}</span></li>)}</ul>
         </div>
       )}
+      {c.shopping?.length > 0 && (
+        <div className="meal">
+          <b>Shopping list</b>
+          <ul>{c.shopping.map((s, i) => <li key={i}><span>{s.shop ? `${s.shop}: ` : ""}{s.item}</span><span>{s.amount}{s.price ? `, ${s.price}` : ""}</span></li>)}</ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -508,7 +514,7 @@ const LABELS = {
   routine: "Current training", lifts: "Best lifts", style_pref: "Likes to train", priority: "Priority muscles", likes_ex: "Loves", dislikes_ex: "Won't / can't do", cardio_likes: "Cardio they like", injuries: "Injuries",
   work: "Job / day", steps: "Steps", other_activity: "Other sport / cardio", sleep: "Sleep", stress: "Stress", train_time: "Trains at (time)",
   weight_trend: "Weight, last month", dieting: "Dieting now", tracking: "Tracks calories", calories_now: "Calories now (kcal)", protein_now: "Protein now (g)",
-  maintenance_known: "Their maintenance (kcal)", scales: "Scales at home", eating_out: "Eats out", food_style: "Food style", supps_open: "Supplements in plan",
+  maintenance_known: "Their maintenance (kcal)", scales: "Scales at home", eating_out: "Eats out", food_style: "Food style", supps_open: "Supplements in plan", shops: "Shops at", shops_other: "Other shop", shop_size: "Store size", shop_where: "Store / town",
   diet: "Diet", allergies: "Allergies", likes: "Foods loved", dislikes: "Won't eat", normal_day: "Normal day of eating", meals: "Meals a day", cooking: "Cooking", budget: "Budget", alcohol: "Alcohol", supplements: "Supplements",
   health_details: "Health details", peds: "Steroids / PEDs", peds_details: "PED details",
   guardian_name: "Parent / guardian", guardian_email: "Guardian email",
@@ -745,6 +751,26 @@ function PlanEditor({ plan, onClose, onSaved }) {
                 </tbody>
               </table>
               <button className="textbtn small" onClick={() => set("supplements", [...(c.supplements || []), { name: "", dose: "", when: "", why: "" }])}>+ Add supplement</button>
+            </div>
+            <div className="panel" style={{ padding: 14 }}>
+              <b>Shopping list</b> <span className="small muted">A week's food from their shops, grouped by shop</span>
+              <table className="ed-table" style={{ marginTop: 8 }}>
+                <tbody>
+                  {(c.shopping || []).map((s, si) => {
+                    const up = (k, v) => set("shopping", c.shopping.map((x, i) => (i === si ? { ...x, [k]: v } : x)));
+                    return (
+                      <tr key={si}>
+                        <td style={{ width: 130 }}><input className="input" value={s.shop || ""} placeholder="Shop" onChange={(e) => up("shop", e.target.value)} aria-label="Shop" /></td>
+                        <td><input className="input" value={s.item || ""} placeholder="Product as sold" onChange={(e) => up("item", e.target.value)} aria-label="Product" /></td>
+                        <td style={{ width: 120 }}><input className="input" value={s.amount || ""} placeholder="How much a week" onChange={(e) => up("amount", e.target.value)} aria-label="Amount a week" /></td>
+                        <td style={{ width: 90 }}><input className="input" value={s.price || ""} placeholder="£" onChange={(e) => up("price", e.target.value)} aria-label="Price" /></td>
+                        <td style={{ width: 40 }}><button className="x" aria-label="Remove item" onClick={() => set("shopping", c.shopping.filter((_, i) => i !== si))}>✕</button></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <button className="textbtn small" onClick={() => set("shopping", [...(c.shopping || []), { shop: c.shopping?.at(-1)?.shop || "", item: "", amount: "", price: "" }])}>+ Add item</button>
             </div>
             <Field label="Swaps (one per line)"><textarea className="textarea" value={lines("swaps")} onChange={(e) => set("swaps", e.target.value.split("\n").filter(Boolean))} /></Field>
           </>

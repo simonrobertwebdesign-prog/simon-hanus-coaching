@@ -169,6 +169,7 @@ const FAQ = [
   ["What happens at a check-in?", "You send your weight, how training went and how you feel. Your coach looks at everything you've logged and sends back what's working, what changes, and why."],
   ["Can I cancel?", "Yes. Monthly and Premium have no minimum term. Cancel any time and you won't be charged again."],
   ["Do I need to count calories?", "Your food plan gives you meals and amounts, so you don't have to track every bite. If you like tracking, the targets are there too."],
+  ["Will the food be in my supermarket?", "Yes. You tell us where you shop, and your plan only uses things those shops sell, with a weekly shopping list and rough prices. If something's out of stock, your plan has easy swaps."],
   ["I have an injury or a health condition. Can I still join?", "Tell us in the questionnaire. Your coach looks at it personally, plans around it, and may ask you to check with your GP first."],
 ];
 

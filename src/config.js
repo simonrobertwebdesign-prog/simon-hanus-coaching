@@ -32,7 +32,7 @@ export const PLANS = [
     blurb: "Your training plan and food plan, built from your answers. Yours to keep.",
     includes: [
       "Training plan built for you",
-      "Food plan built for you",
+      "Food plan and shopping list for your shop",
       "Client area to log every set",
       "Progress charts and photos",
       "Guide to adjusting it yourself",
@@ -53,7 +53,7 @@ export const PLANS = [
     blurb: "Your plans, plus a check-in every 2 weeks that moves them forward with you.",
     includes: [
       "Training plan built for you",
-      "Food plan built for you",
+      "Food plan and shopping list for your shop",
       "Client area to log every set",
       "Progress charts and photos",
       "Check-in every 2 weeks",
@@ -73,7 +73,7 @@ export const PLANS = [
     blurb: "Weekly check-ins for faster changes and closer support.",
     includes: [
       "Training plan built for you",
-      "Food plan built for you",
+      "Food plan and shopping list for your shop",
       "Client area to log every set",
       "Progress charts and photos",
       "Check-in every week",

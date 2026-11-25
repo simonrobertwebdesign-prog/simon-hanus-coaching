@@ -1076,3 +1076,19 @@ h3[data-h="4"] { margin: 0; font-size: 1rem; line-height: 1.2; font-weight: 700;
 /* Questionnaire: section headings inside a long step */
 .wizard-main .q-sub { margin: 18px 0 -4px; padding-top: 22px; border-top: 1px solid var(--rule); font-size: 1.15rem; line-height: 1.2; font-weight: 800; font-variation-settings: "wdth" 110; letter-spacing: -0.005em; color: var(--ink); }
 .wizard-main .wizard-body > .q-sub:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+
+/* Client food page: shopping list */
+.shop-group > b { display: block; margin-bottom: 6px; color: var(--ink); }
+.shop-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.shop-list li { border-bottom: 1px solid var(--rule); }
+.shop-list label { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 10px 2px; cursor: pointer; }
+.shop-list input { width: 18px; height: 18px; accent-color: var(--red-hot); }
+.shop-item { min-width: 0; }
+.shop-amount { color: var(--graphite); white-space: nowrap; }
+.shop-price { color: var(--graphite); white-space: nowrap; min-width: 52px; text-align: right; }
+.shop-list li.done .shop-item, .shop-list li.done .shop-amount, .shop-list li.done .shop-price { text-decoration: line-through; color: var(--muted); }
+@media (max-width: 560px) {
+  .shop-list label { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .shop-price { grid-column: 3; }
+  .shop-amount { grid-column: 2; grid-row: 2; font-size: 0.9rem; margin-top: -8px; }
+}

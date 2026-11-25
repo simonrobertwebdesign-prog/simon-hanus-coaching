@@ -58,7 +58,7 @@ export const supabaseApi = {
       await sb.auth.signUp({
         email,
         password,
-        options: { data: { full_name: name }, emailRedirectTo: location.origin + "/" },
+        options: { data: { full_name: name }, emailRedirectTo: location.origin + import.meta.env.BASE_URL },
       })
     );
     return { needsConfirm: !data.session };
@@ -70,7 +70,7 @@ export const supabaseApi = {
     await sb.auth.signOut();
   },
   async resetPassword(email) {
-    must(await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/" }));
+    must(await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + import.meta.env.BASE_URL }));
   },
   async updatePassword(password) {
     must(await sb.auth.updateUser({ password }));

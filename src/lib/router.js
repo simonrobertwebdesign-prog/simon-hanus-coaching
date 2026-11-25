@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 
 // Routes are plain names in the address hash, e.g. #start, #app-training,
-// #coach-client-abc123. Works the same on Netlify and in the preview.
+// #coach-client-abc123. Works the same on GitHub Pages and in the preview.
 export function useRoute() {
   const read = () => (location.hash || "").replace(/^#/, "") || "home";
   const [route, setRoute] = useState(read);

@@ -10,7 +10,7 @@ From Simon's Brain (`Documents\Brain`): Start, Rules for AI, Next Time, then
 Order of authority: Simon's Coaching Lessons → Coaching Rules → this runbook.
 
 ## 1. Open the coach area
-Open `https://simon-hanus-coaching.netlify.app/#coach-approvals` in the built-in browser.
+Open `https://simonrobertwebdesign-prog.github.io/simon-hanus-coaching/#coach-approvals` in the built-in browser.
 If it shows the log-in page, stop and message Simon: "Please log in to the coach area so I can do today's check-ins."
 
 ## 2. Get today's list
@@ -75,7 +75,7 @@ Then save the check-in: `await SHC.draftCheckin(id, { message, changes, report, 
 - `big_change: true` when calories change by more than 200, training days change, pain or health comes up, or fewer than 60% of sessions were done.
 
 ## 7. Tell Simon
-One short message: how many things are waiting in Approvals, big changes first, with the link `https://simon-hanus-coaching.netlify.app/#coach-approvals`.
+One short message: how many things are waiting in Approvals, big changes first, with the link `https://simonrobertwebdesign-prog.github.io/simon-hanus-coaching/#coach-approvals`.
 If there's nothing to do, don't message him.
 
 ## 8. Brain

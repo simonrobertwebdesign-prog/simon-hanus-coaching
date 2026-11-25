@@ -1,6 +1,9 @@
+# The live site moved to GitHub Pages on 25 Nov 2026 (Netlify's free credits ran out).
+# "ignore = exit 0" tells Netlify to skip every build, so pushes don't spend credits.
 [build]
   command = "npm run build"
   publish = "dist"
+  ignore = "exit 0"
 
 [build.environment]
   NODE_VERSION = "20"

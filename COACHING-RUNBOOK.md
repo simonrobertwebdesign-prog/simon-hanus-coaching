@@ -43,6 +43,8 @@ Paid → `await SHC.confirmPayment(id, sessionId)`. Not found → leave it and p
 
 Content shapes are in `src/lib/seed.js` (`TRAINING_JAMIE`, `FOOD_JAMIE`).
 
+**Worked example (25 Nov playthrough):** `src/lib/seed-sam.json` holds Sam Carter's full answers, both drafted plans and their why notes, built from real Tesco products. Use it as the standard for detail: every meal in grams, day totals checked by adding up the labels (aim within about 50 kcal of the target), a shopping list with weekly amounts and prices, starting weights in the exercise notes, and dates (holidays, Christmas, events) planned in. Simon's write-up: the "First client playthrough: Sam Carter" doc.
+
 ## 5. Redo what Simon sent back (`plansToRedo`, `checkinsToRedo`)
 Read his feedback. Save the lesson in the Brain's Coaching Lessons note **in his exact words**. Then redo it:
 `await SHC.redoPlan(planId, content, why)` or `await SHC.draftCheckin(id, {..., checkin_id})`.
